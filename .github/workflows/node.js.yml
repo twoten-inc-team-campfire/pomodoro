@@ -10,7 +10,7 @@ on:
     branches: [ main ]
 
 jobs:
-  install-and-test:
+  install:
 
     runs-on: ubuntu-latest
 
@@ -22,8 +22,8 @@ jobs:
         npm audit fix
 
 
-  build-and-test:
-    needs: install-and-tes
+  build:
+    needs: install
 
     runs-on: ubuntu-latest
 
@@ -36,7 +36,19 @@ jobs:
     - name: Build
       run: |
         npm run build
-      - name: Test
+
+  test:
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install npm dependencies
+      run: |
+        npm install
+        npm audit fix
+    - name: Test
       run: |
         npm run test
     
