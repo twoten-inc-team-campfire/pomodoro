@@ -20,7 +20,6 @@ jobs:
         npm install
         npm audit fix
 
-
   build:
     needs: install
     runs-on: ubuntu-latest
