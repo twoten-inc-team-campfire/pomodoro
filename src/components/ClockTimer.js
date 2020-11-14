@@ -1,7 +1,6 @@
 import React from 'react';
-import {TimerInterface} from "../parts/PomodoroManager";
 
-class ClockTimer extends TimerInterface {
+class ClockTimer {
 
     constructor(props) {
         super()
