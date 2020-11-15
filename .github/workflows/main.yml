@@ -41,5 +41,5 @@ jobs:
         env:
           REPO: self
           BRANCH: docs
-          FOLDER: build
+          FOLDER: docs
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
