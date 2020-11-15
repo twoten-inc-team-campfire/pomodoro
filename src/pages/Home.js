@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 
+/** Home description */
 class Home extends Component {
+
     /**
      * This is the home page.
      */
