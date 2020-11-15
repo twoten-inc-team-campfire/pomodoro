@@ -29,10 +29,10 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: JSDoc Action
-        uses: andstor/jsdoc-action@v1
+        uses: andstor/jsdoc-action@v1.2.0
         with:
-          source_dir: ./src
-          output_dir: ./out
           recurse: true
           config_file: conf.json
