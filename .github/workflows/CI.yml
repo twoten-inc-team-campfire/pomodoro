@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: JSDoc Action
-        uses: andstor/jsdoc-action@v1.2.0
+        uses: andstor/jsdoc-action@v1
         with:
           recurse: true
           config_file: conf.json
