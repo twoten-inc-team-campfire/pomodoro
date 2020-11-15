@@ -33,4 +33,4 @@ jobs:
         uses: andstor/jsdoc-action@v1.2.0
         with:
           recurse: true
-          config_file: ./jsdoc-config/config.json
+          config_file: jsdoc-config/config.json
