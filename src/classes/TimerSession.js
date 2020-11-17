@@ -41,3 +41,12 @@ function testDuration() {
     let timerSession = new TimerSession(startTime, endTime)
     return timerSession.getDuration() === offset
 }
+// This is an example unit test for when we get unit tests working.
+function testDuration() {
+    let currentTime = Date.now();
+    let offset = 25 * 60 * 1000
+    let startTime = new Date(currentTime);
+    let endTime = new Date(currentTime + offset);
+    let timerSession = new TimerSession(startTime, endTime)
+    return timerSession.getDuration() === offset
+}
