@@ -1,5 +1,5 @@
 /**
- * A period of time that the Pomodoro Timer was active. Used for calculating statistics about user's productivity.
+ * A period of time that the PomodoroManager was active. Used for calculating statistics about user's productivity.
  */
 export class TimerSession {
 
