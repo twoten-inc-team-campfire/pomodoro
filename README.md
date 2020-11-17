@@ -39,6 +39,14 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+### `npm run generate-docs`
+
+Automatically generate the documantation under folder `docs` using JsDOc. 
+
+**Note: for each of the class that you want to add to the documentation, at least a comment for the description of the class is needed right above the definition.**
+
+JsDoc will generate the documentation as a HTML webpage with entry `index.html` in the folder `docs`.
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
