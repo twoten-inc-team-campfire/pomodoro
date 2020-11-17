@@ -1,9 +1,6 @@
 /**
-<<<<<<< HEAD
  * A period of time that the PomodoroManager was active. Used for calculating statistics about user's productivity.
-=======
- * A period of time that the Pomodoro Timer was active. Used for calculating statistics about user's productivity.
->>>>>>> Add classes for use on the Home page
+Rename PomodoroTimer.js to PomodoroManager.js to better reflect usage, clarify PomodoroManager.js render
  */
 export class TimerSession {
 
