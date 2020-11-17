@@ -3,13 +3,13 @@ import {UserSettings} from "../classes/settings/UserSettings";
 import {TimerSession} from "../classes/TimerSession";
 
 /**
- * PomodoroTimer that encapsulates the pomodoro logic applied to a timer object.
+ * PomodoroManager that encapsulates the pomodoro logic applied to a timer object.
  * @component
  */
-class PomodoroTimer extends Component {
+class PomodoroManager extends Component {
 
     /**
-     * The props being passed to the PomodoroTimer
+     * The props being passed to the PomodoroManager
      * @type {{settings: UserSettings, completeTimerSession: PomodoroTimer_OnNewTimerSession, Timer: React.Component}}
      */
     static propTypes = {
@@ -23,7 +23,7 @@ class PomodoroTimer extends Component {
          */
         settings: UserSettings,
         /**
-         * Function allowing PomodoroTimer to pass a completed TimerSession to its parent.
+         * Function allowing PomodoroManager to pass a completed TimerSession to its parent.
          * @name PomodoroTimer_OnNewTimerSession
          * @function
          * @param {TimerSession} The TimerSession being passed to the parent.
@@ -36,14 +36,14 @@ class PomodoroTimer extends Component {
     }
 
     /**
-     * Public function to start/resume the PomodoroTimer
+     * Public function to start/resume the PomodoroManager
      */
     start() {
 
     }
 
     /**
-     * Public function to pause the PomodoroTimer
+     * Public function to pause the PomodoroManager
      * This should return a TimerSession to the parent for the time elapsed.
      */
     pause() {
@@ -68,21 +68,17 @@ class PomodoroTimer extends Component {
     }
 
     render() {
-        return (
-            <div className="Home">
-                Home page with timer.
-            </div>
-        )
+        return "Display the timer here"
     }
 }
 
 /**
- * Interface for timer Components that are compatible with the PomodoroTimer
+ * Interface for timer Components that are compatible with the PomodoroManager
  */
 class TimerInterface extends React.Component {
 
     /**
-     * The props being passed to Timers compatible with PomodoroTimer.
+     * The props being passed to Timers compatible with PomodoroManager.
      * @type {{duration: number, onComplete: TimerInterface_OnComplete}}
      */
     static propTypes = {
@@ -125,4 +121,4 @@ class TimerInterface extends React.Component {
 
 }
 
-export { PomodoroTimer, TimerInterface };
+export { PomodoroManager, TimerInterface };
