@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: classes/settings/UserSettings.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,46 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: classes/settings/UserSettings.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {PomodoroSettings} from "./PomodoroSettings";
+import {UISettings} from "./UISettings";
 
+/**
+ * Contains user's current settings for the application. Container for other settings objects.
+ */
+export class UserSettings {
+    /**
+     * Create a UserSettings object.
+     * @param {PomodoroSettings} pomodoro - The settings for the pomodoro timer
+     * @param {UISettings} ui - The settings for the
+     */
+    constructor(pomodoro= PomodoroSettings.defaults(),
+                ui= UISettings.defaults()) {
+        this.pomodoro = pomodoro
+        this.ui = ui
+    }
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    /**
+     * Returns a UserSettings object with default settings
+     * @returns {UserSettings}
+     */
+    static defaults() {
+        return new UserSettings(
+            PomodoroSettings.defaults(), // Default to pomodoro defaults
+            UISettings.defaults() // Default to UI defaults
+        )
+    }
+}</code></pre>
+        </article>
+    </section>
 
 
 
