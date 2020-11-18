@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: classes/settings/UserSettings.js</title>
+    <title>JSDoc: Source: components/ClockTimer.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: classes/settings/UserSettings.js</h1>
+    <h1 class="page-title">Source: components/ClockTimer.js</h1>
 
     
 
@@ -26,45 +26,30 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import {PomodoroSettings} from "./PomodoroSettings";
-import {UISettings} from "./UISettings";
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import {TimerInterface} from "../parts/PomodoroManager";
 
 /**
- * UserSettings
- * @desc Contains user's current settings for the application. Container for other settings objects.
+ * ClockTimer
+ * @desc A visual timer that displays the time remaining as text in a circular clockface.
+ * @implements {TimerInterface}
  */
-export class UserSettings {
-    /**
-     * Create a UserSettings object.
-     * @constructs
-     * @param {PomodoroSettings} pomodoro - The settings for the pomodoro timer
-     * @param {UISettings} ui - The settings for the UI
-     */
-    constructor(pomodoro= PomodoroSettings.defaults(),
-                ui= UISettings.defaults()) {
-        /**
-         * @member {PomodoroSettings} UserSettings#pomodoro
-         * @desc The settings for the pomodoro timer
-         */
-        this.pomodoro = pomodoro
-        /**
-         * @member {UISettings} UserSettings#ui
-         * @desc The settings for the UI
-         */
-        this.ui = ui
+class ClockTimer extends TimerInterface {
+
+    constructor(props) {
+        super(props)
     }
 
-    /**
-     * Returns a UserSettings object with default settings
-     * @returns {UserSettings}
-     */
-    static defaults() {
-        return new UserSettings(
-            PomodoroSettings.defaults(), // Default to pomodoro defaults
-            UISettings.defaults() // Default to UI defaults
-        )
-    }
-}</code></pre>
+    start() {}
+
+    pause() {}
+
+    reset() {}
+
+    render() {}
+}
+
+export default ClockTimer;</code></pre>
         </article>
     </section>
 
