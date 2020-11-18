@@ -3,65 +3,61 @@ import {UserSettings} from "../classes/settings/UserSettings";
 import {TimerSession} from "../classes/TimerSession";
 
 /**
- * PomodoroManager that encapsulates the pomodoro logic applied to a timer object.
+ * PomodoroManager
+ * @desc PomodoroManager that encapsulates the pomodoro logic applied to a timer object.
  * @component
  */
 class PomodoroManager extends Component {
 
     /**
-     * The props being passed to the PomodoroManager
-     * @type {{settings: UserSettings, completeTimerSession: PomodoroTimer_OnNewTimerSession, Timer: React.Component}}
+     * Callback to pass a new TimerSession to the parent.
+     * @callback onNewTimerSession
+     * @param {TimerSession} newTimerSession - New TimerSession the PomodoroManager just created
+     * @memberOf PomodoroManager
      */
-    static propTypes = {
-        /**
-         * The React Component timer to be rendered.
-         * The timer should support the following
-         */
-        Timer: React.Component,
-        /**
-         * The user's settings.
-         */
-        settings: UserSettings,
-        /**
-         * Function allowing PomodoroManager to pass a completed TimerSession to its parent.
-         * @name PomodoroTimer_OnNewTimerSession
-         * @function
-         * @param {TimerSession} The TimerSession being passed to the parent.
-         */
-        onNewTimerSession: Function
-    }
-
+    /**
+     * @constructs
+     * @param {Object} props - Props passed to component.
+     * @param {TimerInterface} props.Timer - The React Component timer to be rendered. It should support the
+     * TimerInterface interface.
+     * @param {UserSettings} props.UserSettings - The user's settings
+     * @param {onNewTimerSession} props.onNewTimerSession - Callback to pass a new TimerSession to the parent
+     */
     constructor(props) {
         super(props);
     }
 
     /**
-     * Public function to start/resume the PomodoroManager
+     * @desc Public function to start/resume the PomodoroManager
+     * @public
      */
     start() {
 
     }
 
     /**
-     * Public function to pause the PomodoroManager
+     * @desc Public function to pause the PomodoroManager
      * This should return a TimerSession to the parent for the time elapsed.
+     * @public
      */
     pause() {
 
     }
 
     /**
-     * Public function to reset the timer back to the beginning of the current cycle.
+     * @desc Public function to reset the timer back to the beginning of the current cycle.
      * This should not return a TimerSession to the parent.
+     * @public
      */
     reset() {
 
     }
 
     /**
-     * Public function to skip to the end of the current part of the cycle.
+     * @desc Public function to skip to the end of the current part of the cycle.
      * This should return a TimeSession for the duration the timer ran.
      * If the timer has not started running, return nothing.
+     * @public
      */
     skip() {
 
@@ -73,47 +69,47 @@ class PomodoroManager extends Component {
 }
 
 /**
- * Interface for timer Components that are compatible with the PomodoroManager
+ * @interface TimerInterface
+ * @desc Interface for timer Components that are compatible with the PomodoroManager
  */
 class TimerInterface extends React.Component {
 
     /**
-     * The props being passed to Timers compatible with PomodoroManager.
-     * @type {{duration: number, onComplete: TimerInterface_OnComplete}}
+     * Callback to notify the parent that the timer has completed.
+     * @callback onComplete
+     * @param {Date} endTime - Time at which the timer finished.
+     * @memberOf TimerInterface
      */
-    static propTypes = {
-        /**
-         * Duration of the timer in milliseconds
-         */
-        duration: Number,
-        /**
-         * Function to notify parent when the timer completes
-         * @name TimerInterface_OnComplete
-         * @function
-         */
-        onComplete: Function,
-    }
-
+    /**
+     * @lends TimerInterface
+     * @constructs
+     * @param {Object} props - Props passed to the component.
+     * @param {number} props.duration - Duration of the timer in milliseconds
+     * @param {onComplete} props.onComplete - Callback to notify the parent that the timer has completed.
+     */
     constructor(props) {
-        super()
+        super(props)
     }
 
     /**
-     * Public method to start timer.
+     * @desc Public method to start timer.
+     * @public
      */
     start() {
         throw new Error("Start method not implemented")
     }
 
     /**
-     * Public method to pause the timer.
+     * @desc Public method to pause the timer.
+     * @public
      */
     pause() {
         throw new Error("Pause method not implemented")
     }
 
     /**
-     * Public method to reset the timer.
+     * @desc Public method to reset the timer.
+     * @public
      */
     reset() {
         throw new Error("Reset method not implemented")
