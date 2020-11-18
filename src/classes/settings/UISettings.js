@@ -12,8 +12,10 @@ export class UISettings {
      * @param {boolean} displayFastForwardButton - Whether to display the fast forward button on the home screen.
      * @param {boolean} displayTaskSelector - Whether to display the task selector field on the home screen.
      */
-    constructor(displayPauseButton = true, displayCancelButton = true,
-                displayFastForwardButton = true, displayTaskSelector = true) {
+    constructor(displayPauseButton = true,
+                displayCancelButton = true,
+                displayFastForwardButton = true,
+                displayTaskSelector = true) {
         /**
          * @member {boolean} UISettings#displayPauseButton
          * @desc Whether to display the pause button on the home screen.
