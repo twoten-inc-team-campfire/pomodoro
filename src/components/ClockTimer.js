@@ -7,7 +7,7 @@ import {TimerInterface} from "../parts/PomodoroManager";
  * @implements {TimerInterface}
  */
 class ClockTimer extends TimerInterface {
-    
+
     constructor(props) {
         super(props)
     }
