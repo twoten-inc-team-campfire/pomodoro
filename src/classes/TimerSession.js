@@ -21,7 +21,7 @@ export class TimerSession {
         this.endTime = endTime;
         /** @member {TIMER_SESSION_TYPE} TimerSession#type
          * @desc The type of session, a TIMER_SESSION_TYPE enum */
-        this.type = TIMER_SESSION_TYPE.POMODORO;
+        this.type = type;
         /** @member {string} TimerSession#task
          * @desc The title of the task as a string */
         this.task = task
