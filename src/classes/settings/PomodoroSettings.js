@@ -21,19 +21,4 @@ export class PomodoroSettings {
         this.autoStartBreaks = autoStartBreaks;
         this.autoStartPomodoros = autoStartPomodoros;
     }
-
-    /**
-     * Returns a PomodoroSettings object with default settings.
-     * @returns {PomodoroSettings}
-     */
-    static defaults() {
-        return new PomodoroSettings(
-            25 * 60 * 1000, // 25 minute Pomodoros
-            5 * 60 * 1000, // 5 minute short breaks
-            15 * 60 * 1000, // 15 minute long breaks
-            4, // 4 pomodoros before a long break
-            false, // Don't auto-start breaks
-            false // Don't auto-start pomodoros
-        );
-    }
 }

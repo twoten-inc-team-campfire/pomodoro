@@ -13,7 +13,11 @@ export class TimerSession {
     constructor(startTime, endTime, type=TIMER_SESSION_TYPE.POMODORO, task=null) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.type = TIMER_SESSION_TYPE.POMODORO;
+        /** @member {TIMER_SESSION_TYPE} TimerSession#type
+         * @desc The type of session, a TIMER_SESSION_TYPE enum */
+        this.type = type;
+        /** @member {string} TimerSession#task
+         * @desc The title of the task as a string */
         this.task = task
     }
 

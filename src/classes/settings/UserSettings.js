@@ -15,15 +15,4 @@ export class UserSettings {
         this.pomodoro = pomodoro
         this.ui = ui
     }
-
-    /**
-     * Returns a UserSettings object with default settings
-     * @returns {UserSettings}
-     */
-    static defaults() {
-        return new UserSettings(
-            PomodoroSettings.defaults(), // Default to pomodoro defaults
-            UISettings.defaults() // Default to UI defaults
-        )
-    }
 }

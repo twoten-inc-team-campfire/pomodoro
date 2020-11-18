@@ -17,17 +17,4 @@ export class UISettings {
         this.displayFastForwardButton = displayFastForwardButton
         this.displayTaskSelector = displayTaskSelector
     }
-
-    /**
-     * Returns a UISettings object with default settings.
-     * @returns {UISettings}
-     */
-    static defaults() {
-        return new UISettings(
-            true, // Display the pause button by default
-            true, // Display the cancel button by default
-            true, // Display the fast forward button by default
-            true // Display the task selector button by default
-        )
-    }
 }
