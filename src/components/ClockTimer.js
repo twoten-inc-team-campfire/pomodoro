@@ -20,17 +20,6 @@ class ClockTimer extends TimerInterface {
 
     }
 
-    componentDidMount() {
-        this.timerID = setInterval(
-            () => this.tick(),
-            1000
-        );
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timerID);
-    }
-
     start() {
         this.timerID = setInterval(
             () => this.tick(),
@@ -38,14 +27,22 @@ class ClockTimer extends TimerInterface {
         );
     }
 
-    pause() {}
+    pause() {
+        clearInterval(this.timerID);
+    }
 
-    reset() {}
+    reset() {
+        clearInterval(this.timerID);
+        this.setState({
+            minutes: this.state.total_duration,
+            seconds: 0
+        })
+    }
 
     render() {
         return (
             <div>
-                <h1>Second clock timer</h1>
+                <h1>Third clock timer</h1>
                 <h2>{this.printTime()}</h2>
             </div>
         )
