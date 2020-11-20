@@ -61,4 +61,3 @@ function testDuration() {
     let endTime = new Date(currentTime + offset);
     let timerSession = new TimerSession(startTime, endTime)
     return timerSession.getDuration() === offset
-}
