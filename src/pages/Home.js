@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import TimerManger  from '../components/TimerManager';
+import Timer  from '../components/Timer';
 
-
-/** Home description */
 function Home () {
-    return <div>  
-        <TimerManger/>
-    </div>
+    return (
+        <div>  
+            <Timer/>
+        </div>
+    )
 }
 
 export default Home

@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent, screen, waitFor, act } from '@testing-library/react'
-import TimerManager from './TimerManager'
+import Timer from './Timer'
 beforeEach(() => {
 	jest.useFakeTimers()
 })
@@ -10,7 +10,7 @@ afterEach(() => {
 });
 
 test("On first shown, it should have a initial timer showing \"00:10\" and \ a start button", () => {
-	render(<TimerManager/>)
+	render(<Timer/>)
 	const timer = screen.getByTestId('timer-min-sec-text')
 	const startButton = screen.getByTestId('start-button')
 	expect(timer).toBeInTheDocument();
@@ -18,10 +18,11 @@ test("On first shown, it should have a initial timer showing \"00:10\" and \ a s
 })
 
 test("After start button is clicked and 3 seconds passed, the timer should not be \
-	the same as it was before clicking", async () => {
+	the same as it was before clicking", () => {
 	let timerManager; 
+	jest.spyOn(global.console, 'error').mockImplementation(() => jest.fn());
 
-	timerManager = render(<TimerManager/>)
+	timerManager = render(<Timer/>)
 	const timer = screen.getByTestId('timer-min-sec-text')
 	const timerContentBeforeClick = timer.textContent;
 	const startButton = screen.getByTestId('start-button')
@@ -31,7 +32,7 @@ test("After start button is clicked and 3 seconds passed, the timer should not b
 	act(() => 
 		jest.advanceTimersByTime(4000)
 	)
-	screen.debug()
+	
 	expect(startButton).not.toBeInTheDocument();
 	const timerContentAfterClick = timer.textContent;
 
