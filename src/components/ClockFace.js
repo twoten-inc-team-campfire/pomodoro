@@ -11,9 +11,8 @@ import React from 'react';
     const sec_present = sec < 10 ? '0' + sec : sec.toString()
     const time_present = min_present + ':' + sec_present
      return (
-        <div>
-            <h1>Third clock timer</h1>
-            <h2>{time_present}</h2>
+        <div className='clock-face'>
+            <h1>{time_present}</h1>
         </div>
     )
  }
