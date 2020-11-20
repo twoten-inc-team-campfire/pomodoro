@@ -5,7 +5,6 @@ import PauseIcon from '@material-ui/icons/PauseCircleFilled';
 import CancelIcon from '@material-ui/icons/Cancel';
 import FastForwardIcon from '@material-ui/icons/FastForward';
 
-
 /** TimerButtons */
 function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
     const [showPlay, setShowPlay] = useState(true);
@@ -25,16 +24,16 @@ function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
     return (
         <div className="timer-buttons">
             { showPlay &&
-                <IconButton aria-label="play-button" onClick={handlePlay}>
+                <IconButton data-testid="start-button" onClick={handlePlay}>
                     <PlayIcon style={{ fontSize: '75px', color: '#015384'}} />
                 </IconButton>
             }
             { !showPlay && 
                 <span>
-                    <IconButton aria-label="pause-button" onClick={handlePause} >
+                    <IconButton data-testid="pause-button" onClick={handlePause} >
                         <PauseIcon style={{ fontSize: '75px', color: '#015384' }} />
                     </IconButton>
-                    <IconButton aria-label="cancel-button" onClick={handleCancel}>
+                    <IconButton data-testid="cancel-button" onClick={handleCancel}>
                         <CancelIcon style={{ fontSize: '75px', color: '#015384' }} />
                     </IconButton>
                 </span>

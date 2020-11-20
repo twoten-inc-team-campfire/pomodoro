@@ -14,7 +14,7 @@ import {TimerInterface} from "../parts/PomodoroManager";
      return (
         <div>
             <h1>Third clock timer</h1>
-            <h2>{time_present}</h2>
+            <h2 data-testid='timer-min-sec-text'>{time_present}</h2>
         </div>
     )
  }

@@ -64,6 +64,7 @@ const decrementTime = (state) => {
     }
 }
 
+
 function TimerManager (props) {
     const [timerId, setTimerId] = useState(-1)  //timerId for setInterval
     const [time, dispatch] = useReducer(timeReducer, initTime); //timeReducer and initTime are defined above
@@ -76,6 +77,7 @@ function TimerManager (props) {
     }
 
     const tick = () => {
+        console.log("clicked start")
         dispatch(TimerAction.DECREMENT);
     }
     
