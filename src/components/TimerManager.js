@@ -3,6 +3,7 @@ import React, {useState, useReducer} from 'react';
 import {TimerInterface} from "../parts/PomodoroManager";
 import Button from '@material-ui/core/Button';
 import Timer from './ClockTimer';
+import TimerButtons from './TimerButtons';
 /**
  * ExampleManager
  * @desc An example manage component used to test ClockTimer functionality.
@@ -65,7 +66,7 @@ const decrementTime = (state) => {
 
 function TimerManager (props) {
     const [timerId, setTimerId] = useState(-1)  //timerId for setInterval
-    const [time, dispatch] = useReducer(timeReducer, initTime);
+    const [time, dispatch] = useReducer(timeReducer, initTime); //timeReducer and initTime are defined above
     const startTimer = () => {
         let tid = setInterval(
             () => tick(),
@@ -91,24 +92,11 @@ function TimerManager (props) {
     return (
         <div className={'example-manager'}>
             <Timer min={time.min} sec={time.sec}/>
-
-            <Button variant="contained" color="primary"
-                className="start" 
-                onClick={()=>startTimer()}>
-                Start
-            </Button>
-
-            <Button variant="contained" color="primary"
-                className="pause" 
-                onClick={()=>pauseTimer()}>
-                Pause
-            </Button>
-        
-            <Button variant="contained" color="primary"
-                className="reset" 
-                onClick={()=>resetTimer()}>
-                Reset
-            </Button>
+            <TimerButtons
+                onClickStart={startTimer}
+                onClickPause={pauseTimer}
+                onClickCancel={resetTimer}
+            />
         </div>
     )
 }
