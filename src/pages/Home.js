@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import TimerManger  from '../components/TimerManager';
+import Timer  from '../components/Timer';
 
 function Home () {
     return <div>  
-        <TimerManger/>
+        <Timer/>
     </div>
 }
 

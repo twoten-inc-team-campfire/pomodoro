@@ -1,14 +1,8 @@
 
 import React, {useState, useReducer} from 'react';
-import {TimerInterface} from "../parts/PomodoroManager";
-import Button from '@material-ui/core/Button';
-import Timer from './ClockTimer';
+import ClockFace from './ClockFace';
 import TimerButtons from './TimerButtons';
-/**
- * ExampleManager
- * @desc An example manage component used to test ClockTimer functionality.
- * @implements {React.Component}
- */
+
 
 //To avoid using pure string every where, I make them as constants here.
 const TimerAction = {
@@ -64,7 +58,12 @@ const decrementTime = (state) => {
     }
 }
 
-function TimerManager (props) {
+/**
+ * Timer
+ * @desc Timer handles the functionality and logic of a countdown timer.
+ * @implements {React.Component}
+ */
+function Timer (props) {
     const [timerId, setTimerId] = useState(-1)  //timerId for setInterval
     const [time, dispatch] = useReducer(timeReducer, initTime); //timeReducer and initTime are defined above
     const startTimer = () => {
@@ -90,8 +89,8 @@ function TimerManager (props) {
     }
 
     return (
-        <div className={'example-manager'}>
-            <Timer min={time.min} sec={time.sec}/>
+        <div className={'timer'}>
+            <ClockFace min={time.min} sec={time.sec}/>
             <TimerButtons
                 onClickStart={startTimer}
                 onClickPause={pauseTimer}
@@ -101,4 +100,4 @@ function TimerManager (props) {
     )
 }
 
-export default TimerManager;
+export default Timer;
