@@ -11,6 +11,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.0",
+    "serve": "^11.3.2",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",
@@ -30,6 +31,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "serve": "serve -s build",
     "generate-docs": "jsdoc -c jsdoc-config/config.json"
   },
   "eslintConfig": {
