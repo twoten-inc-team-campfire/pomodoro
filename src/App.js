@@ -1,15 +1,17 @@
 import './App.css';
+import { GlobalStateProvider } from './GlobalState/GlobalState'
 import Home from './pages/Home.js';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Pomodoro Timer</h1>
-        <Home/>
-      </header>
-    </div>
-      
+    <GlobalStateProvider>
+      <div className="App">
+        <header className="App-header">
+          <h1>Pomodoro Timer</h1>
+          <Home/>
+        </header>
+      </div>
+    </GlobalStateProvider>
   );
 }
 
