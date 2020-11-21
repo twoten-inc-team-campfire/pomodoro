@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: classes/settings/UserSettings.js</title>
+    <title>JSDoc: Source: components/Timer/ClockFace.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: classes/settings/UserSettings.js</h1>
+    <h1 class="page-title">Source: components/Timer/ClockFace.js</h1>
 
     
 
@@ -26,34 +26,27 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import {PomodoroSettings} from "./PomodoroSettings";
-import {UISettings} from "./UISettings";
+            <pre class="prettyprint source linenums"><code>import React from 'react';
 
 /**
- * UserSettings
- * @desc Contains user's current settings for the application. Container for other settings objects.
+ * ClockFace
+ * @desc The visual component of our timer that displays the time remaining as text in a 
+ * circular clockface.
  */
-export class UserSettings {
-    /**
-     * Create a UserSettings object.
-     * @constructs
-     * @param {PomodoroSettings} pomodoro - The settings for the pomodoro timer
-     * @param {UISettings} ui - The settings for the UI
-     */
-    constructor(pomodoro= PomodoroSettings.defaults(),
-                ui= UISettings.defaults()) {
-        /**
-         * @member {PomodoroSettings} UserSettings#pomodoro
-         * @desc The settings for the pomodoro timer
-         */
-        this.pomodoro = pomodoro
-        /**
-         * @member {UISettings} UserSettings#ui
-         * @desc The settings for the UI
-         */
-        this.ui = ui
-    }
-}</code></pre>
+
+ function ClockFace({min, sec}) {
+    const min_present = min &lt; 10 ? '0' + min : min.toString()
+    const sec_present = sec &lt; 10 ? '0' + sec : sec.toString()
+    const time_present = min_present + ':' + sec_present
+     return (
+        &lt;div className='clock-face'>
+            &lt;h1 aria-label="time-remaining">{time_present}&lt;/h1>
+        &lt;/div>
+    )
+ }
+ 
+export default ClockFace;
+</code></pre>
         </article>
     </section>
 
