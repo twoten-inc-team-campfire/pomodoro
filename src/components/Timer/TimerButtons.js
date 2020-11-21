@@ -24,16 +24,16 @@ function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
     return (
         <div className="timer-buttons">
             { showPlay &&
-                <IconButton data-testid="start-button" onClick={handlePlay}>
+                <IconButton aria-label="start-button" onClick={handlePlay}>
                     <PlayIcon style={{ fontSize: '75px', color: '#015384'}} />
                 </IconButton>
             }
             { !showPlay && 
                 <span>
-                    <IconButton data-testid="pause-button" onClick={handlePause} >
+                    <IconButton aria-label="pause-button" onClick={handlePause} >
                         <PauseIcon style={{ fontSize: '75px', color: '#015384' }} />
                     </IconButton>
-                    <IconButton data-testid="cancel-button" onClick={handleCancel}>
+                    <IconButton aria-label="cancel-button" onClick={handleCancel}>
                         <CancelIcon style={{ fontSize: '75px', color: '#015384' }} />
                     </IconButton>
                 </span>

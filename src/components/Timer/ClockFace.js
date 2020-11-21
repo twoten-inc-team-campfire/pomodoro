@@ -12,7 +12,7 @@ import React from 'react';
     const time_present = min_present + ':' + sec_present
      return (
         <div className='clock-face'>
-            <h1 data-testid="timer-min-sec-text">{time_present}</h1>
+            <h1 aria-label="time-remaining">{time_present}</h1>
         </div>
     )
  }
