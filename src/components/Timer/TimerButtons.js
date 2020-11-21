@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PlayIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseIcon from '@material-ui/icons/PauseCircleFilled';
 import CancelIcon from '@material-ui/icons/Cancel';
-import FastForwardIcon from '@material-ui/icons/FastForward';
+// import FastForwardIcon from '@material-ui/icons/FastForward';
 
 /** TimerButtons */
 function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
