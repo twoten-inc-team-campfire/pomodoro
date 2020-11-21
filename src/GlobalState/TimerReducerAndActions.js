@@ -18,7 +18,7 @@ const timerReducer = (state, action) => {
     if (action.type === 'reset') {
         return initTimer;
     }
-    else if (action.type === 'start') {
+    else if (action.type === 'decrement') {
         return startTimer(state);
     } 
     else if (action.type === 'pause') {
@@ -47,9 +47,9 @@ const startTimer = (state) => {
 
 //Reducer takes an action and update the state: these are the actions.
 const TimerActions = {
-	START: {
+	DECREMENT: {
 		target: 'Timer',
-		type: 'start'
+		type: 'decrement'
 	},
 	PAUSE: {
 		target: 'Timer',

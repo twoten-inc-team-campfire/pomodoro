@@ -1,5 +1,5 @@
-import React, { useState, useContext, useReducer } from 'react';
-import { timerReducer, initTimer } from './TimerReducer'
+import React, { useReducer } from 'react';
+import { timerReducer, initTimer } from './TimerReducerAndActions'
 
 const GlobalStateContext = React.createContext([{}, () => {}]);
 /* this is the provider of the global state to our app
@@ -11,15 +11,12 @@ const initGlobalState = {
 	timer: initTimer
 }
 const globalStateReducer = (state, action) => {
-	console.log("calling dispatchr with action:", action)
 	switch (action.target) {
 		case 'Timer':
-			console.log("It's calling timer Action:", action)
 			const newTimer = timerReducer(state.timer, action)
-			return {...state, timer: newTimer}
-			break;
+			return {...state, timer: newTimer};
 		default:
-			return state
+			return state;
 	}
 }
 
