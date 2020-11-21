@@ -40,12 +40,12 @@ export class DataServiceInterface {
     }
 
     /**
-     * loadPomodoroSettingsList
+     * loadAllPomodoroSettings
      * @desc Load all pomodoro settings 
      * @returns {Object} The mapping from tag to the PomodoroSettings
      * @public
      */
-    loadPomodoroSettingsList() {
+    loadAllPomodoroSettings() {
         throw new Error("Method not implemented");
     }
 

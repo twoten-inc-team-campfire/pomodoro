@@ -30,7 +30,14 @@ export class TimerSession {
     }
 }
 
-const TIMER_SESSION_TYPE = {
+/**
+ * Enum for the type of timer session held.
+ * @enum {number}
+ * @readonly
+ * @public
+ */
+export const TIMER_SESSION_TYPE = {
+    /** @property {number} POMODORO - A pomodoro session, also known as a "work" or "focus" session. */
     POMODORO: 1,
     SHORT_REST: 2,
     LONG_REST: 3

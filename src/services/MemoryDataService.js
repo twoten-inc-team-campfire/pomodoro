@@ -1,5 +1,5 @@
 import TIMER_SESSION_TYPE from '../classes/TimerSession'
-import DataServiceInterface from './DataServiceInterface'
+import { DataServiceInterface } from './DataServiceInterface'
 /**
  * MemoryDataService
  * @desc The services and methods to simply save data to and retrieve data from memory.
@@ -11,6 +11,8 @@ export class MemoryDataService extends DataServiceInterface {
      * @constructs
      */
     constructor() {
+        super();
+
         /** @member {Object} 
          * @desc The mapping from date to a list of timer sessions of that date */
         this.timerSessionsDict = {};
@@ -31,9 +33,9 @@ export class MemoryDataService extends DataServiceInterface {
     saveTimerSession(session) {
         var date = new Date(session.startTime.toDateString());
         var timestamp = date.getTime(); // time in the granularity of date
-        var sessionList = timerSessionsDict[timestamp] || [];
+        var sessionList = this.timerSessionsDict[timestamp] || [];
         sessionList.push(session);
-        timerSessionsDict[timestamp] = sessionList;
+        this.timerSessionsDict[timestamp] = sessionList;
     }
 
     /**
@@ -53,7 +55,7 @@ export class MemoryDataService extends DataServiceInterface {
             timestamp <= endTime;
             timestamp += 1000 * 3600 * 24) {
 
-            var sessionList = timerSessionsDict[timestamp] || [];
+            var sessionList = this.timerSessionsDict[timestamp] || [];
             for (var session of sessionList) {
                 if (typeSet.has(session.type)) {
                     retList.push(session);
@@ -71,17 +73,17 @@ export class MemoryDataService extends DataServiceInterface {
      * @public
      */
     savePomodoroSettings(tag, settings) {
-        pomodoroSettingsDict[tag] = settings;
+        this.pomodoroSettingsDict[tag] = settings;
     }
 
     /**
-     * loadPomodoroSettingsList
+     * loadAllPomodoroSettings
      * @desc Load all pomodoro settings 
      * @returns {Object} The mapping from tag to the PomodoroSettings
      * @public
      */
-    loadPomodoroSettingsList() {
-        return pomodoroSettingsDict;
+    loadAllPomodoroSettings() {
+        return this.pomodoroSettingsDict;
     }
 
     /**
