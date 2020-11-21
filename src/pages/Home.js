@@ -1,18 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
+import Timer from '../components/Timer/Timer';
 
-/** Home description */
-class Home extends Component {
-
-    /**
-     * This is the home page.
-     */
-    render() {
-        return (
-            <div className="Home">
-                Home page with timer.
-            </div>
-        )
-    }
+function Home () {
+    return (
+        <div>  
+            <Timer/>
+        </div>
+    )
 }
 
-export default Home;
+export default Home
