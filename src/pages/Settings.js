@@ -1,5 +1,6 @@
 import React from 'react';
 import HomeSettings from '../components/Settings/HomeSettings';
+import PomodoroSettings from '../components/Settings/PomodoroSettings';
 // import {makeStyles} from '@material-ui/core/styles';
 
 
@@ -19,6 +20,7 @@ function Settings(props) {
             <br></br>
             <hr></hr>
             <h2>General</h2>
+            <PomodoroSettings/>
             <hr></hr>
             <h2>Home Screen Customization</h2>
             <HomeSettings/>
