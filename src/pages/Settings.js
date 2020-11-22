@@ -1,13 +1,29 @@
-import React, {Component} from 'react';
+import React from 'react';
+import HomeSettings from '../components/Settings/HomeSettings';
+// import {makeStyles} from '@material-ui/core/styles';
 
-class Settings extends Component {
-    render() {
-        return (
-            <div className="Settings">
-                Settings page for configuring the app.
-            </div>
-        )
-    }
+
+
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         display: 'flex',
+//     },
+//     formControl: {
+//         margin: theme.spacing(3),
+//     },
+// }));
+
+function Settings(props) {
+    return (
+        <div className="Settings">
+            <br></br>
+            <hr></hr>
+            <h2>General</h2>
+            <hr></hr>
+            <h2>Home Screen Customization</h2>
+            <HomeSettings/>
+        </div>
+    )
 }
 
 export default Settings;
