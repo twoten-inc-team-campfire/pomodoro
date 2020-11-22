@@ -1,5 +1,5 @@
 //initial state of the timer
-const initTimer = { min: 0, sec: 10 }
+const initTimer = { min: 25, sec: 0 }
 
 /* timer reducer to work with useReducer Hooks in react
  *
