@@ -1,7 +1,6 @@
-import {TimerSessionBuilder} from './TimerSessionBuilder';
 import {TimerSession, TIMER_SESSION_TYPE} from './TimerSession';
 
-test('test TimerSession get()', () => {
+test('test customized constructor of TimerSession', () => {
     let currentTime = Date.now();
     let offset = 25 * 60 * 1000
     let startTime = new Date(currentTime);
@@ -9,44 +8,26 @@ test('test TimerSession get()', () => {
     let task = "test";
     let type = TIMER_SESSION_TYPE.LONG_REST;
 
-    const timerSession = new TimerSessionBuilder()
-        .withStartTime(startTime)
-        .withEndTime(endTime)
-        .withTask(task)
-        .withType(type)
-        .build();
+    const timerSession = new TimerSession(startTime, endTime, type, task);
     
-    expect(timerSession.getStartTime()).toEqual(timerSession.startTime);
-    expect(timerSession.getEndTime()).toEqual(timerSession.endTime);
-    expect(timerSession.getType()).toEqual(timerSession.type);
-    expect(timerSession.getTask()).toEqual(timerSession.task);
+    expect(timerSession.startTime).toEqual(timerSession.startTime);
+    expect(timerSession.endTime).toEqual(timerSession.endTime);
+    expect(timerSession.type).toEqual(timerSession.type);
+    expect(timerSession.task).toEqual(timerSession.task);
 })
 
-test('test TimerSession set()', () => {
+test('test default constructor of TimerSession', () => {
     let currentTime = Date.now();
     let offset = 25 * 60 * 1000
     let startTime = new Date(currentTime);
     let endTime = new Date(currentTime + offset);
-    
-    let newStartTime = endTime;
-    let newEndTime = new Date(newStartTime + offset);
-    let task = "test";
-    let type = TIMER_SESSION_TYPE.SHORT_REST;
 
-    const timerSession = new TimerSessionBuilder()
-        .withStartTime(startTime)
-        .withEndTime(endTime)
-        .build();
+    const timerSession = new TimerSession(startTime, endTime);
     
-    timerSession.setStartTIme(newStartTime);
-    timerSession.setEndTime(newEndTime);
-    timerSession.setTask(task);
-    timerSession.setType(type);
-    
-    expect(timerSession.getStartTime()).toEqual(newStartTime);
-    expect(timerSession.getEndTime()).toEqual(newEndTime);
-    expect(timerSession.getType()).toEqual(type);
-    expect(timerSession.getTask()).toEqual(task);
+    expect(timerSession.startTime).toEqual(timerSession.startTime);
+    expect(timerSession.endTime).toEqual(timerSession.endTime);
+    expect(timerSession.type).toEqual(timerSession.type);
+    expect(timerSession.task).toEqual(timerSession.task);
 })
 
 test('test TimerSession getDuration()', () => {
@@ -55,10 +36,7 @@ test('test TimerSession getDuration()', () => {
     let startTime = new Date(currentTime);
     let endTime = new Date(currentTime + offset);
 
-    const timerSession = new TimerSessionBuilder()
-        .withStartTime(startTime)
-        .withEndTime(endTime)
-        .build();
+    const timerSession = new TimerSession(startTime, endTime);
     
     expect(timerSession.getDuration()).toEqual(offset);
 })
