@@ -5,6 +5,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,7 +34,42 @@ function HomeSettings(props) {
 
     return (
         <div className={classes.root}>
-            <FormControl component="fieldset" className={classes.formControl}>
+            <Grid container spacing={1} direction="column">
+                <Grid container direction="row" justify="space-evenly" alignItems="baseline">
+                    <Grid item xs={9}>
+                        <p>Pause Button</p>
+                    </Grid>
+                    <Grid item xs>
+                        <Checkbox checked={pause} onChange={handleChange} name='pause' />
+                    </Grid>
+                </Grid>
+                <Grid container direction="row" justify="space-evenly" alignItems="baseline">
+                    <Grid item xs={9}>
+                        <p>Fast Forward Button</p>
+                    </Grid>
+                    <Grid item xs>
+                        <Checkbox checked={fastForward} onChange={handleChange} name='fastForward' />
+                    </Grid>
+                </Grid>
+                <Grid container direction="row" justify="space-evenly" alignItems="baseline">
+                    <Grid item xs={9}>
+                        <p>Cancel Button</p>
+                    </Grid>
+                    <Grid item xs>
+                        <Checkbox checked={cancel} onChange={handleChange} name='cancel' />
+                    </Grid>
+                </Grid>
+                <Grid container direction="row" justify="space-evenly" alignItems="baseline">
+                    <Grid item xs={9}>
+                        <p>Task Selector</p>
+                    </Grid>
+                    <Grid item xs>
+                        <Checkbox checked={taskSelection} onChange={handleChange} name='taskSelection' />
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            {/* <FormControl component="fieldset" className={classes.formControl}>
                 <FormLabel component="home-settings">Home Screen Customization</FormLabel>
                 <FormGroup>
                     <FormControlLabel
@@ -57,7 +93,7 @@ function HomeSettings(props) {
                         labelPlacement="start"
                     />
                 </FormGroup>
-            </FormControl>
+            </FormControl> */}
         </div>
     )
 }
