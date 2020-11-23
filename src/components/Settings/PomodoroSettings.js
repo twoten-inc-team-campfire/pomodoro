@@ -1,21 +1,21 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import {makeStyles, withStyles} from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import Select from '@material-ui/core/Select';
 import { InputLabel } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import MenuItem from '@material-ui/core/MenuItem'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
-    },
-    formControl: {
-        margin: theme.spacing(3),
+        flexGrow: 1,
     },
 }));
+
 
 function PomodoroSettings(props) {
     const classes = useStyles();
@@ -42,31 +42,104 @@ function PomodoroSettings(props) {
 
     return (
         <div className={classes.root}>
-            <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="pomodoro-settings">Pomodoro Settings</FormLabel>
-                <FormGroup>
-                    <FormControlLabel
-                        control={<Switch checked={autoBreak} onChange={handleBoolChange} name='autoBreak' />}
-                        label="Auto Start Break after Pomodoro" 
-                        labelPlacement="start"
-                    />
-                    <FormControlLabel
-                        control={<Switch checked={autoFocus} onChange={handleBoolChange} name='autoFocus' />}
-                        label="Auto Start Pomodoro after Break" 
-                        labelPlacement="start"
-                    />
-                    <NativeSelect
-                        value={focusLength}
-                        onChange={handleValueChange}
-                        name="focusLength"
-                    >
-                        <option value={15}>15:00</option>
-                        <option value={20}>20:00</option>
-                        <option value={25}>25:00</option>
-                        <option value={30}>30:00</option>
-                    </NativeSelect>
-                </FormGroup>
-            </FormControl>
+            <Grid container spacing={1} direction="column">
+                <Grid container direction="row" justify="space-evenly" alignItems="baseline">
+                    <Grid item xs={9}>
+                        <p>Auto Start Break after Pomodoro</p>
+                    </Grid>
+                    <Grid item xs>
+                        <Switch checked={autoBreak} onChange={handleBoolChange} name='autoBreak' />
+                    </Grid>
+                </Grid>
+                <Grid container direction="row" justify="space-evenly" alignItems="baseline">
+                    <Grid item xs={9}>
+                        <p>Auto Start Pomodoro after Break</p>
+                    </Grid>
+                    <Grid item xs>
+                        <Switch checked={autoFocus} onChange={handleBoolChange} name='autoFocus' />
+                    </Grid>
+                </Grid>
+                <Grid container direction="row" justify="space-between" alignItems="center">
+                    <Grid item xs={8}>
+                        <p>Pomodoro Length</p>
+                    </Grid>
+                    <Grid item xs>
+                        <FormControl variant="outlined">
+                            <Select
+                                label="pomodoro-length"
+                                onChange={handleValueChange}
+                                value={focusLength}
+                                name="focusLength"
+                            >
+                                <MenuItem value={15}>15:00</MenuItem>
+                                <MenuItem value={20}>20:00</MenuItem>
+                                <MenuItem value={25}>25:00</MenuItem>
+                                <MenuItem value={30}>30:00</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+                <Grid container direction="row" justify="space-between" alignItems="center">
+                    <Grid item xs={8}>
+                        <p>Short Break Length</p>
+                    </Grid>
+                    <Grid item xs>
+                        <FormControl variant="outlined">
+                            <Select
+                                label="short-break-length"
+                                onChange={handleValueChange}
+                                value={shortBreakLength}
+                                name="shortBreakLength"
+                            >
+                                <MenuItem value={4}>4:00</MenuItem>
+                                <MenuItem value={5}>5:00</MenuItem>
+                                <MenuItem value={7}>7:00</MenuItem>
+                                <MenuItem value={10}>10:00</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>   
+                <Grid container direction="row" justify="space-between" alignItems="center">
+                    <Grid item xs={8}>
+                        <p>Long Break Length</p>
+                    </Grid>
+                    <Grid item xs>
+                        <FormControl variant="outlined">
+                            <Select
+                                label="long-break-length"
+                                onChange={handleValueChange}
+                                value={longBreakLength}
+                                name="longBreakLength"
+                            >
+                                <MenuItem value={15}>15:00</MenuItem>
+                                <MenuItem value={20}>20:00</MenuItem>
+                                <MenuItem value={25}>25:00</MenuItem>
+                                <MenuItem value={30}>30:00</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+                <Grid container direction="row" justify="space-between" alignItems="center">
+                    <Grid item xs={9}>
+                        <p>Pomodoros Before Long Break</p>
+                    </Grid>
+                    <Grid item xs>
+                        <FormControl variant="outlined">
+                            <Select
+                                label="pomodoro-count"
+                                onChange={handleValueChange}
+                                value={focusCycleCount}
+                                name="focusCycleCount"
+                            >
+                                <MenuItem value={1}>1</MenuItem>
+                                <MenuItem value={2}>2</MenuItem>
+                                <MenuItem value={3}>3</MenuItem>
+                                <MenuItem value={4}>4</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+            </Grid>        
         </div>
     )
 }
