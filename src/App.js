@@ -1,12 +1,12 @@
 import './App.css';
-import Home from './pages/Home.js';
+// import Home from './pages/Home.js';
+import Settings from './pages/Settings.js';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Pomodoro Timer</h1>
-        <Home/>
+        <Settings/>
       </header>
     </div>
       
