@@ -68,32 +68,6 @@ function HomeSettings(props) {
                     </Grid>
                 </Grid>
             </Grid>
-
-            {/* <FormControl component="fieldset" className={classes.formControl}>
-                <FormLabel component="home-settings">Home Screen Customization</FormLabel>
-                <FormGroup>
-                    <FormControlLabel
-                        control={<Checkbox checked={pause} onChange={handleChange} name='pause' />}
-                        label="Pause Button" 
-                        labelPlacement="start"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox checked={fastForward} onChange={handleChange} name='fastForward' />}
-                        label="Fast Forward Button" 
-                        labelPlacement="start"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox checked={cancel} onChange={handleChange} name='cancel' />}
-                        label="Cancel Button" 
-                        labelPlacement="start"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox checked={taskSelection} onChange={handleChange} name='taskSelection' />}
-                        label="Task Selector" 
-                        labelPlacement="start"
-                    />
-                </FormGroup>
-            </FormControl> */}
         </div>
     )
 }
