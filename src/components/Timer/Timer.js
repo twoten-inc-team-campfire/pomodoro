@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import ClockFace from './ClockFace';
 import TimerButtons from './TimerButtons';
-import useTimerGlobalState from '../../GlobalState/useTimerGlobalState';
+import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
 
 /**
  * Timer
@@ -12,7 +12,7 @@ import useTimerGlobalState from '../../GlobalState/useTimerGlobalState';
 function Timer (props) {
     const [ timerId, setTimerId ] = useState(-1); //timerId for setInterval & clearInterval
     const { timer, dispatch, TimerActions } = useTimerGlobalState()
-
+    const { onStart, onPause, onCancel, onComplete } = props;
     const startTimer = () => {
         let tid = setInterval(
             () => dispatch(TimerActions.DECREMENT), //for every second, 
@@ -42,5 +42,6 @@ function Timer (props) {
         </div>
     )
 }
+
 
 export default Timer;

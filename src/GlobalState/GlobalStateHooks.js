@@ -12,4 +12,4 @@ const useTimerGlobalState = () => {
 	}
 }
 
-export default useTimerGlobalState;
+export { useTimerGlobalState };

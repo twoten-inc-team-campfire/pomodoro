@@ -14,9 +14,9 @@ const globalStateReducer = (state, action) => {
 	switch (action.target) {
 		case 'Timer':
 			const newTimer = timerReducer(state.timer, action)
-			return {...state, timer: newTimer};
+			return {...state, timer: newTimer}
 		default:
-			return state;
+			return state
 	}
 }
 
@@ -31,4 +31,9 @@ const GlobalStateProvider = (props) => {
 }
 
 
-export { GlobalStateContext, GlobalStateProvider };
+export {
+	initGlobalState,
+	globalStateReducer,
+	GlobalStateContext, 
+	GlobalStateProvider 
+};

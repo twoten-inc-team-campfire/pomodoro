@@ -19,7 +19,7 @@ const timerReducer = (state, action) => {
         return initTimer;
     }
     else if (action.type === 'decrement') {
-        return startTimer(state);
+        return startTimer(state, action);
     } 
     else if (action.type === 'pause') {
         return state;
@@ -27,8 +27,10 @@ const timerReducer = (state, action) => {
 }
 
 // separate out the logic that decrements the timer. The code should be self-explanatory
-const startTimer = (state) => {
+const startTimer = (state, action) => {
     if (state.sec === 0 && state.min === 0) {
+        //here is when the timer completes
+        if (action.onComplete) action.onComplete()
         return state;
     } 
     else if (state.sec === 0) {
@@ -49,7 +51,8 @@ const startTimer = (state) => {
 const TimerActions = {
 	DECREMENT: {
 		target: 'Timer',
-		type: 'decrement'
+		type: 'decrement',
+        onComplete: undefined
 	},
 	PAUSE: {
 		target: 'Timer',
