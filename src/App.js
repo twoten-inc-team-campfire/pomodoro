@@ -2,6 +2,7 @@ import './App.css';
 import { GlobalStateProvider } from './GlobalState/GlobalState'
 import Home from './pages/Home.js';
 
+
 function App() {
   return (
     <GlobalStateProvider>
