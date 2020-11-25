@@ -1,5 +1,5 @@
 /**
- * @file The services and methods to save and load data from database IndexedDB.
+ * @file The services and methods to save and load data from IndexedDB.
  */
 
 import { Store, get, set, clear, keys } from 'idb-keyval';
