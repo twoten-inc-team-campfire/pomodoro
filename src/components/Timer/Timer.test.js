@@ -15,7 +15,13 @@ afterEach(() => {
 });
 
 test("On first shown, it should have an initial timer showing \"25:00\" and \ a start button", () => {
-	renderHelper(<Timer/>)
+	const custom_timer_state = { 
+		timer: { 
+			min: 25, 
+			sec: 0 
+		} 
+	}
+	renderHelper(<Timer/>, custom_timer_state);
 
 	const time = screen.getByRole('heading', {name: "time-remaining"});
 	const startButton = screen.queryByLabelText('start-button');

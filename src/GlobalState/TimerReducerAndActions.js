@@ -1,5 +1,31 @@
+const TimerActionType = {
+    DECREMENT: 'decrement',
+    PAUSE: 'pause',
+    RESET: 'reset'
+}
 //initial state of the timer
-const initTimer = { min: 25, sec: 0 }
+const initTimer = { 
+    min: 25, 
+    sec: 0,
+}
+
+//Reducer takes an action and update the state: these are the actions.
+const TimerActions = {
+    DECREMENT: (onComplete, timerId) => ({
+        target: 'Timer',
+        type: TimerActionType.DECREMENT,
+        onComplete: onComplete,
+        timerId: timerId
+    }),
+    PAUSE: () => ({
+        target: 'Timer',
+        type: TimerActionType.PAUSE
+    }),
+    RESET: () => ({
+        target: 'Timer',
+        type: TimerActionType.RESET
+    })
+};
 
 /* timer reducer to work with useReducer Hooks in react
  *
@@ -19,18 +45,29 @@ const timerReducer = (state, action) => {
         return initTimer;
     }
     else if (action.type === 'decrement') {
-        return startTimer(state, action);
+        return decrementTimer(state, action);
     } 
     else if (action.type === 'pause') {
-        return state;
+        return state
     }
 }
 
 // separate out the logic that decrements the timer. The code should be self-explanatory
-const startTimer = (state, action) => {
+const decrementTimer = (state, action) => {
     if (state.sec === 0 && state.min === 0) {
-        //here is when the timer completes
-        if (action.onComplete) action.onComplete()
+        //inside here is when the timer completes
+
+        //stop the timer
+        clearInterval(action.timerId)
+
+        //calls onComplete.
+        if (action.onComplete) 
+            action.onComplete()
+        else
+            console.warn("onComplete props is not provided to <Timer/>" + 
+                    "Therefore nothing happens when timer reaches 00:00");
+
+        //no state change, the time is still 00:00
         return state;
     } 
     else if (state.sec === 0) {
@@ -47,21 +84,5 @@ const startTimer = (state, action) => {
     }
 }
 
-//Reducer takes an action and update the state: these are the actions.
-const TimerActions = {
-	DECREMENT: {
-		target: 'Timer',
-		type: 'decrement',
-        onComplete: undefined
-	},
-	PAUSE: {
-		target: 'Timer',
-		type: 'pause'
-	},
-	RESET: {
-		target: 'Timer',
-		type: 'reset'
-	}
-};
 
 export { timerReducer, initTimer, TimerActions }
