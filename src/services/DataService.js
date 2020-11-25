@@ -36,8 +36,8 @@ function saveTimerSession(session) {
  * @param {Date} startDate - The start date of the query. Must be in the granularity of date.
  * @param {Date} endDate - The end date of the query. Must be in the granularity of date.
  * @param {Array} types - The list of timer session types to query
- * @returns {Promise} If resolved, return the array of the TimerSession.
- *                    If rejected, it contains an error.
+ * @returns {Promise<TimerSession[]>} Promise fulfilled by the array of the TimerSession.
+ *                                    If rejected, it contains an error.
  * @public
  */
 function loadTimerSessionListByDate(startDate, endDate, types) {
@@ -84,7 +84,7 @@ function savePomodoroSettings(tag, settings) {
 /**
  * loadAllPomodoroSettings
  * @desc Load all pomodoro settings 
- * @returns {Promise} If resolved, return the mapping object from tag to the PomodoroSettings.
+ * @returns {Promise<object>} Promise fulfilled by the mapping object from tag to the PomodoroSettings.
  *                    If rejected, it contains an error.
  * @public
  */
@@ -131,7 +131,7 @@ function saveUISettings(settings) {
 /**
  * loadUISettings
  * @desc Load the UI settings 
- * @returns {Promise} If resolved, the promise contains the saved UI settings.
+ * @returns {Promise<UISettings>} Promise fulfilled by the saved UI settings.
  *                    If rejected when no previous settings saved, it contains an error.
  * @public
  */
@@ -152,8 +152,7 @@ function loadUISettings() {
 /**
  * clearAllHistory
  * @desc Clear all timer sessions, Pomodoro settings, and UI settings in database.
- * @returns {Promise} If resolved, do nothing.
- *                    If rejected, it contains an error.
+ * @returns {Promise} If rejected, it contains an error.
  * @public
  */
 function clearAllHistory() {
