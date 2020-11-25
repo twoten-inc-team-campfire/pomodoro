@@ -27,64 +27,10 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>
-import React, {useState, useReducer} from 'react';
+import React from 'react';
 import ClockFace from './ClockFace';
 import TimerButtons from './TimerButtons';
-
-
-//To avoid using pure string every where, I make them as constants here.
-const TimerAction = {
-    RESET: 'reset', 
-    DECREMENT: 'decrement', 
-    PAUSE: 'pause'
-}
-
-//initial state of the timer
-const initTime = { min: 25, sec: 0 }
-
-/* timer reducer to work with useReducer Hooks in react
- *
- * Arguments:
- *    @state: the current state of the app (like above, it contains the min and sec)
- *    @action: the "description" about what you want to do with the state
- * 
- * What this function does:
- *        It looks into the "action", understand what the action want us to do with the state, 
- *        and implements the logic for that action
- *
- * Return Value:
- *.       return a new state. In this case, it's an object that contains "min" and "sec"
- */
-const timeReducer = (state, action) => {
-    if (action === TimerAction.RESET) {
-        return initTime;
-    }
-    else if (action === TimerAction.DECREMENT) {
-        return decrementTime(state);
-    } 
-    else if (action === TimerAction.PAUSE) {
-        return state;
-    }
-}
-
-// separate out the logic that decrements the timer. The code should be self-explanatory
-const decrementTime = (state) => {
-    if (state.sec === 0 &amp;&amp; state.min === 0) {
-        return state;
-    } 
-    else if (state.sec === 0) {
-        return {
-            min: state.min - 1,
-            sec: 59
-        }
-    } 
-    else {
-        return {
-            min: state.min,
-            sec: state.sec - 1
-        }
-    }
-}
+import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
 
 /**
  * Timer
@@ -92,33 +38,35 @@ const decrementTime = (state) => {
  * @implements {React.Component}
  */
 function Timer (props) {
-    const [timerId, setTimerId] = useState(-1)  //timerId for setInterval
-    const [time, dispatch] = useReducer(timeReducer, initTime); //timeReducer and initTime are defined above
+    let tid;
+    const { timer, dispatch, TimerActions } = useTimerGlobalState()
+    const { onStart, onPause, onCancel, onComplete } = props;
+
     const startTimer = () => {
-        let tid = setInterval(
-            () => tick(),
+        tid = setInterval(
+            () => dispatch(TimerActions.DECREMENT(onComplete, tid)), //for every second, 
             1000 //1 second
         )
-        setTimerId(tid)
+        if (onStart) onStart();
     }
 
-    const tick = () => {
-        dispatch(TimerAction.DECREMENT);
-    }
-    
     const pauseTimer = () => {
-        clearInterval(timerId);
-        dispatch(TimerAction.PAUSE);
+        clearInterval(tid);
+        dispatch(TimerActions.PAUSE());
+
+        if (onPause) onPause();
     }
 
     const resetTimer = () => {
-        clearInterval(timerId);
-        dispatch(TimerAction.RESET);
+        clearInterval(tid);
+        dispatch(TimerActions.RESET());
+
+        if (onCancel) onCancel();
     }
 
     return (
         &lt;div className={'timer'}>
-            &lt;ClockFace min={time.min} sec={time.sec}/>
+            &lt;ClockFace min={timer.min} sec={timer.sec}/>
             &lt;TimerButtons
                 onClickStart={startTimer}
                 onClickPause={pauseTimer}
@@ -127,6 +75,7 @@ function Timer (props) {
         &lt;/div>
     )
 }
+
 
 export default Timer;</code></pre>
         </article>
@@ -138,13 +87,13 @@ export default Timer;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="PomodoroManager.html">PomodoroManager</a></li><li><a href="PomodoroSettings.html">PomodoroSettings</a></li><li><a href="TimerSession.html">TimerSession</a></li><li><a href="UISettings.html">UISettings</a></li><li><a href="UserSettings.html">UserSettings</a></li></ul><h3>Interfaces</h3><ul><li><a href="TimerInterface.html">TimerInterface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#clearAllHistory">clearAllHistory</a></li><li><a href="global.html#ClockFace">ClockFace</a></li><li><a href="global.html#loadAllPomodoroSettings">loadAllPomodoroSettings</a></li><li><a href="global.html#loadTimerSessionListByDate">loadTimerSessionListByDate</a></li><li><a href="global.html#loadUISettings">loadUISettings</a></li><li><a href="global.html#savePomodoroSettings">savePomodoroSettings</a></li><li><a href="global.html#saveTimerSession">saveTimerSession</a></li><li><a href="global.html#saveUISettings">saveUISettings</a></li><li><a href="global.html#Timer">Timer</a></li><li><a href="global.html#TIMER_SESSION_TYPE">TIMER_SESSION_TYPE</a></li><li><a href="global.html#TimerButtons">TimerButtons</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="PomodoroManager.html">PomodoroManager</a></li><li><a href="PomodoroSettings.html">PomodoroSettings</a></li><li><a href="TimerSession.html">TimerSession</a></li><li><a href="UISettings.html">UISettings</a></li><li><a href="UserSettings.html">UserSettings</a></li></ul><h3>Interfaces</h3><ul><li><a href="TimerInterface.html">TimerInterface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ClockFace">ClockFace</a></li><li><a href="global.html#Timer">Timer</a></li><li><a href="global.html#TIMER_SESSION_TYPE">TIMER_SESSION_TYPE</a></li><li><a href="global.html#TimerButtons">TimerButtons</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Nov 25 2020 20:36:08 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Nov 25 2020 20:40:49 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
