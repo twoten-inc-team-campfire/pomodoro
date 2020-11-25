@@ -34,7 +34,7 @@ test("After start button is clicked and 3 seconds passed, the timer should not b
 	let timerManager; 
 	jest.spyOn(global.console, 'error').mockImplementation(() => jest.fn());
 
-	timerManager = renderHelper(<TimerTest/>);
+	timerManager = renderHelper(<Timer/>);
 
 	const time = screen.getByRole('heading', {name: "time-remaining"});
 	const timerContentBeforeClick = time.textContent;
