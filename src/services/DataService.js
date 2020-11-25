@@ -1,3 +1,7 @@
+/**
+ * @file The services and methods to save and load data from database IndexedDB.
+ */
+
 import { Store, get, set, clear, keys } from 'idb-keyval';
 
 let timerSessionStore = new Store('IndexedDB', 'TimerSessionStore');
