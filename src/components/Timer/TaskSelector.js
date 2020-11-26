@@ -1,4 +1,5 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment } from 'react';
+import './TaskSelector.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -37,14 +38,10 @@ function TaskSelector() {
         setShowSelector(!showSelector)
         setTask(null)
     }
-
-    const closeDialog = () => {
-        setIsDialogOpen(false)
-        handleTaskClear();
-    }
   
     return ( 
         <Fragment>
+            <div className="task-box">
             { showSelector &&
                 <IconButton aria-label="selector-button" onClick={handleToggle} >
                     <ArrowDropDownIcon style={{ fontSize: '35px', color: '#015384' }} />
@@ -66,14 +63,14 @@ function TaskSelector() {
                 </span>
             }
 
-            <Dialog open={isDialogOpen} onClose={closeDialog} >
+            <Dialog open={isDialogOpen} onClose={handleCancel} >
                 <DialogContent>
                     <form>
                         <TextField 
                             id="outlined-basic" 
                             label="Task name" 
                             multiline
-                            rowsMax={4}
+                            rowsMax={3}
                             onChange={e => handleChange(e)}
                             margin="normal" />
                     </form>
@@ -89,6 +86,7 @@ function TaskSelector() {
                     }
                 </DialogActions>
             </Dialog>
+            </div>
         </Fragment>
     )
 }
