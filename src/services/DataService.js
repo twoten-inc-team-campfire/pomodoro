@@ -39,12 +39,15 @@ function saveTimerSession(session) {
  * @desc Load timer sessions of a specific range of dates.
  * @param {Date} startDate - The start date of the query. Must be in the granularity of date.
  * @param {Date} endDate - The end date of the query. Must be in the granularity of date.
- * @param {Array} types - The list of timer session types to query
+ * @param {Array} [types=[TIMER_SESSION_TYPE.POMODORO, TIMER_SESSION_TYPE.SHORT_REST ,TIMER_SESSION_TYPE.LONG_REST]] - The list of timer session types to query
  * @returns {Promise<TimerSession[]>} Promise fulfilled by the array of the TimerSession.
  *                                    If rejected, it contains an error.
  * @public
  */
-function loadTimerSessionListByDate(startDate, endDate, types) {
+function loadTimerSessionListByDate(startDate, endDate,
+                                    types = [TIMER_SESSION_TYPE.POMODORO,
+                                    TIMER_SESSION_TYPE.SHORT_REST,
+                                    TIMER_SESSION_TYPE.LONG_REST]) {
     let promises = [];
     let startTime = startDate.getTime(), endTime = endDate.getTime();
     for (var timestamp = startTime;
@@ -143,7 +146,7 @@ function loadUISettings() {
     let uiSettings;
     return get("uiSettings", uiSettingsStore)
         .then(val => {
-            if (uiSettings === undefined) {
+            if (val === undefined) {
                 throw new Error("No UI settings saved!");
             }
             return val;
