@@ -42,50 +42,50 @@ function TaskSelector() {
     return ( 
         <Fragment>
             <div className="task-box">
-            { showSelector &&
-                <IconButton aria-label="selector-button" onClick={handleToggle} >
-                    <ArrowDropDownIcon style={{ fontSize: '35px', color: '#015384' }} />
-                </IconButton>
-            }
-
-            { task || 'No Task Selected' }
-
-            <br></br>
-
-            { !isDialogOpen && task &&
-                <span>
-                    <IconButton aria-label="complete-button" onClick={handleTaskClear} >
-                        <CheckIcon style={{ fontSize: '35px', color: '#015384' }} />
+                { showSelector &&
+                    <IconButton aria-label="selector-button" onClick={handleToggle} >
+                        <ArrowDropDownIcon style={{ fontSize: '35px', color: '#015384' }} />
                     </IconButton>
-                    <IconButton aria-label="cancel-button" onClick={handleTaskClear} >
-                        <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
-                    </IconButton>
-                </span>
-            }
+                }
 
-            <Dialog open={isDialogOpen} onClose={handleCancel} >
-                <DialogContent>
-                    <form>
-                        <TextField 
-                            id="outlined-basic" 
-                            label="Task name" 
-                            multiline
-                            rowsMax={3}
-                            onChange={e => handleChange(e)}
-                            margin="normal" />
-                    </form>
-                </DialogContent>
-                <DialogActions>
-                    <Button variant="contained" onClick={handleCancel} > 
-                        Cancel
-                    </Button>
-                    { task &&
-                        <Button variant="contained" onClick={handleSubmit} > 
-                            Confirm 
+                { task || 'No Task Selected' }
+
+                <br></br>
+
+                { !isDialogOpen && task &&
+                    <span>
+                        <IconButton aria-label="complete-button" onClick={handleTaskClear} >
+                            <CheckIcon style={{ fontSize: '35px', color: '#015384' }} />
+                        </IconButton>
+                        <IconButton aria-label="cancel-button" onClick={handleTaskClear} >
+                            <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
+                        </IconButton>
+                    </span>
+                }
+
+                <Dialog open={isDialogOpen} onClose={handleCancel} >
+                    <DialogContent>
+                        <form>
+                            <TextField 
+                                id="outlined-basic" 
+                                label="Task name" 
+                                multiline
+                                rowsMax={3}
+                                onChange={e => handleChange(e)}
+                                margin="normal" />
+                        </form>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" onClick={handleCancel} > 
+                            Cancel
                         </Button>
-                    }
-                </DialogActions>
-            </Dialog>
+                        { task &&
+                            <Button variant="contained" onClick={handleSubmit} > 
+                                Confirm 
+                            </Button>
+                        }
+                    </DialogActions>
+                </Dialog>
             </div>
         </Fragment>
     )
