@@ -1,113 +1,95 @@
-import React, { useState } from 'react';
-import './TaskSelector.css';
+import React, { useState, Fragment } from 'react'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import CreateIcon from '@material-ui/icons/Create';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDownCircle';
+import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 
 
-/**
- * TaskSelector
- * @desc Component that allows users to enter a task for the current
- * pomodoro session.
- */
 function TaskSelector() {
     const [showSelector, setShowSelector] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [task, setTask] = useState(null);
-
-    /**
-     * handleToggle
-     * @desc Hides the selector and opens the dialog.
-     */
+  
     const handleToggle = () => {
         setShowSelector(!showSelector)
         setIsDialogOpen(!isDialogOpen)
     }
 
-    /**
-     * handleChange
-     * @desc Sets the task to the input provided by the user.
-     */
     const handleChange = (event) => {
         setTask(event.target.value)
     }
 
-    /**
-     * handleSubmit
-     * @desc Closes the dialog.
-     */
     const handleSubmit = () => {
         setIsDialogOpen(!isDialogOpen)
     }
 
-    /**
-     * handleCancel
-     * @desc Shows the selector, closes the dialog, and sets the task 
-     * to null.
-     */
     const handleCancel = () => {
-        handleToggle()
+        handleToggle();
         setTask(null)
     }
 
-    /**
-     * handleClearTask
-     * @desc Shows the selector and sets the task to null.
-     */
-    const handleClearTask = () => {
+    const handleTaskClear = () => {
         setShowSelector(!showSelector)
         setTask(null)
     }
+
+    const closeDialog = () => {
+        setIsDialogOpen(false)
+        handleTaskClear();
+    }
   
     return ( 
-        <div className="task-box">
+        <Fragment>
             { showSelector &&
                 <IconButton aria-label="selector-button" onClick={handleToggle} >
-                    <CreateIcon style={{ fontSize: '35px', color: '#015384' }} />
+                    <ArrowDropDownIcon style={{ fontSize: '35px', color: '#015384' }} />
                 </IconButton>
             }
 
-            <span id="taskName" data-testid="taskDescription"> { task || 'No Task Selected' } </span>
+            { task || 'No Task Selected' }
 
-            <br/>
+            <br></br>
 
-            { !showSelector &&
-                <IconButton id="clear-button" data-testid="clearButton" onClick={handleClearTask} >
-                    <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
-                </IconButton>
+            { !isDialogOpen && task &&
+                <span>
+                    <IconButton aria-label="complete-button" onClick={handleTaskClear} >
+                        <CheckIcon style={{ fontSize: '35px', color: '#015384' }} />
+                    </IconButton>
+                    <IconButton aria-label="cancel-button" onClick={handleTaskClear} >
+                        <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
+                    </IconButton>
+                </span>
             }
 
-            <Dialog id="dialog" open={isDialogOpen} >
+            <Dialog open={isDialogOpen} onClose={closeDialog} >
                 <DialogContent>
                     <form>
                         <TextField 
                             id="outlined-basic" 
                             label="Task name" 
                             multiline
-                            rowsMax={3}
+                            rowsMax={4}
                             onChange={e => handleChange(e)}
-                            data-testid="taskTextArea"
                             margin="normal" />
                     </form>
                 </DialogContent>
-
                 <DialogActions>
-                    <Button id="cancel-button" variant="contained" onClick={handleCancel} > 
+                    <Button variant="contained" onClick={handleCancel} > 
                         Cancel
                     </Button>
                     { task &&
-                        <Button id="confirm-button" variant="contained" onClick={handleSubmit} > 
+                        <Button variant="contained" onClick={handleSubmit} > 
                             Confirm 
                         </Button>
                     }
                 </DialogActions>
             </Dialog>
-        </div>
+        </Fragment>
     )
 }
   

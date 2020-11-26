@@ -23,19 +23,11 @@ function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
         if (onClickStart) { onClickStart() }
     }
     
-    /**
-     * handlePause
-     * @desc Pauses the timer and shows the play button.
-     */
     const handlePause = () => {
         setShowPlay(!showPlay)
         if (onClickPause) { onClickPause() }
     }
 
-    /**
-     * handleCancel
-     * @desc Resets the timer and shows the play button.
-     */
     const handleCancel = () => {
         setShowPlay(!showPlay)
         if (onClickPause) { onClickCancel() }
