@@ -99,7 +99,7 @@ function loadAllPomodoroSettings() {
     let promises = [];
     let tags = [];
     let pomodoroSettingsDict = {};
-    keys(pomodoroSettingsStore)
+    return keys(pomodoroSettingsStore)
         .then(ks => {
             tags = ks;
             for (let k of ks) {
