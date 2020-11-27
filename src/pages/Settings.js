@@ -11,10 +11,13 @@ import {useSettingsGlobalState} from '../GlobalState/GlobalStateHooks';
 function Settings(props) {
 
     const { settings, dispatch, SettingsActions } = useSettingsGlobalState()
+    
+    const handleCheckedChange = (event) => {
+        let name = event.target.name;
+        let newValue = event.target.checked;
 
-    const {autoBreak, autoFocus, focusLength, shortBreakLength,
-        longBreakLength, focusCycleCount, pause, fastForward, 
-        cancel, taskSelection} = settings;
+        dispatch(SettingsActions.HANDLE_CHANGE(name, newValue));
+    }
 
     const handleChange = (event) => {
         let name = event.target.name;
@@ -22,6 +25,10 @@ function Settings(props) {
 
         dispatch(SettingsActions.HANDLE_CHANGE(name, newValue));
     }
+
+    const {autoBreak, autoFocus, focusLength, shortBreakLength,
+        longBreakLength, focusCycleCount, pause, fastForward, 
+        cancel, taskSelection} = settings;
 
     return (
         <div className="Settings">
@@ -31,7 +38,7 @@ function Settings(props) {
                         <p>Auto Start Break after Pomodoro</p>
                     </Grid>
                     <Grid item xs>
-                        <Switch checked={autoBreak} onChange={handleChange} name='autoBreak' />
+                        <Switch checked={settings.autoBreak} onChange={handleCheckedChange} name='autoBreak' />
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
@@ -39,7 +46,7 @@ function Settings(props) {
                         <p>Auto Start Pomodoro after Break</p>
                     </Grid>
                     <Grid item xs>
-                        <Switch checked={autoFocus} onChange={handleChange} name='autoFocus' />
+                        <Switch checked={settings.autoFocus} onChange={handleCheckedChange} name='autoFocus' />
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="center">
@@ -103,10 +110,10 @@ function Settings(props) {
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="center">
-                    <Grid item xs={9}>
+                    <Grid item xs={8}>
                         <p>Pomodoros Before Long Break</p>
                     </Grid>
-                    <Grid item xs>
+                    <Grid item xs={4}>
                         <FormControl variant="outlined">
                             <Select
                                 label="pomodoro-count"
