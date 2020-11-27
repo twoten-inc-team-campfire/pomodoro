@@ -45,7 +45,7 @@ test('test saveTimerSession, success', () => {
         .then(s => expect(s).toEqual(expectedStore));
 });
 
-test('test saveTimerSession, get error', () => {
+test('test saveTimerSession, idb get error', () => {
     let minuteDate = new Date('2020-1-1 10:51:05');
     let session = new TimerSession(minuteDate, minuteDate);
     get.mockRejectedValue(new Error());
@@ -55,7 +55,7 @@ test('test saveTimerSession, get error', () => {
         .toThrow();
 });
 
-test('test saveTimerSession, set error', () => {
+test('test saveTimerSession, idb set error', () => {
     let minuteDate = new Date('2020-1-1 10:51:05');
     let session = new TimerSession(minuteDate, minuteDate);
     get.mockResolvedValue({});
@@ -108,7 +108,7 @@ test('test loadTimerSessionListByDate, success', () => {
         .toEqual(expectedList);
 });
 
-test('test loadTimerSessionListByDate, error', () => {
+test('test loadTimerSessionListByDate, idb get error', () => {
     let dateDate = new Date('2020-1-1');
     get.mockRejectedValue(new Error());
 
@@ -133,7 +133,7 @@ test('test savePomodoroSettings, success', () => {
         .then(s => expect(s).toEqual(expectedStore))
 });
 
-test('test savePomodoroSettings, error', () => {
+test('test savePomodoroSettings, idb set error', () => {
     let settings = new PomodoroSettings();
     set.mockRejectedValue(new Error());
 
@@ -156,7 +156,7 @@ test('test loadAllPomodoroSettings, success', () => {
         .toEqual(store);
 });
 
-test('test loadAllPomodoroSettings, keys error', () => {
+test('test loadAllPomodoroSettings, idb keys error', () => {
     keys.mockRejectedValue(new Error());
 
     return expect(loadAllPomodoroSettings())
@@ -164,7 +164,7 @@ test('test loadAllPomodoroSettings, keys error', () => {
         .toThrow();
 });
 
-test('test loadAllPomodoroSettings, get error', () => {
+test('test loadAllPomodoroSettings, idb get error', () => {
     keys.mockResolvedValue([1, 2, 3]);
     get.mockRejectedValue(new Error());
 
@@ -188,7 +188,7 @@ test('test saveUISettings, success', () => {
 
 });
 
-test('test saveUISettings, error', () => {
+test('test saveUISettings, idb set error', () => {
     let settings = new UISettings();
     set.mockRejectedValue(new Error());
 
@@ -214,7 +214,7 @@ test('test loadUISettings, no saved settings', () => {
         .toThrow();
 });
 
-test('test loadUISettings, error', () => {
+test('test loadUISettings, idb get error', () => {
     get.mockRejectedValue(new Error());
 
     return expect(loadUISettings())
@@ -230,7 +230,7 @@ test('test clearAllHistory, success', () => {
         .toEqual([true, true, true]);
 });
 
-test('test clearAllHistory, error', () => {
+test('test clearAllHistory, idb clear error', () => {
     clear.mockRejectedValue(new Error());
 
     return expect(clearAllHistory())
