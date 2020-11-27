@@ -1,15 +1,19 @@
 import './App.css';
-// import Home from './pages/Home.js';
+import { GlobalStateProvider } from './GlobalState/GlobalState'
+import Home from './pages/Home.js';
 import Settings from './pages/Settings.js';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <Settings/>
-      </header>
-    </div>
-      
+    <GlobalStateProvider>
+      <div className="App">
+        <header className="App-header">
+          <Home/>
+          {/* <Settings/> */}
+        </header>
+      </div>
+    </GlobalStateProvider>
   );
 }
 
