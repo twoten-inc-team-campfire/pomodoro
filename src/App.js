@@ -9,8 +9,8 @@ function App() {
     <GlobalStateProvider>
       <div className="App">
         <header className="App-header">
-          <Home/>
-          {/* <Settings/> */}
+          {/* <Home/> */}
+          <Settings/>
         </header>
       </div>
     </GlobalStateProvider>
