@@ -1,9 +1,6 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { InputLabel } from '@material-ui/core';
