@@ -3,6 +3,7 @@
  */
 
 import { Store, get, set, clear, keys } from 'idb-keyval';
+import { TIMER_SESSION_TYPE } from '../classes/TimerSession';
 
 let timerSessionStore = new Store('IndexedDB', 'TimerSessionStore');
 let pomodoroSettingsStore = new Store('IndexedDB', 'PomodoroSettingsStore');
@@ -16,18 +17,19 @@ let uiSettingsStore = new Store('IndexedDB', 'UISettingsStore');
  * @public
  */
 function saveTimerSession(session) {
+    // mapping: timestamp -> {type: [session array]}
     let date = new Date(session.startTime.toDateString());
     let timestamp = date.getTime(); // time in the granularity of date
     return get(timestamp, timerSessionStore)
         .then(dict => {
             dict = dict || {};
-            list = dict[session.type] || [];
+            let list = dict[session.type] || [];
             list.push(session);
             dict[session.type] = list;
             return dict;
         })
         .then(dict => {
-            set(timestamp, dict, timerSessionStore);
+            return set(timestamp, dict, timerSessionStore);
         })
         .catch(() => {
             throw new Error("Failed to save timer session!");
@@ -53,7 +55,7 @@ function loadTimerSessionListByDate(startDate, endDate,
     for (var timestamp = startTime;
         timestamp <= endTime;
         timestamp += 1000 * 3600 * 24) {
-        promises.add(get(timestamp, timerSessionStore));
+        promises.push(get(timestamp, timerSessionStore));
     }
 
     let resList = [];
@@ -62,7 +64,7 @@ function loadTimerSessionListByDate(startDate, endDate,
             for (let dict of dicts) {
                 if (dict === undefined) continue;
                 for (let t of types) {
-                    list = dict[t] || [];
+                    let list = dict[t] || [];
                     resList.push(...list);
                 }
             }
