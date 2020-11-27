@@ -8,24 +8,41 @@ import {
     loadUISettings,
     clearAllHistory,
 } from './DataService';
-import { TimerSession } from '../classes/TimerSession';
+import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
 import { PomodoroSettings } from '../classes/settings/PomodoroSettings';
 import { UISettings } from '../classes/settings/UISettings';
 
 jest.mock('idb-keyval');
 
-test('test test', () => {
-    get.mockImplementation(v => Promise.resolve(v + 1));
-    return get(1).then(v => {
-        expect(v).toBe(2);
-    });
-});
-
 test('test saveTimerSession, success', () => {
-    let minuteDate = new Date('2020-1-1 10:51:05');
-    let session = new TimerSession(minuteDate, minuteDate);
-    let dateDate = new Date('2020-1-1');
-    let timestamp = dateDate.getTime();
+    // expected store construction
+    let minuteDate1 = new Date('2020-1-1 10:51:05'), minuteDate2 = new Date('2020-1-4 10:51:05');
+    let dateDate1 = new Date('2020-1-1'), dateDate2 = new Date('2020-1-4');
+    let timestamp1 = dateDate1.getTime(), timestamp2 = dateDate2.getTime();
+    let session1 = new TimerSession(minuteDate1, minuteDate1, TIMER_SESSION_TYPE.POMODORO),
+        session2 = new TimerSession(minuteDate1, minuteDate1, TIMER_SESSION_TYPE.SHORT_REST),
+        session3 = new TimerSession(minuteDate2, minuteDate2, TIMER_SESSION_TYPE.LONG_REST);
+
+    let expectedStore = {};
+    expectedStore[timestamp1] = {
+        [TIMER_SESSION_TYPE.POMODORO]: [session1],
+        [TIMER_SESSION_TYPE.SHORT_REST]: [session2],
+    };
+    expectedStore[timestamp2] = {
+        [TIMER_SESSION_TYPE.LONG_REST]: [session3],
+    };
+
+    let actualStore = {};
+    get.mockImplementation(t => Promise.resolve(actualStore[t]));
+    set.mockImplementation((t, d) => {
+        actualStore[t] = d;
+        return Promise.resolve(actualStore);
+    });
+
+    return saveTimerSession(session1)
+        .then(() => saveTimerSession(session2))
+        .then(() => saveTimerSession(session3))
+        .then(s => expect(s).toEqual(expectedStore));
 });
 
 test('test saveTimerSession, get error', () => {
@@ -49,34 +66,77 @@ test('test saveTimerSession, set error', () => {
         .toThrow();
 });
 
-test('test sth', () => {
+test('test loadTimerSessionListByDate, empty success', () => {
+    let dateDate = new Date('2020-1-1');
+    let expectedStore = {};
+    get.mockImplementation(t => Promise.resolve(expectedStore[t]));
 
+    return expect(loadTimerSessionListByDate(dateDate, dateDate))
+        .resolves
+        .toEqual([]);
 });
 
-test('test sth', () => {
+test('test loadTimerSessionListByDate, success', () => {
+    // expected store construction
+    let minuteDate1 = new Date('2020-1-1 10:51:05'), minuteDate2 = new Date('2020-1-4 10:51:05');
+    let dateDate1 = new Date('2020-1-1'), dateDate2 = new Date('2020-1-4');
+    let timestamp1 = dateDate1.getTime(), timestamp2 = dateDate2.getTime();
+    let session1 = new TimerSession(minuteDate1, minuteDate1, TIMER_SESSION_TYPE.POMODORO),
+        session2 = new TimerSession(minuteDate1, minuteDate1, TIMER_SESSION_TYPE.SHORT_REST),
+        session3 = new TimerSession(minuteDate2, minuteDate2, TIMER_SESSION_TYPE.LONG_REST);
 
+    let store = {};
+    store[timestamp1] = {
+        [TIMER_SESSION_TYPE.POMODORO]: [session1],
+        [TIMER_SESSION_TYPE.SHORT_REST]: [session2],
+    };
+    store[timestamp2] = {
+        [TIMER_SESSION_TYPE.LONG_REST]: [session3],
+    };
+
+    get.mockImplementation(t => Promise.resolve(store[t]));
+    let expectedList = [session1, session3];
+
+    return expect(loadTimerSessionListByDate(
+        dateDate1,
+        dateDate2,
+        [
+            TIMER_SESSION_TYPE.POMODORO,
+            TIMER_SESSION_TYPE.LONG_REST
+        ]))
+        .resolves
+        .toEqual(expectedList);
+});
+
+test('test loadTimerSessionListByDate, error', () => {
+    let dateDate = new Date('2020-1-1');
+    get.mockRejectedValue(new Error());
+
+    return expect(loadTimerSessionListByDate(dateDate, dateDate))
+        .rejects
+        .toThrow();
 });
 
 test('test savePomodoroSettings, success', () => {
-    let expected = {
+    let expectedStore = {
         'settings1': 1,
         'settings2': 2,
     }
-    let actual = {};
+    let actualStore = {};
     set.mockImplementation((k, v) => {
-        actual[k] = v;
-        return Promise.resolve(actual);
+        actualStore[k] = v;
+        return Promise.resolve(actualStore);
     });
 
-    return savePomodoroSettings('settings1', expected['settings1'])
-        .then(s => savePomodoroSettings('settings2', expected['settings2']))
-        .then(s => expect(s).toEqual(expected))
+    return savePomodoroSettings('settings1', expectedStore['settings1'])
+        .then(s => savePomodoroSettings('settings2', expectedStore['settings2']))
+        .then(s => expect(s).toEqual(expectedStore))
 });
 
 test('test savePomodoroSettings, error', () => {
     let settings = new PomodoroSettings();
     set.mockRejectedValue(new Error());
-    
+
     return expect(savePomodoroSettings('settings', settings))
         .rejects
         .toThrow();
@@ -164,7 +224,7 @@ test('test loadUISettings, error', () => {
 
 test('test clearAllHistory, success', () => {
     clear.mockResolvedValue(true);
-    
+
     return expect(clearAllHistory())
         .resolves
         .toEqual([true, true, true]);
