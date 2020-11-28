@@ -2,7 +2,7 @@
  * TimerSession
  * @desc A period of time that the PomodoroManager was active. Used for calculating statistics about user's productivity.
  */
-export class TimerSession {
+class TimerSession {
 
     /**
      * Create a TimerSession.
@@ -30,11 +30,25 @@ export class TimerSession {
     /**
      * getDuration
      * @desc Get the duration that the TimerSession lasted.
-     * @returns {number} The duration of the TimerSession.
+     * @returns {number} The duration of the TimerSession in milliseconds
      * @public
      */
     getDuration() {
-        return (this.endTime - this.startTime)
+        return (this.endTime.getTime() - this.startTime.getTime())
+    }
+
+    /**
+     * copy
+     * @desc Returns a copy of the given TimerSession.
+     * @returns {TimerSession} The copy of the current TimerSession.
+     */
+    copy() {
+        return new TimerSession(
+            new Date(this.startTime),
+            new Date(this.endTime),
+            this.type,
+            this.task
+        )
     }
 }
 
@@ -44,11 +58,23 @@ export class TimerSession {
  * @readonly
  * @public
  */
-export const TIMER_SESSION_TYPE = {
+const TIMER_SESSION_TYPE = {
     /** @property {number} POMODORO - A pomodoro session, also known as a "work" or "focus" session. */
     POMODORO: 1,
     /** @property {number} SHORT_REST - A short rest */
     SHORT_REST: 2,
     /** @property {number} LONG_REST - A long rest */
     LONG_REST: 3
+}
+
+export {TimerSession, TIMER_SESSION_TYPE}
+
+// This is an example unit test for when we get unit tests working.
+function testDuration() {
+    let currentTime = Date.now();
+    let offset = 25 * 60 * 1000
+    let startTime = new Date(currentTime);
+    let endTime = new Date(currentTime + offset);
+    let timerSession = new TimerSession(startTime, endTime)
+    return timerSession.getDuration() === offset
 }
