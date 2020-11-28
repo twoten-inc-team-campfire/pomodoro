@@ -146,8 +146,12 @@ function getSessionRow(session) {
                 <div style={{"display": "flex", "flexDirection": "column", "gridColumn": "1",
                     "justifySelf": "end", "color": textSecondary}}
                 >
-                    <p>{`${getDateHours(session.startTime)}:${getDateMinutes(session.startTime)}`}</p>
-                    <p>{`${getDateHours(session.endTime)}:${getDateMinutes(session.endTime)}`}</p>
+                    <p style={{"margin": "0 0 0 0"}}>
+                        {`${getDateHours(session.startTime)}:${getDateMinutes(session.startTime)}`}
+                    </p>
+                    <p>
+                        {`${getDateHours(session.endTime)}:${getDateMinutes(session.endTime)}`}
+                    </p>
                 </div>,
                 <svg viewBox={"0 0 10 100"} style={{"gridColumn": "2", "height": "6em", "width": "auto",
                     "justifySelf": "center"}}
