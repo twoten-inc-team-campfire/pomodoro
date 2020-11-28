@@ -6,13 +6,35 @@ let colorSecondary = "#07a0c3";
 let textPrimary = "#000000";
 let textSecondary = "#838383";
 
-function getDateHour(date) {
+/**
+ * getDateHour
+ * @desc Returns the formatted hour (hh) for a given date.
+ * @param {Date} date - Returns the formatted hour from this date.
+ * @example
+ * // returns 03
+ * date.setHours(3, 6, 5, 0)
+ * getDateHour(date);
+ * @returns {string}
+ * @ignore
+ */
+function getDateHours(date) {
     let hour = date.getHours().toString();
     if (hour.length < 2)
         hour = "0" + hour;
     return hour;
 }
 
+/**
+ * getDateMinutes
+ * @desc Returns the formatted minute (mm) for a given date.
+ * @param {Date} date - Returns the formatted minute from this date.
+ * @example
+ * // returns 06
+ * date.setHours(3, 6, 5, 0)
+ * getDateHour(date);
+ * @returns {string}
+ * @ignore
+ */
 function getDateMinutes(date) {
     let minute = date.getMinutes().toString();
     if (minute.length < 2)
@@ -20,6 +42,14 @@ function getDateMinutes(date) {
     return minute;
 }
 
+/**
+ * getFormattedPauseTime
+ * @desc Returns the number of milliseconds that the timer has been paused for a clock cycle in the format
+ * "X hours, Y minutes, Z seconds", omitted the leading terms if they're 0.
+ * @param {number} time - The total number of milliseconds the timer has been paused for a clock cycle.
+ * @returns {string}
+ * @ignore
+ */
 function getFormattedPauseTime(time) {
     let hours = null;
     let minutes = null;
@@ -50,6 +80,13 @@ function getFormattedPauseTime(time) {
     return "";
 }
 
+/**
+ * getTasksString
+ * @desc Takes an array of tasks and reduces them into a single string that describes the tasks completed.
+ * @param {[string]} tasks - The array of tasks to be reduced into a string.
+ * @returns {string}
+ * @ignore
+ */
 function getTasksString(tasks) {
     if (tasks.length > 0) {
         let str = "";
@@ -62,6 +99,20 @@ function getTasksString(tasks) {
     return "";
 }
 
+/**
+ * @typedef {TimerSession} SessionInfo
+ * @desc A TimerSession, but with additional info about all the tasks completed during that timer cycle and the
+ * amount of time the timer was paused.
+ * @property {[string]} tasks - All tasks that were undertaken during the timer cycle
+ * @property {number} pauseTime - The length of time the timer was paused during a part of the cycle in milliseconds.
+ * @ignore
+ */
+
+/**
+ * getSessionRow
+ * @param {SessionInfo} session
+ * @returns {JSX.Element[]}
+ */
 function getSessionRow(session) {
     switch (session.type) {
         case TIMER_SESSION_TYPE.SHORT_REST:
@@ -95,8 +146,8 @@ function getSessionRow(session) {
                 <div style={{"display": "flex", "flexDirection": "column", "gridColumn": "1",
                     "justifySelf": "end", "color": textSecondary}}
                 >
-                    <p>{`${getDateHour(session.startTime)}:${getDateMinutes(session.startTime)}`}</p>
-                    <p>{`${getDateHour(session.endTime)}:${getDateMinutes(session.endTime)}`}</p>
+                    <p>{`${getDateHours(session.startTime)}:${getDateMinutes(session.startTime)}`}</p>
+                    <p>{`${getDateHours(session.endTime)}:${getDateMinutes(session.endTime)}`}</p>
                 </div>,
                 <svg viewBox={"0 0 10 100"} style={{"gridColumn": "2", "height": "6em", "width": "auto",
                     "justifySelf": "center"}}
@@ -118,8 +169,9 @@ function getSessionRow(session) {
 }
 
 /**
- *
- * @param {[TimerSession]} timerSessions
+ * DailyLogItem
+ * @desc Returns information about a group of sequential TimerSessions in a specific day.
+ * @param {[TimerSession]} timerSessions - A group of sequential TimerSessions that were all recorded in one day.
  * @returns {JSX.Element}
  * @constructor
  */
@@ -156,7 +208,7 @@ export default function DailyLogItem({timerSessions}) {
             "gap": "0em 1em",
         }}>
             <p style={{"justifySelf": "center", "color": textPrimary}}>
-                {`${getDateHour(timerSessions[0].startTime)}:${getDateMinutes(timerSessions[0].startTime)}`}
+                {`${getDateHours(timerSessions[0].startTime)}:${getDateMinutes(timerSessions[0].startTime)}`}
             </p>
             <svg style={{"width": "3.5em", "height": "auto",
                 "justifySelf": "center", "alignSelf": "center"}} viewBox={"0, 0, 4, 4"}>
