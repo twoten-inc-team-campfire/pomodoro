@@ -28,17 +28,17 @@ export class TimerSession {
         this.type = type;
         /** @member {string} TimerSession#task
          * @desc The title of the task as a string */
-        this.task = task
+        this.task = task;
     }
 
     /**
      * getDuration
      * @desc Get the duration that the TimerSession lasted.
-     * @returns {number} The duration of the TimerSession.
+     * @returns {number} The duration of the TimerSession in milliseconds
      * @public
      */
     getDuration() {
-        return (this.endTime - this.startTime)
+        return (this.endTime - this.startTime);
     }
 
     /**
@@ -54,7 +54,21 @@ export class TimerSession {
         return startTime instanceof Date
             && endTime instanceof Date
             && typeof type == 'number'
-            && Object.values(TIMER_SESSION_TYPE).includes(type)
+            && Object.values(TIMER_SESSION_TYPE).includes(type);
+    }
+
+    /**
+     * copy
+     * @desc Returns a copy of the given TimerSession.
+     * @returns {TimerSession} The copy of the current TimerSession.
+     */
+    copy() {
+        return new TimerSession(
+            new Date(this.startTime),
+            new Date(this.endTime),
+            this.type,
+            this.task
+        );
     }
 }
 
