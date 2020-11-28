@@ -2,7 +2,7 @@
  * TimerSession
  * @desc A period of time that the PomodoroManager was active. Used for calculating statistics about user's productivity.
  */
-export class TimerSession {
+class TimerSession {
 
     /**
      * Create a TimerSession.
@@ -34,7 +34,7 @@ export class TimerSession {
     /**
      * getDuration
      * @desc Get the duration that the TimerSession lasted.
-     * @returns {number} The duration of the TimerSession.
+     * @returns {number} The duration of the TimerSession in milliseconds
      * @public
      */
     getDuration() {
@@ -55,6 +55,21 @@ export class TimerSession {
             && endTime instanceof Date
             && typeof type == 'number'
             && Object.values(TIMER_SESSION_TYPE).includes(type)
+        return (this.endTime.getTime() - this.startTime.getTime())
+    }
+
+    /**
+     * copy
+     * @desc Returns a copy of the given TimerSession.
+     * @returns {TimerSession} The copy of the current TimerSession.
+     */
+    copy() {
+        return new TimerSession(
+            new Date(this.startTime),
+            new Date(this.endTime),
+            this.type,
+            this.task
+        )
     }
 }
 
@@ -64,7 +79,7 @@ export class TimerSession {
  * @readonly
  * @public
  */
-export const TIMER_SESSION_TYPE = {
+const TIMER_SESSION_TYPE = {
     /** @property {number} POMODORO - A pomodoro session, also known as a "work" or "focus" session. */
     POMODORO: 1,
     /** @property {number} SHORT_REST - A short rest */
@@ -72,3 +87,5 @@ export const TIMER_SESSION_TYPE = {
     /** @property {number} LONG_REST - A long rest */
     LONG_REST: 3
 }
+
+export {TimerSession, TIMER_SESSION_TYPE}
