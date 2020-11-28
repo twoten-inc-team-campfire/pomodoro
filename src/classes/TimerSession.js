@@ -2,7 +2,7 @@
  * TimerSession
  * @desc A period of time that the PomodoroManager was active. Used for calculating statistics about user's productivity.
  */
-export class TimerSession {
+class TimerSession {
 
     /**
      * Create a TimerSession.
@@ -34,7 +34,21 @@ export class TimerSession {
      * @public
      */
     getDuration() {
-        return (this.endTime.getMilliseconds() - this.startTime.getMilliseconds())
+        return (this.endTime.getTime() - this.startTime.getTime())
+    }
+
+    /**
+     * copy
+     * @desc Returns a copy of the given TimerSession.
+     * @returns {TimerSession} The copy of the current TimerSession.
+     */
+    copy() {
+        return new TimerSession(
+            new Date(this.startTime),
+            new Date(this.endTime),
+            this.type,
+            this.task
+        )
     }
 }
 
@@ -52,6 +66,8 @@ const TIMER_SESSION_TYPE = {
     /** @property {number} LONG_REST - A long rest */
     LONG_REST: 3
 }
+
+export {TimerSession, TIMER_SESSION_TYPE}
 
 // This is an example unit test for when we get unit tests working.
 function testDuration() {
