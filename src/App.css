@@ -53,10 +53,10 @@
 
 :root {
   --background: #e5e5e5;
-  --color-primary: #086788;
-  --color-primary-contrast: #f1f2eb;
-  --color-secondary: #07a0c3;
-  --text-primary: #000000;
-  --text-secondary: #838383;
-  --text-tertiary: #c4c4c4;
+  --color-primary: #086788; /* The primary fill color. */
+  --color-primary-contrast: #f1f2eb; /* Use when you want to contrast something surrounded by the primary color, like text. */
+  --color-secondary: #07a0c3; /* The secondary fill color. */
+  --text-primary: #000000; /* Primary text color. */
+  --text-secondary: #838383; /* Used to outline primary things, such as prominant icons or text. */
+  --text-tertiary: #c4c4c4; /* Used to outline secondary things. Don't think I've used this one yet. */
 }
