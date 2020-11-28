@@ -3,10 +3,13 @@ import {TimerSession} from "../../classes/TimerSession";
 import DailyLogItem from "./DailyLogItem";
 
 /**
- *
- * @param {Date} date
- * @param {[TimerSessions]} timerSessions
- * @param {number} gap
+ * DailyLog
+ * @desc Displays a log of the TimerSessions for a specific day, showing information about groups of consecutive
+ * TimerSessions: time started, total amount of work done, tasks that were worked on, etc.
+ * @param {Date} date - The date whose information is being logged.
+ * @param {[TimerSessions]} timerSessions - The TimerSessions recorded on the date passed in as an argument.
+ * @param {number} gap - The permitted time gap between consecutive TimerSessions before they're split into separate
+ * segments.
  * @returns {JSX.Element}
  * @constructor
  */
