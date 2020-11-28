@@ -9,7 +9,8 @@ let textTertiary = "#c4c4c4";
 let colorPrimary = "#086788";
 
 /**
- *
+ * TimelineGraph
+ * @desc Displays a visual summary of a day's TimerSessions in the form of a marked timeline.
  * @param {Date} date - The date we want to model.
  * @param {[TimerSession]} timerSessions - The array of TimerSessions on that date. For now, we're assuming
  * the array is well-formed. In other words, the TimerSessions are ordered sequentially and at least partially take
