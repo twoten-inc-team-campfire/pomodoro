@@ -38,7 +38,21 @@ class TimerSession {
      * @public
      */
     getDuration() {
-        return (this.endTime - this.startTime)
+        return (this.endTime.getTime() - this.startTime.getTime())
+    }
+
+    /**
+     * copy
+     * @desc Returns a copy of the given TimerSession.
+     * @returns {TimerSession} The copy of the current TimerSession.
+     */
+    copy() {
+        return new TimerSession(
+            new Date(this.startTime),
+            new Date(this.endTime),
+            this.type,
+            this.task
+        )
     }
 
     /**
