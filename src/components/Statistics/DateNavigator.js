@@ -54,11 +54,11 @@ function DateNavigator({date, onDateChange}) {
     function strToDate(str) {
         let substrs = str.split('-');
         let newDate = new Date();
-        newDate.setFullYear(parseInt(substrs[0]), parseInt(substrs[1])+1, parseInt(substrs[2]));
+        newDate.setFullYear(parseInt(substrs[0]), parseInt(substrs[1])-1, parseInt(substrs[2]));
         return newDate;
     }
     return (
-        <div style={{"display": "flex", "align-items": "center", "justify-content": "center"}}>
+        <div style={{"display": "flex", "alignItems": "center", "justifyContent": "center"}}>
             <IconButton
                 onClick={() => onDateChange(date, changeDate(-1))}
             >
