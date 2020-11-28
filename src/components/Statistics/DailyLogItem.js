@@ -149,7 +149,7 @@ function getSessionRow(session) {
                     <p style={{"margin": "0 0 0 0"}}>
                         {`${getDateHours(session.startTime)}:${getDateMinutes(session.startTime)}`}
                     </p>
-                    <p>
+                    <p style={{"margin": "0 0 0 0"}}>
                         {`${getDateHours(session.endTime)}:${getDateMinutes(session.endTime)}`}
                     </p>
                 </div>,
@@ -160,11 +160,11 @@ function getSessionRow(session) {
                 </svg>,
                 <div style={{"gridColumn": "3", "height": "inherit", "overflow": "hide", "justifySelf": "start",
                     "textAlign": "start"}}>
-                    <p style={{"color": textPrimary}}
+                    <p style={{"color": textPrimary, "margin": "0 0 0 0"}}
                     >
                         {`Task(s): ${getTasksString(session.tasks)}`}
                     </p>
-                    <p style={{"color": textSecondary}}>
+                    <p style={{"color": textSecondary, "margin": "0 0 0 0"}}>
                         {session.pauseTime >= 1000 ? `Time paused: ${getFormattedPauseTime(session.pauseTime)}` : ""}
                     </p>
                 </div>
