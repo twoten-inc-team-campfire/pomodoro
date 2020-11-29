@@ -5,20 +5,37 @@ import PauseIcon from '@material-ui/icons/PauseCircleFilled';
 import CancelIcon from '@material-ui/icons/Cancel';
 // import FastForwardIcon from '@material-ui/icons/FastForward';
 
-/** TimerButtons */
+
+/**
+ * TimerButtons
+ * @desc Allows users to start, pause, and cancel the current pomodoro
+ * session.
+ */
 function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
     const [showPlay, setShowPlay] = useState(true);
 
+    /**
+     * handlePlay
+     * @desc Starts the timer and hides the play button.
+     */
     const handlePlay = () => {
         setShowPlay(!showPlay)
         if (onClickStart) { onClickStart() }
     }
     
+    /**
+     * handlePause
+     * @desc Pauses the timer and shows the play button.
+     */
     const handlePause = () => {
         setShowPlay(!showPlay)
         if (onClickPause) { onClickPause() }
     }
 
+    /**
+     * handleCancel
+     * @desc Resets the timer and shows the play button.
+     */
     const handleCancel = () => {
         setShowPlay(!showPlay)
         if (onClickPause) { onClickCancel() }
@@ -45,7 +62,7 @@ function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
     )
 }
 
-// this is the fastford button, don't need it for now.
+// this is the fastforward button, don't need it for now.
 // { showForward &&
 //     <IconButton aria-label="forward">
 //         <FastForwardIcon style={{ fontSize: '75px', color: '#015384' }} onClick={this.alternateButtons} />
