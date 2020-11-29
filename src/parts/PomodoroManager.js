@@ -1,13 +1,68 @@
-import React, {Component} from 'react';
-import {UserSettings} from "../classes/settings/UserSettings";
-import {TimerSession} from "../classes/TimerSession";
+import React, {useReducer} from 'react';
+import {TimerSession, TIMER_SESSION_TYPE} from "../classes/TimerSession";
+import Timer from "../components/Timer/Timer"
+
+const initState = {
+    type: TIMER_SESSION_TYPE.POMODORO,
+    count: 0,
+    sessionIngterval: 4
+}
+
+const forward = (state) => {
+    let type = state.type;
+    let count = state.count;
+    let sessionIngterval = state.sessionIngterval;
+    
+    switch(type) {
+        case TIMER_SESSION_TYPE.POMODORO:
+            if (count === sessionIngterval - 1) {
+                type = TIMER_SESSION_TYPE.LONG_REST;
+            }
+            else {
+                type = TIMER_SESSION_TYPE.SHORT_REST;
+            }
+            count = (count + 1) % sessionIngterval;
+            return {
+                type: type,
+                count: count,
+                sessionIngterval: state.sessionIngterval
+            }
+        case TIMER_SESSION_TYPE.SHORT_REST:
+        case TIMER_SESSION_TYPE.LONG_REST:
+            type = TIMER_SESSION_TYPE.POMODORO;
+            return {
+                type: type,
+                count: count,
+                sessionIngterval: state.sessionIngterval
+            }
+        default:
+            throw new Error('Unexpected type');
+    }
+}
+
+const managerReducer = (state, action) => {
+    if (action === PomodoroManagerAction.NEXT) {
+        return forward(state);
+    }
+    else {
+        throw new Error('Unexpected action');
+    }
+}
+
+const PomodoroManagerAction = {
+    NEXT: 'next'
+}
 
 /**
  * PomodoroManager
  * @desc PomodoroManager that encapsulates the pomodoro logic applied to a timer object.
  * @component
  */
-class PomodoroManager extends Component {
+function PomodoroManager ({onNewTimerSession}) {
+
+    const [state, dispatch] = useReducer(managerReducer, initState);
+    let startTime = null;
+    let endTime = null;
 
     /**
      * Callback to pass a new TimerSession to the parent.
@@ -23,98 +78,61 @@ class PomodoroManager extends Component {
      * @param {UserSettings} props.UserSettings - The user's settings
      * @param {onNewTimerSession} props.onNewTimerSession - Callback to pass a new TimerSession to the parent
      */
-    constructor(props) {
-        super(props);
+
+    const onStart = () => {
+        console.log('on start');
+        startTime = Date.now();
     }
 
-    /**
-     * @desc Public function to start/resume the PomodoroManager
-     * @public
-     */
-    start() {
+    const onPause = () => {
+        endTime = Date.now();
+        console.log('on pause');
 
+        if (startTime && endTime) {
+            onNewTimerSession(new TimerSession(startTime, endTime, state.type));
+        }
+
+        startTime = null;
+        endTime = null;
     }
 
-    /**
-     * @desc Public function to pause the PomodoroManager
-     * This should return a TimerSession to the parent for the time elapsed.
-     * @public
-     */
-    pause() {
+    const onComplete = () => {
+        endTime = Date.now();
 
+        if (startTime && endTime) {
+            onNewTimerSession(new TimerSession(startTime, endTime, state.type));
+        }
+
+        startTime = null;
+        endTime = null;
+        
+        dispatch(PomodoroManagerAction.NEXT);
     }
 
-    /**
-     * @desc Public function to reset the timer back to the beginning of the current cycle.
-     * This should not return a TimerSession to the parent.
-     * @public
-     */
-    reset() {
+    const onCancel = () => {
+        console.log('on cancel');
+        endTime = Date.now();
+        
+        if (startTime && endTime) {
+            onNewTimerSession(new TimerSession(startTime, endTime, state.type));
+        }
 
+        startTime = null;
+        endTime = null;
+        
+        dispatch(PomodoroManagerAction.NEXT);
     }
 
-    /**
-     * @desc Public function to skip to the end of the current part of the cycle.
-     * This should return a TimeSession for the duration the timer ran.
-     * If the timer has not started running, return nothing.
-     * @public
-     */
-    skip() {
-
-    }
-
-    render() {
-        return "Display the timer here"
-    }
+    return (
+        <div className={'pomodoroManager'}>
+            <Timer 
+                onStart={onStart}
+                onPause={onPause}
+                onCancel={onCancel}
+                onComplete={onComplete}
+            />
+        </div>
+    )
 }
 
-/**
- * @interface TimerInterface
- * @desc Interface for timer Components that are compatible with the PomodoroManager
- */
-class TimerInterface extends React.Component {
-
-    /**
-     * Callback to notify the parent that the timer has completed.
-     * @callback onComplete
-     * @param {Date} endTime - Time at which the timer finished.
-     * @memberOf TimerInterface
-     */
-    /**
-     * @lends TimerInterface
-     * @constructs
-     * @param {Object} props - Props passed to the component.
-     * @param {number} props.duration - Duration of the timer in milliseconds
-     * @param {onComplete} props.onComplete - Callback to notify the parent that the timer has completed.
-     */
-    constructor(props) {
-        super(props)
-    }
-
-    /**
-     * @desc Public method to start timer.
-     * @public
-     */
-    start() {
-        throw new Error("Start method not implemented")
-    }
-
-    /**
-     * @desc Public method to pause the timer.
-     * @public
-     */
-    pause() {
-        throw new Error("Pause method not implemented")
-    }
-
-    /**
-     * @desc Public method to reset the timer.
-     * @public
-     */
-    reset() {
-        throw new Error("Reset method not implemented")
-    }
-
-}
-
-export { PomodoroManager, TimerInterface };
+export { PomodoroManager, initState, forward };

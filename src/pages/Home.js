@@ -1,10 +1,15 @@
 import React from 'react';
-import Timer from '../components/Timer/Timer';
+import { PomodoroManager } from '../parts/PomodoroManager';
 
 function Home () {
+    const onNewTimerSession = (timerSession) => {
+        console.log(timerSession.getDuration())
+        console.log(timerSession.type)
+    }
+
     return (
         <div>  
-            <Timer/>
+            <PomodoroManager onNewTimerSession={onNewTimerSession}/>
         </div>
     )
 }
