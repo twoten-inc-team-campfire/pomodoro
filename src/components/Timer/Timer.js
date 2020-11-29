@@ -9,10 +9,10 @@ import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
  * @desc Timer handles the functionality and logic of a countdown timer.
  * @implements {React.Component}
  */
-function Timer (props) {
 
+function Timer ({ onStart, onPause, onCancel, onComplete }) {
+    let tid;
     const { timer, dispatch, TimerActions } = useTimerGlobalState()
-    const { onStart, onPause, onCancel, onComplete } = props;
 
     const startTimer = () => {
         // start the timer

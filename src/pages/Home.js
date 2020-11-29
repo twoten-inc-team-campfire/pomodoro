@@ -1,13 +1,17 @@
 import React from 'react';
 import TaskSelector from '../components/Timer/TaskSelector';
 import Timer from '../components/Timer/Timer';
+import { PomodoroManager } from '../parts/PomodoroManager';
 
 function Home () {
+    const onNewTimerSession = (timerSession) => {
+        console.log(timerSession.getDuration())
+        console.log(timerSession.type)
+    }
+
     return (
-        <div aria-label="home-page">
-            <h1>Pomodoro Timer</h1>
-            <center><TaskSelector/></center>
-            <Timer/>
+        <div>  
+            <PomodoroManager onNewTimerSession={onNewTimerSession}/>
         </div>
     )
 }
