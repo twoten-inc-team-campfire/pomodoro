@@ -12,33 +12,34 @@ function Settings(props) {
 
     const { settings, dispatch, SettingsActions } = useSettingsGlobalState()
     
-    const handleCheckedChange = (event) => {
+    const handleBooleanCheckedChange = (event) => {
         let name = event.target.name;
         let newValue = event.target.checked;
 
         dispatch(SettingsActions.HANDLE_CHANGE(name, newValue));
     }
 
-    const handleChange = (event) => {
+    const handleNumberValueChange = (event) => {
         let name = event.target.name;
         let newValue = event.target.value;
 
         dispatch(SettingsActions.HANDLE_CHANGE(name, newValue));
     }
 
-    const {autoBreak, autoFocus, focusLength, shortBreakLength,
-        longBreakLength, focusCycleCount, pause, fastForward, 
-        cancel, taskSelection} = settings;
-
     return (
         <div className="Settings">
             <Grid container spacing={1} direction="column">
+                <Grid item>
+                    <h4>General Settings</h4>
+                </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <Grid item xs={9}>
                         <p>Auto Start Break after Pomodoro</p>
                     </Grid>
                     <Grid item xs>
-                        <Switch checked={settings.autoBreak} onChange={handleCheckedChange} name='autoBreak' />
+                        <Switch checked={settings.autoBreak} onChange={handleBooleanCheckedChange}
+                            name='autoBreak' inputProps={{ 'aria-label': 'Auto Break Checkbox'}}
+                        />
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
@@ -46,7 +47,9 @@ function Settings(props) {
                         <p>Auto Start Pomodoro after Break</p>
                     </Grid>
                     <Grid item xs>
-                        <Switch checked={settings.autoFocus} onChange={handleCheckedChange} name='autoFocus' />
+                        <Switch checked={settings.autoFocus} onChange={handleBooleanCheckedChange} 
+                            name='autoFocus' inputProps={{ 'aria-label': 'Auto Focus Checkbox'}}
+                        />
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="center">
@@ -57,8 +60,8 @@ function Settings(props) {
                         <FormControl variant="outlined">
                             <Select
                                 label="pomodoro-length"
-                                onChange={handleChange}
-                                value={focusLength}
+                                onChange={handleNumberValueChange}
+                                value={settings.focusLength}
                                 name="focusLength"
                             >
                                 <MenuItem value={15}>15:00</MenuItem>
@@ -77,8 +80,8 @@ function Settings(props) {
                         <FormControl variant="outlined">
                             <Select
                                 label="short-break-length"
-                                onChange={handleChange}
-                                value={shortBreakLength}
+                                onChange={handleNumberValueChange}
+                                value={settings.shortBreakLength}
                                 name="shortBreakLength"
                             >
                                 <MenuItem value={4}>4:00</MenuItem>
@@ -97,8 +100,8 @@ function Settings(props) {
                         <FormControl variant="outlined">
                             <Select
                                 label="long-break-length"
-                                onChange={handleChange}
-                                value={longBreakLength}
+                                onChange={handleNumberValueChange}
+                                value={settings.longBreakLength}
                                 name="longBreakLength"
                             >
                                 <MenuItem value={15}>15:00</MenuItem>
@@ -117,8 +120,8 @@ function Settings(props) {
                         <FormControl variant="outlined">
                             <Select
                                 label="pomodoro-count"
-                                onChange={handleChange}
-                                value={focusCycleCount}
+                                onChange={handleNumberValueChange}
+                                value={settings.focusCycleCount}
                                 name="focusCycleCount"
                             >
                                 <MenuItem value={1}>1</MenuItem>
@@ -129,12 +132,18 @@ function Settings(props) {
                         </FormControl>
                     </Grid>
                 </Grid>
+                <Grid item>
+                    <hr></hr>
+                    <h4>Home Page Settings</h4>
+                </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <Grid item xs={9}>
                         <p>Pause Button</p>
                     </Grid>
                     <Grid item xs>
-                        <Checkbox value={pause} onChange={handleChange} name='pause' />
+                        <Checkbox checked={settings.pause} onChange={handleBooleanCheckedChange} 
+                            name='pause' inputProps={{ 'aria-label': 'Pause Button Checkbox'}}
+                        />
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
@@ -142,7 +151,9 @@ function Settings(props) {
                         <p>Fast Forward Button</p>
                     </Grid>
                     <Grid item xs>
-                        <Checkbox value={fastForward} onChange={handleChange} name='fastForward' />
+                        <Checkbox checked={settings.fastForward} onChange={handleBooleanCheckedChange}
+                            name='fastForward' inputProps={{ 'aria-label': 'Fast Forward Button Checkbox'}}
+                        />
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
@@ -150,7 +161,9 @@ function Settings(props) {
                         <p>Cancel Button</p>
                     </Grid>
                     <Grid item xs>
-                        <Checkbox value={cancel} onChange={handleChange} name='cancel' />
+                        <Checkbox checked={settings.cancel} onChange={handleBooleanCheckedChange} 
+                            name='cancel' inputProps={{ 'aria-label': 'Cancel Button Checkbox'}}
+                        />
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="space-evenly" alignItems="baseline">
@@ -158,7 +171,9 @@ function Settings(props) {
                         <p>Task Selector</p>
                     </Grid>
                     <Grid item xs>
-                        <Checkbox value={taskSelection} onChange={handleChange} name='taskSelection' />
+                        <Checkbox checked={settings.taskSelection} onChange={handleBooleanCheckedChange} 
+                            name='taskSelection' inputProps={{ 'aria-label': 'Task Selector Checkbox'}}
+                        />
                     </Grid>
                 </Grid>
             </Grid>
