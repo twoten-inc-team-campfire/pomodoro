@@ -74,10 +74,6 @@ function Settings(props) {
         dispatch(SettingsActions.HANDLE_CHANGE(name, newValue));
     }
 
-    const {autoBreak, autoFocus, focusLength, shortBreakLength,
-        longBreakLength, focusCycleCount, pause, fastForward, 
-        cancel, taskSelection} = settings;
-
     return (
         <div className="Settings">
             <Grid container spacing={1} direction="column">
