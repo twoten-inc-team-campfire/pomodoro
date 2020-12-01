@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: components/Timer/ClockFace.js</title>
+    <title>JSDoc: Source: App.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: components/Timer/ClockFace.js</h1>
+    <h1 class="page-title">Source: App.js</h1>
 
     
 
@@ -26,26 +26,44 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from 'react';
+            <pre class="prettyprint source linenums"><code>import './App.css';
+import { GlobalStateProvider } from './GlobalState/GlobalState'
+import Home from './pages/Home';
+import Settings from './pages/Settings';
+import Summary from './pages/Summary';
+import SwipeableViews from 'react-swipeable-views';
 
 /**
- * ClockFace
- * @desc The visual component of our timer that displays the time remaining as text in a 
- * circular clockface.
- */
+The "App" style originally comes with create-react-app.
+It seems like we have adopted to use this as our default theme.
+Let's extract that into a component so that all pages can use the same theme
+**/
+const StyleWrapper = (props) => {
+	const SlideStyles = {
+		padding: 0.5
+	}
+	return (
+		&lt;div className="App" style={SlideStyles}>
+			&lt;header className="App-header">
+				{props.children}
+			&lt;/header>
+		&lt;/div>
+	)
+}
 
- function ClockFace({min, sec}) {
-    const min_present = min &lt; 10 ? '0' + min : min.toString()
-    const sec_present = sec &lt; 10 ? '0' + sec : sec.toString()
-    const time_present = min_present + ':' + sec_present
-     return (
-        &lt;div className='clock-face'>
-            &lt;h1 aria-label="time-remaining">{time_present}&lt;/h1>
-        &lt;/div>
-    )
- }
- 
-export default ClockFace;
+function App() {
+  return (
+    &lt;GlobalStateProvider>
+	    &lt;SwipeableViews enableMouseEvents resistance index={1}>
+	    	&lt;StyleWrapper> &lt;Settings/> &lt;/StyleWrapper>
+	    	&lt;StyleWrapper> &lt;Home/> &lt;/StyleWrapper>
+	    	&lt;StyleWrapper> &lt;Summary/> &lt;/StyleWrapper>
+	    &lt;/SwipeableViews>
+    &lt;/GlobalStateProvider>
+  );
+}
+
+export default App;
 </code></pre>
         </article>
     </section>
