@@ -12,7 +12,11 @@ export class TimerSession {
      * @param {TIMER_SESSION_TYPE} type - The type of session, a TIMER_SESSION_TYPE enum
      * @param {string} task - The title of the task as a string
      */
-    constructor(startTime, endTime, type=TIMER_SESSION_TYPE.POMODORO, task=null) {
+    constructor(startTime, endTime, type = TIMER_SESSION_TYPE.POMODORO, task = null) {
+        if (!this.isValidConstructorInput(startTime, endTime, type)) {
+            throw new Error('Invalid constructor of TimerSession');
+        }
+
         /** @member {Date} TimerSession#startTime
          * @desc The time the work session started */
         this.startTime = startTime;
@@ -35,6 +39,22 @@ export class TimerSession {
      */
     getDuration() {
         return (this.endTime - this.startTime)
+    }
+
+    /**
+     * isValidConstructorInput
+     * @desc Verify if the constructor inputs are in proper types
+     * @param {Date} startTime - The time the work session started
+     * @param {Date} endTime - The time the work session ended
+     * @param {TIMER_SESSION_TYPE} type - The type of session, a TIMER_SESSION_TYPE enum
+     * @returns {boolean} true if the inputs are in proper types, otherwise false
+     * @private
+     */
+    isValidConstructorInput(startTime, endTime, type) {
+        return startTime instanceof Date
+            && endTime instanceof Date
+            && typeof type == 'number'
+            && Object.values(TIMER_SESSION_TYPE).includes(type)
     }
 }
 
