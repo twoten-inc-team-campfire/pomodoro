@@ -201,8 +201,8 @@ describe("test savePomodoroSettings()", () => {
 describe("test loadAllPomodoroSettings()", () => {
     test('operation success', () => {
         let store = {
-            'settings1': 1,
-            'settings2': 2,
+            'settings1': new PomodoroSettings(1500000),
+            'settings2': new PomodoroSettings(3000000),
         }
         keys.mockResolvedValue(Object.keys(store));
         get.mockResolvedValueOnce(store['settings1'])
