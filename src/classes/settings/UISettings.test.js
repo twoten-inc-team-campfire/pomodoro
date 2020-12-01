@@ -1,7 +1,7 @@
 import { UISettings } from './UISettings';
 
-describe('UISettings constructor', () => {
-    test('should be successfull instantiation with default inputs', () => {
+describe('test constructor of UISettings', () => {
+    test('successful instantiation of default constructor', () => {
         const settings = new UISettings();
 
         expect(settings.displayPauseButton).toEqual(settings.displayPauseButton);
@@ -10,7 +10,7 @@ describe('UISettings constructor', () => {
         expect(settings.displayTaskSelector).toEqual(settings.displayTaskSelector);
     })
 
-    test('should throw an error if invalid boolean input', () => {
+    test('invalid boolean input for constructor', () => {
         expect(() => new UISettings(10, true, true, true)).toThrow();
     })
 
