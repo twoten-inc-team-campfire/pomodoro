@@ -23,10 +23,9 @@ function saveTimerSession(session) {
         return Promise.reject(new Error('Invalid input: Not TimerSession!'));
     }
 
-    // mapping: timestamp -> {type: [session array]}
-    let date = new Date(session.startTime.toDateString());
-    let timestamp = date.getTime(); // time in the granularity of date
-    return get(timestamp, timerSessionStore)
+    // mapping: date string -> {type: [session array]}
+    let dateString = session.startTime.toDateString();
+    return get(dateString, timerSessionStore)
         .then(dict => {
             dict = dict || {};
             let list = dict[session.type] || [];
@@ -35,7 +34,7 @@ function saveTimerSession(session) {
             return dict;
         })
         .then(dict => {
-            return set(timestamp, dict, timerSessionStore);
+            return set(dateString, dict, timerSessionStore);
         })
         .catch(() => {
             throw new Error("Failed to save timer session!");
@@ -45,8 +44,8 @@ function saveTimerSession(session) {
 /**
  * loadTimerSessionListByDate
  * @desc Load timer sessions of a specific range of dates.
- * @param {Date} startDate - The start date of the query. Must be in the granularity of date.
- * @param {Date} endDate - The end date of the query. Must be in the granularity of date.
+ * @param {Date} startDate - The start date of the query.
+ * @param {Date} endDate - The end date of the query.
  * @param {Array} [types=[TIMER_SESSION_TYPE.POMODORO, TIMER_SESSION_TYPE.SHORT_REST ,TIMER_SESSION_TYPE.LONG_REST]] - The list of timer session types to query
  * @returns {Promise<TimerSession[]>} Promise fulfilled by the array of the TimerSession.
  *                                    If rejected, it contains an error.
@@ -61,11 +60,11 @@ function loadTimerSessionListByDate(startDate, endDate,
     }
 
     let promises = [];
-    let startTime = startDate.getTime(), endTime = endDate.getTime();
-    for (var timestamp = startTime;
-        timestamp <= endTime;
-        timestamp += 1000 * 3600 * 24) {
-        promises.push(get(timestamp, timerSessionStore));
+    for (let currDate = new Date(startDate);
+        currDate <= endDate;
+        currDate.setDate(currDate.getDate() + 1)) {
+        let dateString = currDate.toDateString();
+        promises.push(get(dateString, timerSessionStore));
     }
 
     let resList = [];

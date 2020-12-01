@@ -17,33 +17,32 @@ jest.mock('idb-keyval');
 describe("test saveTimerSession()", () => {
     test('operation success', () => {
         // expected store construction
-        let minuteDate1 = new Date('2020-1-1 10:51:05'), minuteDate2 = new Date('2020-1-4 10:51:05');
-        let dateDate1 = new Date('2020-1-1'), dateDate2 = new Date('2020-1-4');
-        let timestamp1 = dateDate1.getTime(), timestamp2 = dateDate2.getTime();
-        let session1 = new TimerSession(minuteDate1, minuteDate1, TIMER_SESSION_TYPE.POMODORO),
-            session2 = new TimerSession(minuteDate1, minuteDate1, TIMER_SESSION_TYPE.SHORT_REST),
-            session3 = new TimerSession(minuteDate2, minuteDate2, TIMER_SESSION_TYPE.LONG_REST);
+        let date1 = new Date('2020-2-27 10:51:05'), date2 = new Date('2020-3-2 9:01:05');
+        let dateString1 = date1.toDateString(), dateString2 = date2.toDateString();
+        let session1 = new TimerSession(date1, date1, TIMER_SESSION_TYPE.POMODORO),
+            session2 = new TimerSession(date1, date1, TIMER_SESSION_TYPE.SHORT_REST),
+            session3 = new TimerSession(date2, date2, TIMER_SESSION_TYPE.LONG_REST);
 
         let expectedStore = {};
-        expectedStore[timestamp1] = {
+        expectedStore[dateString1] = {
             [TIMER_SESSION_TYPE.POMODORO]: [session1],
             [TIMER_SESSION_TYPE.SHORT_REST]: [session2],
         };
-        expectedStore[timestamp2] = {
+        expectedStore[dateString2] = {
             [TIMER_SESSION_TYPE.LONG_REST]: [session3],
         };
 
         let actualStore = {};
-        get.mockImplementation(t => Promise.resolve(actualStore[t]));
-        set.mockImplementation((t, d) => {
-            actualStore[t] = d;
+        get.mockImplementation(str => Promise.resolve(actualStore[str]));
+        set.mockImplementation((str, dict) => {
+            actualStore[str] = dict;
             return Promise.resolve(actualStore);
         });
 
         return saveTimerSession(session1)
             .then(() => saveTimerSession(session2))
             .then(() => saveTimerSession(session3))
-            .then(s => expect(s).toEqual(expectedStore));
+            .then(store => expect(store).toEqual(expectedStore));
     });
 
     test('throw error if input is not an instance of TimerSession', () => {
@@ -54,8 +53,8 @@ describe("test saveTimerSession()", () => {
     });
 
     test('throw error if idb get() has error', () => {
-        let minuteDate = new Date('2020-1-1 10:51:05');
-        let session = new TimerSession(minuteDate, minuteDate);
+        let date = new Date('2020-1-1 10:51:05');
+        let session = new TimerSession(date, date);
         get.mockRejectedValue(new Error());
 
         return expect(saveTimerSession(session))
@@ -64,8 +63,8 @@ describe("test saveTimerSession()", () => {
     });
 
     test('throw error if idb set() has error', () => {
-        let minuteDate = new Date('2020-1-1 10:51:05');
-        let session = new TimerSession(minuteDate, minuteDate);
+        let date = new Date('2020-1-1 10:51:05');
+        let session = new TimerSession(date, date);
         get.mockResolvedValue({});
         set.mockRejectedValue(new Error());
 
@@ -77,39 +76,46 @@ describe("test saveTimerSession()", () => {
 
 describe("test loadTimerSessionListByDate()", () => {
     test('operation success with empty result', () => {
-        let dateDate = new Date('2020-1-1');
+        let date = new Date('2020-2-27 10:51:05');
         let expectedStore = {};
-        get.mockImplementation(t => Promise.resolve(expectedStore[t]));
+        get.mockImplementation(str => Promise.resolve(expectedStore[str]));
 
-        return expect(loadTimerSessionListByDate(dateDate, dateDate))
+        return expect(loadTimerSessionListByDate(date, date))
             .resolves
             .toEqual([]);
     });
 
     test('operation success with a result list', () => {
         // expected store construction
-        let minuteDate1 = new Date('2020-1-1 10:51:05'), minuteDate2 = new Date('2020-1-4 10:51:05');
-        let dateDate1 = new Date('2020-1-1'), dateDate2 = new Date('2020-1-4');
-        let timestamp1 = dateDate1.getTime(), timestamp2 = dateDate2.getTime();
-        let session1 = new TimerSession(minuteDate1, minuteDate1, TIMER_SESSION_TYPE.POMODORO),
-            session2 = new TimerSession(minuteDate1, minuteDate1, TIMER_SESSION_TYPE.SHORT_REST),
-            session3 = new TimerSession(minuteDate2, minuteDate2, TIMER_SESSION_TYPE.LONG_REST);
+        let date1 = new Date('2020-2-27 10:51:05'),
+            date2 = new Date('2020-2-29 10:51:05'),
+            date3 = new Date('2020-3-1 10:51:05'),
+            date4 = new Date('2020-3-2 9:01:05');
+        let dateString1 = date1.toDateString(),
+            dateString2 = date2.toDateString(),
+            dateString3 = date3.toDateString();
+        let session1 = new TimerSession(date1, date1, TIMER_SESSION_TYPE.POMODORO),
+            session2 = new TimerSession(date2, date2, TIMER_SESSION_TYPE.SHORT_REST),
+            session3 = new TimerSession(date3, date3, TIMER_SESSION_TYPE.LONG_REST);
 
         let store = {};
-        store[timestamp1] = {
+        store[dateString1] = {
             [TIMER_SESSION_TYPE.POMODORO]: [session1],
             [TIMER_SESSION_TYPE.SHORT_REST]: [session2],
         };
-        store[timestamp2] = {
+        store[dateString2] = {
             [TIMER_SESSION_TYPE.LONG_REST]: [session3],
         };
+        store[dateString3] = {
+            [TIMER_SESSION_TYPE.LONG_REST]: [session1],
+        };
 
-        get.mockImplementation(t => Promise.resolve(store[t]));
-        let expectedList = [session1, session3];
+        get.mockImplementation(str => Promise.resolve(store[str]));
+        let expectedList = [session1, session3, session1];
 
         return expect(loadTimerSessionListByDate(
-            dateDate1,
-            dateDate2,
+            date1,
+            date4,
             [
                 TIMER_SESSION_TYPE.POMODORO,
                 TIMER_SESSION_TYPE.LONG_REST
@@ -136,7 +142,7 @@ describe("test loadTimerSessionListByDate()", () => {
     test('throw error if input types are not TIMER_SESSION_TYPE', () => {
         let date = new Date('2020-1-1');
 
-        return expect(loadTimerSessionListByDate(date, date, [4,5]))
+        return expect(loadTimerSessionListByDate(date, date, [4, 5]))
             .rejects
             .toThrow();
     });
