@@ -3,7 +3,9 @@
  */
 
 import { Store, get, set, clear, keys } from 'idb-keyval';
-import { TIMER_SESSION_TYPE } from '../classes/TimerSession';
+import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
+import { PomodoroSettings } from '../classes/settings/PomodoroSettings';
+import { UISettings } from '../classes/settings/UISettings';
 
 let timerSessionStore = new Store('IndexedDB', 'TimerSessionStore');
 let pomodoroSettingsStore = new Store('IndexedDB', 'PomodoroSettingsStore');
@@ -17,6 +19,10 @@ let uiSettingsStore = new Store('IndexedDB', 'UISettingsStore');
  * @public
  */
 function saveTimerSession(session) {
+    if (!isValidTimerSession(session)) {
+        return Promise.reject(new Error('Invalid input: Not TimerSession!'));
+    }
+
     // mapping: timestamp -> {type: [session array]}
     let date = new Date(session.startTime.toDateString());
     let timestamp = date.getTime(); // time in the granularity of date
@@ -47,9 +53,13 @@ function saveTimerSession(session) {
  * @public
  */
 function loadTimerSessionListByDate(startDate, endDate,
-                                    types = [TIMER_SESSION_TYPE.POMODORO,
-                                    TIMER_SESSION_TYPE.SHORT_REST,
-                                    TIMER_SESSION_TYPE.LONG_REST]) {
+    types = [TIMER_SESSION_TYPE.POMODORO,
+    TIMER_SESSION_TYPE.SHORT_REST,
+    TIMER_SESSION_TYPE.LONG_REST]) {
+    if (!isValidLoadTimerSessionInput(startDate, endDate, types)) {
+        return Promise.reject(new Error('Invalid input for loading timer sessions!'));
+    }
+
     let promises = [];
     let startTime = startDate.getTime(), endTime = endDate.getTime();
     for (var timestamp = startTime;
@@ -84,6 +94,9 @@ function loadTimerSessionListByDate(startDate, endDate,
  * @public
  */
 function savePomodoroSettings(tag, settings) {
+    if (!isValidPomodoroSettings(settings)) {
+        return Promise.reject(new Error('Invalid input: Not PomodoroSettings!'));
+    }
     return set(tag, settings, pomodoroSettingsStore)
         .catch(() => {
             throw new Error("Failed to save pomodoro settings!");
@@ -131,6 +144,10 @@ function loadAllPomodoroSettings() {
  * @public
  */
 function saveUISettings(settings) {
+    if (!isValidUISettings(settings)) {
+        return Promise.reject(new Error("Invalid input: Not UISettings!"));
+    }
+
     return set("uiSettings", settings, uiSettingsStore)
         .catch(() => {
             throw new Error("Failed to save UI settings!");
@@ -166,12 +183,69 @@ function loadUISettings() {
  */
 function clearAllHistory() {
     return Promise.all(
-        [clear(timerSessionStore),
-        clear(pomodoroSettingsStore),
-        clear(uiSettingsStore)])
+        [
+            clear(timerSessionStore),
+            clear(pomodoroSettingsStore),
+            clear(uiSettingsStore)
+        ])
         .catch(() => {
             throw new Error("Failed to clear history!");
         });
+}
+
+
+/**
+ * isValidTimerSession
+ * @desc Verify if the input is an instance of TimerSession
+ * @param {TimerSession} session - The timer session to be verified
+ * @returns {boolean} true if it is an instance of TimerSession, otherwise false
+ * @private
+ */
+function isValidTimerSession(session) {
+    return session instanceof TimerSession;
+}
+
+/**
+ * isValidLoadTimerSessionInput
+ * @desc Verify if the inputs are valid for loading the query
+ * @param {Date} startDate - The start date of the query. Must be in the granularity of date.
+ * @param {Date} endDate - The end date of the query. Must be in the granularity of date.
+ * @param {Array} types - The list of timer session types to query
+ * @returns {boolean} true the inputs are valid for loading the query, otherwise false
+ * @private
+ */
+function isValidLoadTimerSessionInput(startDate, endDate, types) {
+    if (!(types instanceof Array)) {
+        return false;
+    }
+    for (let t of types) {
+        if (!Object.values(TIMER_SESSION_TYPE).includes(t)) {
+            return false;
+        }
+    }
+    return startDate instanceof Date && endDate instanceof Date;
+}
+
+/**
+ * isValidPomodoroSettings
+ * @desc Verify if the input is an instance of PomodoroSettings
+ * @param {PomodoroSettings} settings - The pomodoro settings to be verified
+ * @returns {boolean} true if it is an instance of PomodoroSettings, otherwise false
+ * @private
+ */
+function isValidPomodoroSettings(settings) {
+    return settings instanceof PomodoroSettings;
+}
+
+/**
+ * isValidUISettings
+ * @desc Verify if the input is an instance of UISettings
+ * @param {UISettings} settings - The UI settings to be verified
+ * @returns {boolean} true if it is an instance of UISettings, otherwise false
+ * @private
+ */
+function isValidUISettings(settings) {
+    return settings instanceof UISettings;
 }
 
 export {
