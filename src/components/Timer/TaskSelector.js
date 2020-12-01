@@ -65,49 +65,48 @@ function TaskSelector() {
     }
   
     return ( 
-        <Fragment>
-            <div className="task-box">
-                { showSelector &&
-                    <IconButton aria-label="selector-button" onClick={handleToggle} >
-                        <CreateIcon style={{ fontSize: '35px', color: '#015384' }} />
-                    </IconButton>
-                }
+        <div className="task-box">
+            { showSelector &&
+                <IconButton aria-label="selector-button" onClick={handleToggle} >
+                    <CreateIcon style={{ fontSize: '35px', color: '#015384' }} />
+                </IconButton>
+            }
 
-                { task || 'No Task Selected' }
+            <span id="task"> { task || 'No Task Selected' } </span>
 
-                <br></br>
+            <br/>
 
-                { !isDialogOpen && task &&
-                    <IconButton aria-label="cancel-button" onClick={handleClearTask} >
-                        <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
-                    </IconButton>
-                }
+            { !showSelector &&
+                <IconButton id="clear-button" onClick={handleClearTask} >
+                    <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
+                </IconButton>
+            }
 
-                <Dialog open={isDialogOpen} onClose={handleCancel} >
-                    <DialogContent>
-                        <form>
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Task name" 
-                                multiline
-                                rowsMax={3}
-                                onChange={e => handleChange(e)}
-                                margin="normal" />
-                        </form>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="contained" onClick={handleCancel} > 
-                            Cancel
+            <Dialog id="dialog" open={isDialogOpen} onClose={handleCancel} >
+                <DialogContent>
+                    <form>
+                        <TextField 
+                            id="outlined-basic" 
+                            label="Task name" 
+                            multiline
+                            rowsMax={3}
+                            onChange={e => handleChange(e)}
+                            margin="normal" />
+                    </form>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button id="cancel-button" variant="contained" onClick={handleCancel} > 
+                        Cancel
+                    </Button>
+                    { task &&
+                        <Button id="confirm-button" variant="contained" onClick={handleSubmit} > 
+                            Confirm 
                         </Button>
-                        { task &&
-                            <Button variant="contained" onClick={handleSubmit} > 
-                                Confirm 
-                            </Button>
-                        }
-                    </DialogActions>
-                </Dialog>
-            </div>
-        </Fragment>
+                    }
+                </DialogActions>
+            </Dialog>
+        </div>
     )
 }
   
