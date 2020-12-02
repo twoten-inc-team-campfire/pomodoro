@@ -72,29 +72,17 @@ function TaskSelector() {
                 </IconButton>
             }
 
-<<<<<<< HEAD
             <span id="taskName" data-testid="taskDescription"> { task || 'No Task Selected' } </span>
-=======
-            <span id="task"> { task || 'No Task Selected' } </span>
->>>>>>> Cleaned up Task Selector logic
 
             <br/>
 
             { !showSelector &&
-<<<<<<< HEAD
                 <IconButton id="clear-button" data-testid="clearButton" onClick={handleClearTask} >
-=======
-                <IconButton id="clear-button" onClick={handleClearTask} >
->>>>>>> Cleaned up Task Selector logic
                     <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
                 </IconButton>
             }
 
-<<<<<<< HEAD
             <Dialog id="dialog" open={isDialogOpen} >
-=======
-            <Dialog id="dialog" open={isDialogOpen} onClose={handleCancel} >
->>>>>>> Cleaned up Task Selector logic
                 <DialogContent>
                     <form>
                         <TextField 
@@ -103,10 +91,7 @@ function TaskSelector() {
                             multiline
                             rowsMax={3}
                             onChange={e => handleChange(e)}
-<<<<<<< HEAD
                             data-testid="taskTextArea"
-=======
->>>>>>> Cleaned up Task Selector logic
                             margin="normal" />
                     </form>
                 </DialogContent>
