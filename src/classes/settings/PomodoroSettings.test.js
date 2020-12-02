@@ -1,7 +1,7 @@
 import { PomodoroSettings } from './PomodoroSettings';
 
-describe('test constructor of PomodoroSettings', () => {
-    test('successful instantiation of default constructor', () => {
+describe('PomodoroSettings constructor', () => {
+    test('should be successfull instantiation with default inputs', () => {
         const settings = new PomodoroSettings();
 
         expect(settings.pomodoroLength).toEqual(settings.pomodoroLength);
@@ -12,11 +12,11 @@ describe('test constructor of PomodoroSettings', () => {
         expect(settings.autoStartPomodoros).toEqual(settings.autoStartPomodoros);
     })
 
-    test('invalid number input for constructor', () => {
+    test('should throw an error if invalid number input', () => {
         expect(() => new PomodoroSettings('10', 10, 10, 10, true, true)).toThrow();
     })
 
-    test('invalid boolean input for constructor', () => {
+    test('should throw an error if invalid boolean input', () => {
         expect(() => new PomodoroSettings(10, 10, 10, 10, 'true', true)).toThrow();
     })
 

@@ -51,10 +51,7 @@ function saveTimerSession(session) {
  *                                    If rejected, it contains an error.
  * @public
  */
-function loadTimerSessionListByDate(startDate, endDate,
-    types = [TIMER_SESSION_TYPE.POMODORO,
-    TIMER_SESSION_TYPE.SHORT_REST,
-    TIMER_SESSION_TYPE.LONG_REST]) {
+function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TIMER_SESSION_TYPE)) {
     if (!isValidLoadTimerSessionInput(startDate, endDate, types)) {
         return Promise.reject(new Error('Invalid input for loading timer sessions!'));
     }
