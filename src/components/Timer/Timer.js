@@ -9,17 +9,8 @@ import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
  * @desc Timer handles the functionality and logic of a countdown timer.
  * @implements {React.Component}
  */
-<<<<<<< HEAD
-<<<<<<< HEAD
 function Timer ({ onStart, onPause, onCancel, onComplete }) {
-    let tid;
-=======
-function Timer (props) {
-=======
-function Timer ({ onStart, onPause, onCancel, onComplete }) {
->>>>>>> d716e4b (Init code for the pomodoro manager)
     const [timerId, setTid] = useState(-1)
->>>>>>> 0acc778 (fixed bug: timer never stopped)
     const { timer, dispatch, TimerActions } = useTimerGlobalState()
 
     const startTimer = () => {
