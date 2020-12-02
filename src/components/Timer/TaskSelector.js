@@ -72,7 +72,7 @@ function TaskSelector() {
                 </IconButton>
             }
 
-            <span id="task"> { task || 'No Task Selected' } </span>
+            <span id="task" data-testid="taskDescription"> { task || 'No Task Selected' } </span>
 
             <br/>
 
@@ -91,6 +91,7 @@ function TaskSelector() {
                             multiline
                             rowsMax={3}
                             onChange={e => handleChange(e)}
+                            data-testid="taskTextArea"
                             margin="normal" />
                     </form>
                 </DialogContent>
