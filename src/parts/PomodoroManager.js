@@ -80,13 +80,11 @@ function PomodoroManager ({onNewTimerSession}) {
      */
 
     const onStart = () => {
-        console.log('on start');
         startTime = Date.now();
     }
 
     const onPause = () => {
         endTime = Date.now();
-        console.log('on pause');
 
         if (startTime && endTime) {
             onNewTimerSession(new TimerSession(startTime, endTime, state.type));
@@ -110,7 +108,6 @@ function PomodoroManager ({onNewTimerSession}) {
     }
 
     const onCancel = () => {
-        console.log('on cancel');
         endTime = Date.now();
         
         if (startTime && endTime) {
@@ -119,8 +116,6 @@ function PomodoroManager ({onNewTimerSession}) {
 
         startTime = null;
         endTime = null;
-        
-        dispatch(PomodoroManagerAction.NEXT);
     }
 
     return (
