@@ -10,12 +10,13 @@ test("At first, only the selector is shown.", () => {
     const dialog = screen.queryByLabelText('dialog');
     const cancelButton = screen.queryByLabelText('cancel-button');
     const confirmButton = screen.queryByLabelText('confirm-button');
-	const clearButton = screen.queryByLabelText('clear-button');
+    const clearButton = screen.queryByLabelText('clear-button');
 
     expect(selectorButton).toBeInTheDocument();
     expect(task).toBeNull();
     expect(dialog).toBeNull();
     expect(cancelButton).toBeNull();
     expect(confirmButton).toBeNull();
-	expect(clearButton).toBeNull();
+    expect(clearButton).toBeNull();
 })
+
