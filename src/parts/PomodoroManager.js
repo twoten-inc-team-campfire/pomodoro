@@ -70,14 +70,6 @@ function PomodoroManager ({onNewTimerSession}) {
      * @param {TimerSession} newTimerSession - New TimerSession the PomodoroManager just created
      * @memberOf PomodoroManager
      */
-    /**
-     * @constructs
-     * @param {Object} props - Props passed to component.
-     * @param {TimerInterface} props.Timer - The React Component timer to be rendered. It should support the
-     * TimerInterface interface.
-     * @param {UserSettings} props.UserSettings - The user's settings
-     * @param {onNewTimerSession} props.onNewTimerSession - Callback to pass a new TimerSession to the parent
-     */
 
     const onStart = () => {
         startTime = Date.now();
