@@ -26,11 +26,12 @@
     "workbox-streams": "^5.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start & npm run watch-docs",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate-docs": "jsdoc -c conf.json"
+    "generate-docs": "jsdoc -c conf.json",
+    "watch-docs": "onchange \"src/\" \"./App*\" \"./index*\" -e  \"*.test.js\" -- npm run generate-docs"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +52,8 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/react": "^11.2.1"
+    "@testing-library/react": "^11.2.1",
+    "jsdoc": "^3.6.6",
+    "onchange": "^7.1.0"
   }
 }
