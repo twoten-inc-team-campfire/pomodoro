@@ -72,12 +72,12 @@ function TaskSelector() {
                 </IconButton>
             }
 
-            <span id="task" data-testid="taskDescription"> { task || 'No Task Selected' } </span>
+            <span id="taskName" data-testid="taskDescription"> { task || 'No Task Selected' } </span>
 
             <br/>
 
             { !showSelector &&
-                <IconButton id="clear-button" onClick={handleClearTask} >
+                <IconButton id="clear-button" data-testid="clearButton" onClick={handleClearTask} >
                     <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
                 </IconButton>
             }
