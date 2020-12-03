@@ -1,6 +1,6 @@
 ### What this does
 The only changes in this branch is in `package.json` file. It enables auto document generation. 
-It puts no effort on the developers to obtain auto documentation generation. Just run `npm start`. All documentation go under `./doc/`
+It puts no effort on the developers to obtain auto documentation generation. First, run `npm install`, then just run `npm start`. All documentation go under `./doc/`
 
 ### What you need to do to see the documentation
 Open the `./doc/` folder. Then double click the `index.html`. It will bring up a static website that contains the documentations.
