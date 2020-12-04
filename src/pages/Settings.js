@@ -6,12 +6,44 @@ import Switch from '@material-ui/core/Switch';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem'
 import {useSettingsGlobalState} from '../GlobalState/GlobalStateHooks';
+import { withStyles } from '@material-ui/core/styles'
 
 /**
  * Settings
  * @desc The page that displays the UI components for settings and sends change
  * events to the Global context.
  */
+
+let textPrimary = "#000000";
+let textSecondary = "#838383";
+let colorPrimary = "#086788";
+let colorSecondary = "#07a0c3";
+  
+
+
+const BlueSwitch = withStyles({
+    switchBase: {
+        color: textSecondary,
+        '&$checked': {
+            color: colorPrimary,
+        },
+        '&$checked + $track': {
+            backgroundColor: colorSecondary,
+        },
+    },
+    checked: {},
+    track: {},
+})(Switch);
+
+const BlueCheckbox = withStyles({
+    root: {
+        color: colorSecondary,
+        '&$checked': {
+            color: colorPrimary,
+        },
+    },
+    checked: {},
+})(Checkbox);
 
 function Settings(props) {
 
@@ -50,7 +82,7 @@ function Settings(props) {
                         <p>Auto Start Break after Pomodoro</p>
                     </Grid>
                     <Grid item xs>
-                        <Switch checked={settings.autoBreak} onChange={changeCheckBox}
+                        <BlueSwitch checked={settings.autoBreak} onChange={changeCheckBox}
                             name='autoBreak' inputProps={{ 'aria-label': 'Auto Break Checkbox'}}
                         />
                     </Grid>
@@ -60,7 +92,7 @@ function Settings(props) {
                         <p>Auto Start Pomodoro after Break</p>
                     </Grid>
                     <Grid item xs>
-                        <Switch checked={settings.autoFocus} onChange={changeCheckBox} 
+                        <BlueSwitch checked={settings.autoFocus} onChange={changeCheckBox} 
                             name='autoFocus' inputProps={{ 'aria-label': 'Auto Focus Checkbox'}}
                         />
                     </Grid>
@@ -92,9 +124,6 @@ function Settings(props) {
                         <p>Short Break Length</p>
                     </Grid>
                     <Grid item xs>
-                        {/* <select>
-                            
-                        </select> */}
                         <FormControl variant="outlined">
                             <Select
                                 label="short-break-length"
@@ -158,7 +187,7 @@ function Settings(props) {
                         <p>Pause Button</p>
                     </Grid>
                     <Grid item xs>
-                        <Checkbox checked={settings.pause} onChange={changeCheckBox} 
+                        <BlueCheckbox checked={settings.pause} onChange={changeCheckBox} 
                             name='pause' inputProps={{ 'aria-label': 'Pause Button Checkbox'}}
                         />
                     </Grid>
@@ -168,7 +197,7 @@ function Settings(props) {
                         <p>Fast Forward Button</p>
                     </Grid>
                     <Grid item xs>
-                        <Checkbox checked={settings.fastForward} onChange={changeCheckBox}
+                        <BlueCheckbox checked={settings.fastForward} onChange={changeCheckBox}
                             name='fastForward' inputProps={{ 'aria-label': 'Fast Forward Button Checkbox'}}
                         />
                     </Grid>
@@ -178,7 +207,7 @@ function Settings(props) {
                         <p>Cancel Button</p>
                     </Grid>
                     <Grid item xs>
-                        <Checkbox checked={settings.cancel} onChange={changeCheckBox} 
+                        <BlueCheckbox checked={settings.cancel} onChange={changeCheckBox} 
                             name='cancel' inputProps={{ 'aria-label': 'Cancel Button Checkbox'}}
                         />
                     </Grid>
@@ -188,7 +217,7 @@ function Settings(props) {
                         <p>Task Selector</p>
                     </Grid>
                     <Grid item xs>
-                        <Checkbox checked={settings.taskSelection} onChange={changeCheckBox} 
+                        <BlueCheckbox checked={settings.taskSelection} onChange={changeCheckBox} 
                             name='taskSelection' inputProps={{ 'aria-label': 'Task Selector Checkbox'}}
                         />
                     </Grid>
