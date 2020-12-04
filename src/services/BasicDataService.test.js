@@ -7,7 +7,7 @@ import {
     saveUISettings,
     loadUISettings,
     clearAllHistory,
-} from './DataService';
+} from './BasicDataService';
 import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
 import { PomodoroSettings } from '../classes/settings/PomodoroSettings';
 import { UISettings } from '../classes/settings/UISettings';
@@ -295,8 +295,6 @@ describe("loadUISettings()", () => {
             .toThrow();
     });
 });
-
-jest.mock('idb-keyval');
 
 describe("clearAllHistory()", () => {
     test('should clear all storage of timer sessions, ' +
