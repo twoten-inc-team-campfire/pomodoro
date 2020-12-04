@@ -1,6 +1,7 @@
 import './App.css';
 import { GlobalStateProvider } from './GlobalState/GlobalState'
 import Home from './pages/Home.js';
+// import Settings from './pages/Settings.js'
 
 
 function App() {
