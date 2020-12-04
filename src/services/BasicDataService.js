@@ -7,21 +7,6 @@ import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
 import { PomodoroSettings } from '../classes/settings/PomodoroSettings';
 import { UISettings } from '../classes/settings/UISettings';
 
-let timerSessionStore = new Store('IndexedDB', 'TimerSessionStore');
-let pomodoroSettingsStore = new Store('IndexedDB', 'PomodoroSettingsStore');
-let uiSettingsStore = new Store('IndexedDB', 'UISettingsStore');
-
-/**
- * saveTimerSession
- * @desc Save the timer session in default timerSessionStore.
- * @param {TimerSession} session - The session to be saved
- * @returns {Promise}  If rejected, it contains an error.
- * @public
- */
-async function saveTimerSession(session) {
-    return saveTimerSessionWithStore(session, timerSessionStore);
-}
-
 /**
  * saveTimerSessionWithStore
  * @desc Save the timer session in the give store.
@@ -30,7 +15,7 @@ async function saveTimerSession(session) {
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-async function saveTimerSessionWithStore(session, store) {
+function saveTimerSessionWithStore(session, store) {
     if (!isValidTimerSession(session)) {
         return Promise.reject(new Error('Invalid input: Not TimerSession!'));
     }
@@ -57,20 +42,6 @@ async function saveTimerSessionWithStore(session, store) {
 }
 
 /**
- * loadTimerSessionListByDate
- * @desc Load timer sessions of a specific range of dates from the default timerSessionStore.
- * @param {Date} startDate - The start date of the query.
- * @param {Date} endDate - The end date of the query.
- * @param {Array} [types=[TIMER_SESSION_TYPE.POMODORO, TIMER_SESSION_TYPE.SHORT_REST ,TIMER_SESSION_TYPE.LONG_REST]] - The list of timer session types to query
- * @returns {Promise<TimerSession[]>} Promise fulfilled by the array of the TimerSession.
- *                                    If rejected, it contains an error.
- * @public
- */
-async function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TIMER_SESSION_TYPE)) {
-    return loadTimerSessionListByDateWithStore(startDate, endDate, timerSessionStore, types);
-}
-
-/**
  * loadTimerSessionListByDateWithStore
  * @desc Load timer sessions of a specific range of dates from the given store.
  * @param {Date} startDate - The start date of the query.
@@ -81,7 +52,7 @@ async function loadTimerSessionListByDate(startDate, endDate, types = Object.val
  *                                    If rejected, it contains an error.
  * @public
  */
-async function loadTimerSessionListByDateWithStore(startDate, endDate, store,
+function loadTimerSessionListByDateWithStore(startDate, endDate, store,
     types = Object.values(TIMER_SESSION_TYPE)) {
     if (!isValidLoadTimerSessionInput(startDate, endDate, store, types)) {
         return Promise.reject(new Error('Invalid input for loading timer sessions!'));
@@ -113,18 +84,6 @@ async function loadTimerSessionListByDateWithStore(startDate, endDate, store,
 }
 
 /**
- * savePomodoroSettings
- * @desc Save the pomodoro settings in the default pomodoroSettingsStore.
- * @param {string} tag - The tag of the pomodoro settings to be saved
- * @param {PomodoroSettings} settings - The pomodoro settings to be saved
- * @returns {Promise}  If rejected, it contains an error.
- * @public
- */
-async function savePomodoroSettings(tag, settings) {
-    return savePomodoroSettingsWithStore(tag, settings, pomodoroSettingsStore);
-}
-
-/**
  * savePomodoroSettingsWithStore
  * @desc Save the pomodoro settings in the given store.
  * @param {string} tag - The tag of the pomodoro settings to be saved
@@ -133,7 +92,7 @@ async function savePomodoroSettings(tag, settings) {
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-async function savePomodoroSettingsWithStore(tag, settings, store) {
+function savePomodoroSettingsWithStore(tag, settings, store) {
     if (!isValidPomodoroSettings(settings)) {
         return Promise.reject(new Error('Invalid input: Not PomodoroSettings!'));
     } if (!isValidStore(store)) {
@@ -147,17 +106,6 @@ async function savePomodoroSettingsWithStore(tag, settings, store) {
 }
 
 /**
- * loadAllPomodoroSettings
- * @desc Load all pomodoro settings from the default pomodoroSettingsStore.
- * @returns {Promise<object>} Promise fulfilled by the mapping object from tag to the PomodoroSettings.
- *                    If rejected, it contains an error.
- * @public
- */
-async function loadAllPomodoroSettings() {
-    return loadAllPomodoroSettingsWithStore(pomodoroSettingsStore);
-}
-
-/**
  * loadAllPomodoroSettingsWithStore
  * @desc Load all pomodoro settings from the given store
  * @param {Store} store - The store where pomodoro settings will be loaded.
@@ -165,7 +113,7 @@ async function loadAllPomodoroSettings() {
  *                    If rejected, it contains an error.
  * @public
  */
-async function loadAllPomodoroSettingsWithStore(store) {
+function loadAllPomodoroSettingsWithStore(store) {
     if (!isValidStore(store)) {
         return Promise.reject(new Error("Invalid input: Not Store!"));
     }
@@ -195,17 +143,6 @@ async function loadAllPomodoroSettingsWithStore(store) {
 }
 
 /**
- * saveUISettings
- * @desc Save the UI settings in the default uiSettingsStore.
- * @param {UISettings} settings - The UI settings to be saved.
- * @returns {Promise}  If rejected, it contains an error.
- * @public
- */
-async function saveUISettings(settings) {
-    return saveUISettingsWithStore(settings, uiSettingsStore);
-}
-
-/**
  * saveUISettingsWithStore
  * @desc Save the UI settings in the given store.
  * @param {UISettings} settings - The UI settings to be saved.
@@ -213,7 +150,7 @@ async function saveUISettings(settings) {
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-async function saveUISettingsWithStore(settings, store) {
+function saveUISettingsWithStore(settings, store) {
     if (!isValidUISettings(settings)) {
         return Promise.reject(new Error("Invalid input: Not UISettings!"));
     }
@@ -228,17 +165,6 @@ async function saveUISettingsWithStore(settings, store) {
 }
 
 /**
- * loadUISettings
- * @desc Load the UI settings from the default uiSettingsStore.
- * @returns {Promise<UISettings>} Promise fulfilled by the saved UI settings.
- *                    If rejected when no previous settings saved, it contains an error.
- * @public
- */
-async function loadUISettings() {
-    return loadUISettingsWithStore(uiSettingsStore);
-}
-
-/**
  * loadUISettingsWithStore
  * @desc Load the UI settings from the given store.
  * @param {Store} store - The store where UI settings will be loaded.
@@ -246,7 +172,7 @@ async function loadUISettings() {
  *                    If rejected when no previous settings saved, it contains an error.
  * @public
  */
-async function loadUISettingsWithStore(store) {
+function loadUISettingsWithStore(store) {
     if (!isValidStore(store)) {
         return Promise.reject(new Error("Invalid input: Not Store!"));
     }
@@ -264,28 +190,13 @@ async function loadUISettingsWithStore(store) {
 }
 
 /**
- * clearAllHistory
- * @desc Clear all timer sessions, Pomodoro settings, and UI settings in database.
- * @returns {Promise} If rejected, it contains an error.
- * @public
- */
-async function clearAllHistory() {
-    return Promise.all(
-        [
-            clearHistoryWithStore(timerSessionStore),
-            clearHistoryWithStore(pomodoroSettingsStore),
-            clearHistoryWithStore(uiSettingsStore)
-        ]);
-}
-
-/**
  * clearAllHistoryWithStore
  * @desc Clear data in the given object store in database IndexedDB.
  * @param {Store} store - The store where history will be cleared
  * @returns {Promise} If rejected, it contains an error.
  * @public
  */
-async function clearHistoryWithStore(store) {
+function clearHistoryWithStore(store) {
     if (!isValidStore(store)) {
         return Promise.reject(new Error("Invalid input: Not Store!"));
     }
@@ -363,14 +274,6 @@ function isValidUISettings(settings) {
 }
 
 export {
-    saveTimerSession,
-    loadTimerSessionListByDate,
-    savePomodoroSettings,
-    loadAllPomodoroSettings,
-    saveUISettings,
-    loadUISettings,
-    clearAllHistory,
-
     saveTimerSessionWithStore,
     loadTimerSessionListByDateWithStore,
     savePomodoroSettingsWithStore,
