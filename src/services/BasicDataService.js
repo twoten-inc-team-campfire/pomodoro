@@ -13,19 +13,34 @@ let uiSettingsStore = new Store('IndexedDB', 'UISettingsStore');
 
 /**
  * saveTimerSession
- * @desc Save the timer session.
+ * @desc Save the timer session in default timerSessionStore.
  * @param {TimerSession} session - The session to be saved
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-function saveTimerSession(session) {
+async function saveTimerSession(session) {
+    return saveTimerSessionWithStore(session, timerSessionStore);
+}
+
+/**
+ * saveTimerSessionWithStore
+ * @desc Save the timer session in the give store.
+ * @param {TimerSession} session - The session to be saved
+ * @param {Store} store - The store where the session will be saved.
+ * @returns {Promise}  If rejected, it contains an error.
+ * @public
+ */
+async function saveTimerSessionWithStore(session, store) {
     if (!isValidTimerSession(session)) {
         return Promise.reject(new Error('Invalid input: Not TimerSession!'));
+    }
+    if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
     }
 
     // mapping: date string -> {type: [session array]}
     let dateString = session.startTime.toDateString();
-    return get(dateString, timerSessionStore)
+    return get(dateString, store)
         .then(dict => {
             dict = dict || {};
             let list = dict[session.type] || [];
@@ -34,7 +49,7 @@ function saveTimerSession(session) {
             return dict;
         })
         .then(dict => {
-            return set(dateString, dict, timerSessionStore);
+            return set(dateString, dict, store);
         })
         .catch(() => {
             throw new Error("Failed to save timer session!");
@@ -43,7 +58,7 @@ function saveTimerSession(session) {
 
 /**
  * loadTimerSessionListByDate
- * @desc Load timer sessions of a specific range of dates.
+ * @desc Load timer sessions of a specific range of dates from the default timerSessionStore.
  * @param {Date} startDate - The start date of the query.
  * @param {Date} endDate - The end date of the query.
  * @param {Array} [types=[TIMER_SESSION_TYPE.POMODORO, TIMER_SESSION_TYPE.SHORT_REST ,TIMER_SESSION_TYPE.LONG_REST]] - The list of timer session types to query
@@ -51,8 +66,24 @@ function saveTimerSession(session) {
  *                                    If rejected, it contains an error.
  * @public
  */
-function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TIMER_SESSION_TYPE)) {
-    if (!isValidLoadTimerSessionInput(startDate, endDate, types)) {
+async function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TIMER_SESSION_TYPE)) {
+    return loadTimerSessionListByDateWithStore(startDate, endDate, timerSessionStore, types);
+}
+
+/**
+ * loadTimerSessionListByDateWithStore
+ * @desc Load timer sessions of a specific range of dates from the given store.
+ * @param {Date} startDate - The start date of the query.
+ * @param {Date} endDate - The end date of the query.
+ * @param {Store} store - The store where timer sessions will be loaded. 
+ * @param {Array} [types=[TIMER_SESSION_TYPE.POMODORO, TIMER_SESSION_TYPE.SHORT_REST ,TIMER_SESSION_TYPE.LONG_REST]] - The list of timer session types to query
+ * @returns {Promise<TimerSession[]>} Promise fulfilled by the array of the TimerSession.
+ *                                    If rejected, it contains an error.
+ * @public
+ */
+async function loadTimerSessionListByDateWithStore(startDate, endDate, store,
+    types = Object.values(TIMER_SESSION_TYPE)) {
+    if (!isValidLoadTimerSessionInput(startDate, endDate, store, types)) {
         return Promise.reject(new Error('Invalid input for loading timer sessions!'));
     }
 
@@ -61,7 +92,7 @@ function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TI
         currDate <= endDate;
         currDate.setDate(currDate.getDate() + 1)) {
         let dateString = currDate.toDateString();
-        promises.push(get(dateString, timerSessionStore));
+        promises.push(get(dateString, store));
     }
 
     let resList = [];
@@ -83,17 +114,33 @@ function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TI
 
 /**
  * savePomodoroSettings
- * @desc Save the pomodoro settings.
+ * @desc Save the pomodoro settings in the default pomodoroSettingsStore.
  * @param {string} tag - The tag of the pomodoro settings to be saved
  * @param {PomodoroSettings} settings - The pomodoro settings to be saved
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-function savePomodoroSettings(tag, settings) {
+async function savePomodoroSettings(tag, settings) {
+    return savePomodoroSettingsWithStore(tag, settings, pomodoroSettingsStore);
+}
+
+/**
+ * savePomodoroSettingsWithStore
+ * @desc Save the pomodoro settings in the given store.
+ * @param {string} tag - The tag of the pomodoro settings to be saved
+ * @param {PomodoroSettings} settings - The pomodoro settings to be saved
+ * @param {Store} store - The store where pomodoro settings will be saved.
+ * @returns {Promise}  If rejected, it contains an error.
+ * @public
+ */
+async function savePomodoroSettingsWithStore(tag, settings, store) {
     if (!isValidPomodoroSettings(settings)) {
         return Promise.reject(new Error('Invalid input: Not PomodoroSettings!'));
+    } if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
     }
-    return set(tag, settings, pomodoroSettingsStore)
+
+    return set(tag, settings, store)
         .catch(() => {
             throw new Error("Failed to save pomodoro settings!");
         });
@@ -101,20 +148,36 @@ function savePomodoroSettings(tag, settings) {
 
 /**
  * loadAllPomodoroSettings
- * @desc Load all pomodoro settings 
+ * @desc Load all pomodoro settings from the default pomodoroSettingsStore.
  * @returns {Promise<object>} Promise fulfilled by the mapping object from tag to the PomodoroSettings.
  *                    If rejected, it contains an error.
  * @public
  */
-function loadAllPomodoroSettings() {
+async function loadAllPomodoroSettings() {
+    return loadAllPomodoroSettingsWithStore(pomodoroSettingsStore);
+}
+
+/**
+ * loadAllPomodoroSettingsWithStore
+ * @desc Load all pomodoro settings from the given store
+ * @param {Store} store - The store where pomodoro settings will be loaded.
+ * @returns {Promise<object>} Promise fulfilled by the mapping object from tag to the PomodoroSettings.
+ *                    If rejected, it contains an error.
+ * @public
+ */
+async function loadAllPomodoroSettingsWithStore(store) {
+    if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
+    }
+
     let promises = [];
     let tags = [];
     let pomodoroSettingsDict = {};
-    return keys(pomodoroSettingsStore)
+    return keys(store)
         .then(ks => {
             tags = ks;
             for (let k of ks) {
-                promises.push(get(k, pomodoroSettingsStore));
+                promises.push(get(k, store));
             }
             return Promise.all(promises);
         })
@@ -129,22 +192,36 @@ function loadAllPomodoroSettings() {
         .catch(() => {
             throw new Error("Failed to load all pomodoro settings!");
         });
-
 }
 
 /**
  * saveUISettings
- * @desc Save the UI settings.
- * @param {UISettings} settings - The UI settings to be saved
+ * @desc Save the UI settings in the default uiSettingsStore.
+ * @param {UISettings} settings - The UI settings to be saved.
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-function saveUISettings(settings) {
+async function saveUISettings(settings) {
+    return saveUISettingsWithStore(settings, uiSettingsStore);
+}
+
+/**
+ * saveUISettingsWithStore
+ * @desc Save the UI settings in the given store.
+ * @param {UISettings} settings - The UI settings to be saved.
+ * @param {Store} store - The store where UI settings will be saved.
+ * @returns {Promise}  If rejected, it contains an error.
+ * @public
+ */
+async function saveUISettingsWithStore(settings, store) {
     if (!isValidUISettings(settings)) {
         return Promise.reject(new Error("Invalid input: Not UISettings!"));
     }
+    if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
+    }
 
-    return set("uiSettings", settings, uiSettingsStore)
+    return set("uiSettings", settings, store)
         .catch(() => {
             throw new Error("Failed to save UI settings!");
         });
@@ -152,14 +229,29 @@ function saveUISettings(settings) {
 
 /**
  * loadUISettings
- * @desc Load the UI settings 
+ * @desc Load the UI settings from the default uiSettingsStore.
  * @returns {Promise<UISettings>} Promise fulfilled by the saved UI settings.
  *                    If rejected when no previous settings saved, it contains an error.
  * @public
  */
-function loadUISettings() {
-    let uiSettings;
-    return get("uiSettings", uiSettingsStore)
+async function loadUISettings() {
+    return loadUISettingsWithStore(uiSettingsStore);
+}
+
+/**
+ * loadUISettingsWithStore
+ * @desc Load the UI settings from the given store.
+ * @param {Store} store - The store where UI settings will be loaded.
+ * @returns {Promise<UISettings>} Promise fulfilled by the saved UI settings.
+ *                    If rejected when no previous settings saved, it contains an error.
+ * @public
+ */
+async function loadUISettingsWithStore(store) {
+    if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
+    }
+
+    return get("uiSettings", store)
         .then(val => {
             if (val === undefined) {
                 throw new Error("No UI settings saved!");
@@ -177,16 +269,41 @@ function loadUISettings() {
  * @returns {Promise} If rejected, it contains an error.
  * @public
  */
-function clearAllHistory() {
+async function clearAllHistory() {
     return Promise.all(
         [
-            clear(timerSessionStore),
-            clear(pomodoroSettingsStore),
-            clear(uiSettingsStore)
-        ])
+            clearHistoryWithStore(timerSessionStore),
+            clearHistoryWithStore(pomodoroSettingsStore),
+            clearHistoryWithStore(uiSettingsStore)
+        ]);
+}
+
+/**
+ * clearAllHistoryWithStore
+ * @desc Clear data in the given object store in database IndexedDB.
+ * @param {Store} store - The store where history will be cleared
+ * @returns {Promise} If rejected, it contains an error.
+ * @public
+ */
+async function clearHistoryWithStore(store) {
+    if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
+    }
+    return clear(store)
         .catch(() => {
             throw new Error("Failed to clear history!");
         });
+}
+
+/**
+ * isValidStore
+ * @desc Verify if the input is an instance of Store
+ * @param {Store} store - The store to be verified
+ * @returns {boolean} true if it is an instance of Store, otherwise false
+ * @private
+ */
+function isValidStore(store) {
+    return store instanceof Store;
 }
 
 
@@ -204,13 +321,14 @@ function isValidTimerSession(session) {
 /**
  * isValidLoadTimerSessionInput
  * @desc Verify if the inputs are valid for loading the query
- * @param {Date} startDate - The start date of the query. Must be in the granularity of date.
- * @param {Date} endDate - The end date of the query. Must be in the granularity of date.
+ * @param {Date} startDate - The start date of the query.
+ * @param {Date} endDate - The end date of the query.
+ * @param {Store} store - The store to be verified
  * @param {Array} types - The list of timer session types to query
  * @returns {boolean} true the inputs are valid for loading the query, otherwise false
  * @private
  */
-function isValidLoadTimerSessionInput(startDate, endDate, types) {
+function isValidLoadTimerSessionInput(startDate, endDate, store, types) {
     if (!(types instanceof Array)) {
         return false;
     }
@@ -219,7 +337,7 @@ function isValidLoadTimerSessionInput(startDate, endDate, types) {
             return false;
         }
     }
-    return startDate instanceof Date && endDate instanceof Date;
+    return startDate instanceof Date && endDate instanceof Date && store instanceof Store;
 }
 
 /**
@@ -252,4 +370,12 @@ export {
     saveUISettings,
     loadUISettings,
     clearAllHistory,
+
+    saveTimerSessionWithStore,
+    loadTimerSessionListByDateWithStore,
+    savePomodoroSettingsWithStore,
+    loadAllPomodoroSettingsWithStore,
+    saveUISettingsWithStore,
+    loadUISettingsWithStore,
+    clearHistoryWithStore,
 }
