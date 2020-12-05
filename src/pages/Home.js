@@ -3,7 +3,8 @@ import Timer from '../components/Timer/Timer';
 
 function Home () {
     return (
-        <div>  
+        <div>
+            <h1>Pomodoro Timer</h1> 
             <Timer/>
         </div>
     )
