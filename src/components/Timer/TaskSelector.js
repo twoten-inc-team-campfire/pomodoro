@@ -82,7 +82,7 @@ function TaskSelector() {
                 </IconButton>
             }
 
-            <Dialog id="dialog" open={isDialogOpen} onClose={handleCancel} >
+            <Dialog id="dialog" open={isDialogOpen} >
                 <DialogContent>
                     <form>
                         <TextField 
