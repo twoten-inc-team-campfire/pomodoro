@@ -184,4 +184,3 @@ default task are shown", () => {
     const taskText = screen.getByTestId('taskDescription');
     expect(taskText.innerHTML).toMatch(defaultTask);
 })
-
