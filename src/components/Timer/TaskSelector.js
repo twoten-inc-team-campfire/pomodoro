@@ -15,7 +15,7 @@ import CloseIcon from '@material-ui/icons/Close';
  * @desc Component that allows users to enter a task for the current
  * pomodoro session.
  */
-function TaskSelector() {
+function TaskSelector({onConfirmTask}) {
     const [showSelector, setShowSelector] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [task, setTask] = useState(null);
@@ -35,6 +35,7 @@ function TaskSelector() {
      */
     const handleChange = (event) => {
         setTask(event.target.value)
+        onConfirmTask(event.target.value)
     }
 
     /**
@@ -42,7 +43,6 @@ function TaskSelector() {
      * @desc Closes the dialog.
      */
     const handleSubmit = () => {
-        setIsDialogOpen(!isDialogOpen)
     }
 
     /**
