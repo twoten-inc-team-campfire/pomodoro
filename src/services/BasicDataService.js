@@ -2,10 +2,9 @@
  * @file The services and methods to save and load data from IndexedDB.
  */
 
-import { Store, get, set, clear, keys } from 'idb-keyval';
+import { Store, get, set, clear } from 'idb-keyval';
 import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
-import { PomodoroSettings } from '../classes/settings/PomodoroSettings';
-import { UISettings } from '../classes/settings/UISettings';
+import { UserSettings } from '../classes/settings/UserSettings';
 
 /**
  * saveTimerSessionWithStore
@@ -84,108 +83,49 @@ function loadTimerSessionListByDateWithStore(startDate, endDate, store,
 }
 
 /**
- * savePomodoroSettingsWithStore
- * @desc Save the pomodoro settings in the given store.
- * @param {string} tag - The tag of the pomodoro settings to be saved
- * @param {PomodoroSettings} settings - The pomodoro settings to be saved
- * @param {Store} store - The store where pomodoro settings will be saved.
+ * saveUserSettingsWithStore
+ * @desc Save the user settings in the given store.
+ * @param {UserSettings} settings - The user settings to be saved.
+ * @param {Store} store - The store where user settings will be saved.
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-function savePomodoroSettingsWithStore(tag, settings, store) {
-    if (!isValidPomodoroSettings(settings)) {
-        return Promise.reject(new Error('Invalid input: Not PomodoroSettings!'));
-    } if (!isValidStore(store)) {
-        return Promise.reject(new Error("Invalid input: Not Store!"));
-    }
-
-    return set(tag, settings, store)
-        .catch(() => {
-            throw new Error("Failed to save pomodoro settings!");
-        });
-}
-
-/**
- * loadAllPomodoroSettingsWithStore
- * @desc Load all pomodoro settings from the given store
- * @param {Store} store - The store where pomodoro settings will be loaded.
- * @returns {Promise<object>} Promise fulfilled by the mapping object from tag to the PomodoroSettings.
- *                    If rejected, it contains an error.
- * @public
- */
-function loadAllPomodoroSettingsWithStore(store) {
-    if (!isValidStore(store)) {
-        return Promise.reject(new Error("Invalid input: Not Store!"));
-    }
-
-    let promises = [];
-    let tags = [];
-    let pomodoroSettingsDict = {};
-    return keys(store)
-        .then(ks => {
-            tags = ks;
-            for (let k of ks) {
-                promises.push(get(k, store));
-            }
-            return Promise.all(promises);
-        })
-        .then(values => {
-            for (let i in values) {
-                let k = tags[i];
-                let v = values[i];
-                pomodoroSettingsDict[k] = v;
-            }
-            return pomodoroSettingsDict;
-        })
-        .catch(() => {
-            throw new Error("Failed to load all pomodoro settings!");
-        });
-}
-
-/**
- * saveUISettingsWithStore
- * @desc Save the UI settings in the given store.
- * @param {UISettings} settings - The UI settings to be saved.
- * @param {Store} store - The store where UI settings will be saved.
- * @returns {Promise}  If rejected, it contains an error.
- * @public
- */
-function saveUISettingsWithStore(settings, store) {
-    if (!isValidUISettings(settings)) {
-        return Promise.reject(new Error("Invalid input: Not UISettings!"));
+function saveUserSettingsWithStore(settings, store) {
+    if (!isValidUserSettings(settings)) {
+        return Promise.reject(new Error("Invalid input: Not UserSettings!"));
     }
     if (!isValidStore(store)) {
         return Promise.reject(new Error("Invalid input: Not Store!"));
     }
 
-    return set("uiSettings", settings, store)
+    return set("userSettings", settings, store)
         .catch(() => {
-            throw new Error("Failed to save UI settings!");
+            throw new Error("Failed to save user settings!");
         });
 }
 
 /**
- * loadUISettingsWithStore
- * @desc Load the UI settings from the given store.
- * @param {Store} store - The store where UI settings will be loaded.
- * @returns {Promise<UISettings>} Promise fulfilled by the saved UI settings.
+ * loadUserSettingsWithStore
+ * @desc Load the user settings from the given store.
+ * @param {Store} store - The store where user settings will be loaded.
+ * @returns {Promise<UserSettings>} Promise fulfilled by the saved user settings.
  *                    If rejected when no previous settings saved, it contains an error.
  * @public
  */
-function loadUISettingsWithStore(store) {
+function loadUserSettingsWithStore(store) {
     if (!isValidStore(store)) {
         return Promise.reject(new Error("Invalid input: Not Store!"));
     }
 
-    return get("uiSettings", store)
+    return get("userSettings", store)
         .then(val => {
             if (val === undefined) {
-                throw new Error("No UI settings saved!");
+                throw new Error("No user settings saved!");
             }
             return val;
         })
         .catch(() => {
-            throw new Error("Failed to load UI settings!");
+            throw new Error("Failed to load user settings!");
         });
 }
 
@@ -252,33 +192,20 @@ function isValidLoadTimerSessionInput(startDate, endDate, store, types) {
 }
 
 /**
- * isValidPomodoroSettings
- * @desc Verify if the input is an instance of PomodoroSettings
- * @param {PomodoroSettings} settings - The pomodoro settings to be verified
- * @returns {boolean} true if it is an instance of PomodoroSettings, otherwise false
+ * isValidUserSettings
+ * @desc Verify if the input is an instance of UserSettings
+ * @param {UserSettings} settings - The user settings to be verified
+ * @returns {boolean} true if it is an instance of UserSettings, otherwise false
  * @private
  */
-function isValidPomodoroSettings(settings) {
-    return settings instanceof PomodoroSettings;
-}
-
-/**
- * isValidUISettings
- * @desc Verify if the input is an instance of UISettings
- * @param {UISettings} settings - The UI settings to be verified
- * @returns {boolean} true if it is an instance of UISettings, otherwise false
- * @private
- */
-function isValidUISettings(settings) {
-    return settings instanceof UISettings;
+function isValidUserSettings(settings) {
+    return settings instanceof UserSettings;
 }
 
 export {
     saveTimerSessionWithStore,
     loadTimerSessionListByDateWithStore,
-    savePomodoroSettingsWithStore,
-    loadAllPomodoroSettingsWithStore,
-    saveUISettingsWithStore,
-    loadUISettingsWithStore,
+    saveUserSettingsWithStore,
+    loadUserSettingsWithStore,
     clearHistoryWithStore,
 }
