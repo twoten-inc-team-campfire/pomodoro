@@ -74,7 +74,7 @@ function Settings(props) {
     }
 
     return (
-        <div className="Settings">
+        <div className="Settings" aria-label="settings-page">
             <Grid container spacing={1} direction="column">
                 <Grid item>
                     <h4>General Settings</h4>

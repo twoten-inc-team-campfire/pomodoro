@@ -4,7 +4,7 @@ import Timer from '../components/Timer/Timer';
 
 function Home () {
     return (
-        <div>
+        <div aria-label="home-page">
             <h1>Pomodoro Timer</h1>
             <center><TaskSelector/></center>
             <Timer/>
