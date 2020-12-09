@@ -1,13 +1,21 @@
 import React from 'react';
 import {TimerSession} from "../../classes/TimerSession";
-import DailyLogItem from "./DailyLogItem";
+import DailyLogSession from "./DailyLogSession";
 
+/**
+ * @typedef {TimerSession} DailyLog#TimerCycle
+ * @desc A compressed sequence of TimerSessions of the same type; contains additional info about all the tasks
+ * completed during that timer cycle and the amount of time the timer was paused.
+ * @property {[string]} tasks - All tasks that were undertaken during the timer cycle
+ * @property {number} pauseTime - The length of time the timer was paused during a part of the cycle in milliseconds.
+ * @ignore
+ */
 /**
  * DailyLog
  * @desc Displays a log of the TimerSessions for a specific day, showing information about groups of consecutive
  * TimerSessions: time started, total amount of work done, tasks that were worked on, etc.
  * @param {Date} date - The date whose information is being logged.
- * @param {[TimerSessions]} timerSessions - The TimerSessions recorded on the date passed in as an argument.
+ * @param {TimerSessions[]} timerSessions - The TimerSessions recorded on the date passed in as an argument.
  * @param {number} gap - The permitted time gap between consecutive TimerSessions before they're split into separate
  * segments.
  * @returns {JSX.Element}
@@ -46,7 +54,7 @@ export default function DailyLog({date, timerSessions, gap=20}) {
         sessions.push(currentSession);
         items = sessions.map((session, index) => (
             <div style={{"marginTop": "0.5em", "marginBottom": "0.5em"}}>
-                <DailyLogItem key={index} timerSessions={session}/>
+                <DailyLogSession key={index} timerSessions={session}/>
             </div>
         ));
     }
