@@ -37,16 +37,7 @@ function TimelineGraph({date, timerSessions, maxGap = 5}) {
         const dayLengthMs = nextDay.getTime() - dayStartMs;
 
         // Third, edit the first and last timerSessions to make sure they completely fall within the current day.
-        if (timerSessions[0].startTime < currentDay) {
-            let temp = timerSessions[0].copy();
-            temp.startTime = currentDay;
-            timerSessions[0] = temp;
-        }
-        if (timerSessions[timerSessions.length - 1].endTime > nextDay) {
-            let temp = timerSessions[0].copy();
-            temp.endTime = nextDay;
-            timerSessions[timerSessions.length - 1] = temp;
-        }
+        timerSessions = fitTimerSessionsIntoRange(timerSessions, currentDay, nextDay);
 
         // Fourth, process the timerSessions to extract their lengths.
         let timeBlocks = [];
