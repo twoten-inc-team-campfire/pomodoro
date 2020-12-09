@@ -2,17 +2,14 @@ import { Store } from 'idb-keyval';
 import { 
     saveTimerSessionWithStore,
     loadTimerSessionListByDateWithStore,
-    savePomodoroSettingsWithStore,
-    loadAllPomodoroSettingsWithStore,
-    saveUISettingsWithStore,
-    loadUISettingsWithStore,
+    saveUserSettingsWithStore,
+    loadUserSettingsWithStore,
     clearHistoryWithStore,
  } from './BasicDataService';
 import { TIMER_SESSION_TYPE } from '../classes/TimerSession';
 
 let timerSessionStore = new Store('IndexedDB', 'TimerSessionStore');
-let pomodoroSettingsStore = new Store('IndexedDB', 'PomodoroSettingsStore');
-let uiSettingsStore = new Store('IndexedDB', 'UISettingsStore');
+let userSettingsStore = new Store('IndexedDB', 'UserSettingsStore');
 
 /**
  * saveTimerSession
@@ -40,53 +37,30 @@ function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TI
 }
 
 /**
- * savePomodoroSettings
- * @desc Save the pomodoro settings in the default pomodoroSettingsStore.
- * @param {string} tag - The tag of the pomodoro settings to be saved
- * @param {PomodoroSettings} settings - The pomodoro settings to be saved
+ * saveUserSettings
+ * @desc Save the user settings in the default userSettingsStore.
+ * @param {UserSettings} settings - The user settings to be saved.
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-function savePomodoroSettings(tag, settings) {
-    return savePomodoroSettingsWithStore(tag, settings, pomodoroSettingsStore);
+function saveUserSettings(settings) {
+    return saveUserSettingsWithStore(settings, userSettingsStore);
 }
 
 /**
- * loadAllPomodoroSettings
- * @desc Load all pomodoro settings from the default pomodoroSettingsStore.
- * @returns {Promise<object>} Promise fulfilled by the mapping object from tag to the PomodoroSettings.
- *                    If rejected, it contains an error.
- * @public
- */
-function loadAllPomodoroSettings() {
-    return loadAllPomodoroSettingsWithStore(pomodoroSettingsStore);
-}
-
-/**
- * saveUISettings
- * @desc Save the UI settings in the default uiSettingsStore.
- * @param {UISettings} settings - The UI settings to be saved.
- * @returns {Promise}  If rejected, it contains an error.
- * @public
- */
-function saveUISettings(settings) {
-    return saveUISettingsWithStore(settings, uiSettingsStore);
-}
-
-/**
- * loadUISettings
- * @desc Load the UI settings from the default uiSettingsStore.
- * @returns {Promise<UISettings>} Promise fulfilled by the saved UI settings.
+ * loadUserSettings
+ * @desc Load the user settings from the default userSettingsStore.
+ * @returns {Promise<UserSettings>} Promise fulfilled by the saved user settings.
  *                    If rejected when no previous settings saved, it contains an error.
  * @public
  */
-function loadUISettings() {
-    return loadUISettingsWithStore(uiSettingsStore);
+function loadUserSettings() {
+    return loadUserSettingsWithStore(userSettingsStore);
 }
 
 /**
  * clearAllHistory
- * @desc Clear all timer sessions, Pomodoro settings, and UI settings in database.
+ * @desc Clear all timer sessions and user settings in database.
  * @returns {Promise} If rejected, it contains an error.
  * @public
  */
@@ -94,17 +68,14 @@ function clearAllHistory() {
     return Promise.all(
         [
             clearHistoryWithStore(timerSessionStore),
-            clearHistoryWithStore(pomodoroSettingsStore),
-            clearHistoryWithStore(uiSettingsStore)
+            clearHistoryWithStore(userSettingsStore)
         ]);
 }
 
 export {
     saveTimerSession,
     loadTimerSessionListByDate,
-    savePomodoroSettings,
-    loadAllPomodoroSettings,
-    saveUISettings,
-    loadUISettings,
+    saveUserSettings,
+    loadUserSettings,
     clearAllHistory,
 }

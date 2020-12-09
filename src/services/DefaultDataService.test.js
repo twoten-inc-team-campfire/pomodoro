@@ -2,19 +2,15 @@ import { Store } from 'idb-keyval';
 import {
     saveTimerSession,
     loadTimerSessionListByDate,
-    savePomodoroSettings,
-    loadAllPomodoroSettings,
-    saveUISettings,
-    loadUISettings,
+    saveUserSettings,
+    loadUserSettings,
     clearAllHistory,
 } from './DefaultDataService';
 import {
     saveTimerSessionWithStore,
     loadTimerSessionListByDateWithStore,
-    savePomodoroSettingsWithStore,
-    loadAllPomodoroSettingsWithStore,
-    saveUISettingsWithStore,
-    loadUISettingsWithStore,
+    saveUserSettingsWithStore,
+    loadUserSettingsWithStore,
     clearHistoryWithStore,
 } from './BasicDataService';
 
@@ -49,56 +45,28 @@ describe("loadTimerSessionListByDate()", () => {
     });
 });
 
-describe("savePomodoroSettings()", () => {
-    test('should call savePomodoroSettingsWithStore() with a Store object in the inputs', () => {
-        savePomodoroSettingsWithStore.mockResolvedValue(true);
+describe("saveUserSettings()", () => {
+    test('should call saveUserSettingsWithStore() with a Store object in the inputs', () => {
+        saveUserSettingsWithStore.mockResolvedValue(true);
 
-        return savePomodoroSettings()
+        return saveUserSettings()
             .then(val => {
                 expect(val).toBe(true);
-                for (let call of savePomodoroSettingsWithStore.mock.calls) {
-                    expect(call[2]).toBeInstanceOf(Store);
-                }
-            });
-    });
-});
-
-describe("loadAllPomodoroSettings()", () => {
-    test('should call loadAllPomodoroSettingsWithStore() with a Store object in the inputs', () => {
-        loadAllPomodoroSettingsWithStore.mockResolvedValue(true);
-
-        return loadAllPomodoroSettings()
-            .then(val => {
-                expect(val).toBe(true);
-                for (let call of loadAllPomodoroSettingsWithStore.mock.calls) {
-                    expect(call[0]).toBeInstanceOf(Store);
-                }
-            });
-    });
-});
-
-describe("saveUISettings()", () => {
-    test('should call saveUISettingsWithStore() with a Store object in the inputs', () => {
-        saveUISettingsWithStore.mockResolvedValue(true);
-
-        return saveUISettings()
-            .then(val => {
-                expect(val).toBe(true);
-                for (let call of saveUISettingsWithStore.mock.calls) {
+                for (let call of saveUserSettingsWithStore.mock.calls) {
                     expect(call[1]).toBeInstanceOf(Store);
                 }
             });
     });
 });
 
-describe("loadUISettings()", () => {
-    test('should call loadUISettingsWithStore() with a Store object in the inputs', () => {
-        loadUISettingsWithStore.mockResolvedValue(true);
+describe("loadUserSettings()", () => {
+    test('should call loadUserSettingsWithStore() with a Store object in the inputs', () => {
+        loadUserSettingsWithStore.mockResolvedValue(true);
 
-        return loadUISettings()
+        return loadUserSettings()
             .then(val => {
                 expect(val).toBe(true);
-                for (let call of loadUISettingsWithStore.mock.calls) {
+                for (let call of loadUserSettingsWithStore.mock.calls) {
                     expect(call[0]).toBeInstanceOf(Store);
                 }
             });
@@ -111,7 +79,7 @@ describe("clearAllHistory()", () => {
 
         return clearAllHistory()
             .then(vals => {
-                expect(vals).toEqual([true, true, true]);
+                expect(vals).toEqual([true, true]);
                 for (let call of clearHistoryWithStore.mock.calls) {
                     expect(call[0]).toBeInstanceOf(Store);
                 }

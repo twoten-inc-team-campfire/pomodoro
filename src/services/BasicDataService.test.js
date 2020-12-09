@@ -1,16 +1,13 @@
-import { Store, get, set, clear, keys } from 'idb-keyval';
+import { Store, get, set, clear } from 'idb-keyval';
 import {
     saveTimerSessionWithStore,
     loadTimerSessionListByDateWithStore,
-    savePomodoroSettingsWithStore,
-    loadAllPomodoroSettingsWithStore,
-    saveUISettingsWithStore,
-    loadUISettingsWithStore,
+    saveUserSettingsWithStore,
+    loadUserSettingsWithStore,
     clearHistoryWithStore,
 } from './BasicDataService';
 import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
-import { PomodoroSettings } from '../classes/settings/PomodoroSettings';
-import { UISettings } from '../classes/settings/UISettings';
+import { UserSettings } from '../classes/settings/UserSettings';
 
 jest.mock('idb-keyval');
 let testStore = new Store('test-db', 'test-store');
@@ -176,154 +173,60 @@ describe("loadTimerSessionListByDateWithStore()", () => {
     });
 });
 
-describe("savePomodoroSettingsWithStore()", () => {
-    test('should save the PomodoroSettings object when given the valid settings', () => {
-        let expectedStore = {
-            'settings1': new PomodoroSettings(1500000),
-            'settings2': new PomodoroSettings(3000000),
-        }
-        let actualStore = {};
-        set.mockImplementation((k, v) => {
-            actualStore[k] = v;
-            return Promise.resolve(actualStore);
-        });
-
-        return savePomodoroSettingsWithStore('settings1', expectedStore['settings1'], testStore)
-            .then(s => savePomodoroSettingsWithStore('settings2', expectedStore['settings2'], testStore))
-            .then(s => expect(s).toEqual(expectedStore))
-    });
-
-    test('should throw an error if the input is invalid (not PomodoroSettings)', () => {
-        let settings = {
-            pomodoroLength: 1500000, // 25 * 60 * 1000
-            shortBreakLength: 300000, // 5 * 60 * 1000
-            longBreakLength: 900000, // 15 * 60 * 1000
-            numPomodorosInCycle: 4,
-            autoStartBreaks: false,
-            autoStartPomodoros: false
-        };
-        return expect(savePomodoroSettingsWithStore(settings, testStore))
-            .rejects
-            .toThrow();
-    });
-
-    test('should throw an error if idb set() has error', () => {
-        let settings = new PomodoroSettings();
-        set.mockRejectedValue(new Error());
-
-        return expect(savePomodoroSettingsWithStore('settings', settings, testStore))
-            .rejects
-            .toThrow();
-    });
-
-    test('should throw an error if not Store object', () => {
-        let settings = new PomodoroSettings();
-
-        return expect(savePomodoroSettingsWithStore(settings, settings, 'testStore'))
-            .rejects
-            .toThrow();
-    });
-});
-
-describe("loadAllPomodoroSettingsWithStore()", () => {
-    test('should load all PomodoroSettings', () => {
-        let store = {
-            'settings1': new PomodoroSettings(1500000),
-            'settings2': new PomodoroSettings(3000000),
-        }
-        keys.mockResolvedValue(Object.keys(store));
-        get.mockResolvedValueOnce(store['settings1'])
-            .mockResolvedValueOnce(store['settings2']);
-
-        return expect(loadAllPomodoroSettingsWithStore(testStore))
-            .resolves
-            .toEqual(store);
-    });
-
-    test('should throw an error if idb keys() has error', () => {
-        keys.mockRejectedValue(new Error());
-
-        return expect(loadAllPomodoroSettingsWithStore(testStore))
-            .rejects
-            .toThrow();
-    });
-
-    test('should throw an error if idb get() has error', () => {
-        keys.mockResolvedValue([1, 2, 3]);
-        get.mockRejectedValue(new Error());
-
-        return expect(loadAllPomodoroSettingsWithStore(testStore))
-            .rejects
-            .toThrow();
-    });
-
-    test('should throw an error if not Store object', () => {
-        return expect(loadAllPomodoroSettingsWithStore('testStore'))
-            .rejects
-            .toThrow();
-    });
-});
-
-describe("saveUISettingsWithStore()", () => {
-    test('should save the UISettings object when given the valid settings', () => {
-        let settings = new UISettings();
-        let dict = { "uiSettings": settings };
-        set.mockImplementation((k = "uiSettings", v) => {
+describe("saveUserSettingsWithStore()", () => {
+    test('should save the UserSettings object when given the valid settings', () => {
+        let settings = new UserSettings();
+        let dict = { "userSettings": settings };
+        set.mockImplementation((k = "userSettings", v) => {
             let item = {};
             item[k] = v;
             return Promise.resolve(item);
         });
 
-        return expect(saveUISettingsWithStore(settings, testStore))
+        return expect(saveUserSettingsWithStore(settings, testStore))
             .resolves
             .toEqual(dict);
 
     });
 
-    test('should throw an error if the input is invalid (not UISettings)', () => {
-        let settings = {
-            displayPauseButton: true,
-            displayCancelButton: true,
-            displayFastForwardButton: true,
-            displayTaskSelector: true
-        };
-        return expect(saveUISettingsWithStore(settings, testStore))
+    test('should throw an error if the input is invalid (not UserSettings)', () => {
+        return expect(saveUserSettingsWithStore('settings', testStore))
             .rejects
             .toThrow();
     });
 
     test('should throw an error if idb set() has error', () => {
-        let settings = new UISettings();
+        let settings = new UserSettings();
         set.mockRejectedValue(new Error());
 
-        return expect(saveUISettingsWithStore(settings, testStore))
+        return expect(saveUserSettingsWithStore(settings, testStore))
             .rejects
             .toThrow();
     });
 
     test('should throw an error if not Store object', () => {
-        let settings = new UISettings();
+        let settings = new UserSettings();
 
-        return expect(saveUISettingsWithStore(settings, 'testStore'))
+        return expect(saveUserSettingsWithStore(settings, 'testStore'))
             .rejects
             .toThrow();
     });
 });
 
-describe("loadUISettingsWithStore()", () => {
-    test('should load the saved UISettings if there is one saved', () => {
-        let uiSettings = new UISettings();
-        get.mockResolvedValue(uiSettings);
+describe("loadUserSettingsWithStore()", () => {
+    test('should load the saved UserSettings if there is one saved', () => {
+        let userSettings = new UserSettings();
+        get.mockResolvedValue(userSettings);
 
-        return expect(loadUISettingsWithStore(testStore))
+        return expect(loadUserSettingsWithStore(testStore))
             .resolves
-            .toEqual(uiSettings);
+            .toEqual(userSettings);
     });
 
     test('should throw an error if no previously saved settings', () => {
         get.mockResolvedValue(undefined);
 
-        return expect(loadUISettingsWithStore(testStore))
+        return expect(loadUserSettingsWithStore(testStore))
             .rejects
             .toThrow();
     });
@@ -331,13 +234,13 @@ describe("loadUISettingsWithStore()", () => {
     test('should throw an error if idb get() has error', () => {
         get.mockRejectedValue(new Error());
 
-        return expect(loadUISettingsWithStore(testStore))
+        return expect(loadUserSettingsWithStore(testStore))
             .rejects
             .toThrow();
     });
 
     test('should throw an error if not Store object', () => {
-        return expect(loadUISettingsWithStore('testStore'))
+        return expect(loadUserSettingsWithStore('testStore'))
             .rejects
             .toThrow();
     });
