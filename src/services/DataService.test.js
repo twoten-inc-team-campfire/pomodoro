@@ -9,7 +9,7 @@ import {
     clearAllHistory,
 } from './DataService';
 import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
-import { PomodoroSettings } from '../classes/settings/PomodoroSettings';
+import { UserSettings } from '../classes/settings/UserSettings';
 import { UISettings } from '../classes/settings/UISettings';
 
 jest.mock('idb-keyval');
@@ -160,8 +160,8 @@ describe("loadTimerSessionListByDate()", () => {
 describe("savePomodoroSettings()", () => {
     test('should save the PomodoroSettings object when given the valid settings', () => {
         let expectedStore = {
-            'settings1': new PomodoroSettings(1500000),
-            'settings2': new PomodoroSettings(3000000),
+            'settings1': new UserSettings(1500000),
+            'settings2': new UserSettings(3000000),
         }
         let actualStore = {};
         set.mockImplementation((k, v) => {
@@ -189,7 +189,7 @@ describe("savePomodoroSettings()", () => {
     });
 
     test('should throw an error if idb set() has error', () => {
-        let settings = new PomodoroSettings();
+        let settings = new UserSettings();
         set.mockRejectedValue(new Error());
 
         return expect(savePomodoroSettings('settings', settings))
@@ -201,8 +201,8 @@ describe("savePomodoroSettings()", () => {
 describe("loadAllPomodoroSettings()", () => {
     test('should load all PomodoroSettings', () => {
         let store = {
-            'settings1': new PomodoroSettings(1500000),
-            'settings2': new PomodoroSettings(3000000),
+            'settings1': new UserSettings(1500000),
+            'settings2': new UserSettings(3000000),
         }
         keys.mockResolvedValue(Object.keys(store));
         get.mockResolvedValueOnce(store['settings1'])

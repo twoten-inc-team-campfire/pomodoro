@@ -49,6 +49,8 @@ function Settings(props) {
 
     const { settings, dispatch, SettingsActions } = useSettingsGlobalState()
     
+    console.log("Settings page got the settings:")
+    console.log(settings);
     /**
      * Receives user events from Checkbox and Switch components, and dispatches
      * setting changes to the Global state.
@@ -84,8 +86,8 @@ function Settings(props) {
                         <p>Auto Start Break after Pomodoro</p>
                     </Grid>
                     <Grid item xs>
-                        <BlueSwitch checked={settings.autoBreak} onChange={changeCheckBox}
-                            name='autoBreak' inputProps={{ 'aria-label': 'Auto Break Checkbox'}}
+                        <BlueSwitch checked={settings.autoStartBreaks} onChange={changeCheckBox}
+                            name='autoStartBreaks' inputProps={{ 'aria-label': 'Auto Break Checkbox'}}
                         />
                     </Grid>
                 </Grid>
@@ -94,8 +96,8 @@ function Settings(props) {
                         <p>Auto Start Pomodoro after Break</p>
                     </Grid>
                     <Grid item xs>
-                        <BlueSwitch checked={settings.autoFocus} onChange={changeCheckBox} 
-                            name='autoFocus' inputProps={{ 'aria-label': 'Auto Focus Checkbox'}}
+                        <BlueSwitch checked={settings.autoStartPomodoros} onChange={changeCheckBox} 
+                            name='autoStartPomodoros' inputProps={{ 'aria-label': 'Auto Focus Checkbox'}}
                         />
                     </Grid>
                 </Grid>
@@ -108,10 +110,10 @@ function Settings(props) {
                             <Select
                                 label="pomodoro-length"
                                 onChange={changeNumberValue}
-                                value={settings.focusLength}
-                                name="focusLength"
-                                inputProps={{'aria-label': 'Focus Length Selector'}}
-                                data-testid="focusLengthSelector"
+                                value={settings.pomodoroLength}
+                                name="pomodoroLength"
+                                inputProps={{'aria-label': 'Pomodoro Length Selector'}}
+                                data-testid="pomodoroLengthSelector"
                             >
                                 <MenuItem value={15} data-testid="focusLength15">15:00</MenuItem>
                                 <MenuItem value={20} data-testid="focusLength20">20:00</MenuItem>
@@ -172,9 +174,9 @@ function Settings(props) {
                             <Select
                                 label="pomodoro-count"
                                 onChange={changeNumberValue}
-                                value={settings.focusCycleCount}
+                                value={settings.numPomodorosInCycle}
                                 inputProps={{'aria-label': 'Pomodoro Count Selector'}}
-                                name="focusCycleCount"
+                                name="numPomodorosInCycle"
                             >
                                 <MenuItem value={1} data-testid="pomocount1">1</MenuItem>
                                 <MenuItem value={2} data-testid="pomocount2">2</MenuItem>
@@ -193,8 +195,8 @@ function Settings(props) {
                         <p>Pause Button</p>
                     </Grid>
                     <Grid item xs>
-                        <BlueCheckbox checked={settings.pause} onChange={changeCheckBox} 
-                            name='pause' inputProps={{ 'aria-label': 'Pause Button Checkbox'}}
+                        <BlueCheckbox checked={settings.displayPauseButton} onChange={changeCheckBox} 
+                            name='displayPauseButton' inputProps={{ 'aria-label': 'Pause Button Checkbox'}}
                         />
                     </Grid>
                 </Grid>
@@ -203,8 +205,8 @@ function Settings(props) {
                         <p>Fast Forward Button</p>
                     </Grid>
                     <Grid item xs>
-                        <BlueCheckbox checked={settings.fastForward} onChange={changeCheckBox}
-                            name='fastForward' inputProps={{ 'aria-label': 'Fast Forward Button Checkbox'}}
+                        <BlueCheckbox checked={settings.displayFastForwardButton} onChange={changeCheckBox}
+                            name='displayFastForwardButton' inputProps={{ 'aria-label': 'Fast Forward Button Checkbox'}}
                         />
                     </Grid>
                 </Grid>
@@ -213,8 +215,8 @@ function Settings(props) {
                         <p>Cancel Button</p>
                     </Grid>
                     <Grid item xs>
-                        <BlueCheckbox checked={settings.cancel} onChange={changeCheckBox} 
-                            name='cancel' inputProps={{ 'aria-label': 'Cancel Button Checkbox'}}
+                        <BlueCheckbox checked={settings.displayCancelButton} onChange={changeCheckBox} 
+                            name='displayCancelButton' inputProps={{ 'aria-label': 'Cancel Button Checkbox'}}
                         />
                     </Grid>
                 </Grid>
@@ -223,8 +225,8 @@ function Settings(props) {
                         <p>Task Selector</p>
                     </Grid>
                     <Grid item xs>
-                        <BlueCheckbox checked={settings.taskSelection} onChange={changeCheckBox} 
-                            name='taskSelection' inputProps={{ 'aria-label': 'Task Selector Checkbox'}}
+                        <BlueCheckbox checked={settings.displayTaskSelector} onChange={changeCheckBox} 
+                            name='displayTaskSelector' inputProps={{ 'aria-label': 'Task Selector Checkbox'}}
                         />
                     </Grid>
                 </Grid>

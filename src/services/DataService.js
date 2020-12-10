@@ -4,12 +4,11 @@
 
 import { Store, get, set, clear, keys } from 'idb-keyval';
 import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
-import { PomodoroSettings } from '../classes/settings/PomodoroSettings';
-import { UISettings } from '../classes/settings/UISettings';
+import { UserSettings } from '../classes/settings/UserSettings';
+
 
 let timerSessionStore = new Store('IndexedDB', 'TimerSessionStore');
-let pomodoroSettingsStore = new Store('IndexedDB', 'PomodoroSettingsStore');
-let uiSettingsStore = new Store('IndexedDB', 'UISettingsStore');
+let userSettingsStore = new Store('IndexedDB', 'UserSettingsStore');
 
 /**
  * saveTimerSession
@@ -82,92 +81,40 @@ function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TI
 }
 
 /**
- * savePomodoroSettings
- * @desc Save the pomodoro settings.
- * @param {string} tag - The tag of the pomodoro settings to be saved
- * @param {PomodoroSettings} settings - The pomodoro settings to be saved
+ * saveUserSettings
+ * @desc Save the instance of UserSettings to the database.
+ * @param {UserSettings} settings - The User settings to be saved
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-function savePomodoroSettings(tag, settings) {
-    if (!isValidPomodoroSettings(settings)) {
-        return Promise.reject(new Error('Invalid input: Not PomodoroSettings!'));
-    }
-    return set(tag, settings, pomodoroSettingsStore)
-        .catch(() => {
-            throw new Error("Failed to save pomodoro settings!");
-        });
-}
-
-/**
- * loadAllPomodoroSettings
- * @desc Load all pomodoro settings 
- * @returns {Promise<object>} Promise fulfilled by the mapping object from tag to the PomodoroSettings.
- *                    If rejected, it contains an error.
- * @public
- */
-function loadAllPomodoroSettings() {
-    let promises = [];
-    let tags = [];
-    let pomodoroSettingsDict = {};
-    return keys(pomodoroSettingsStore)
-        .then(ks => {
-            tags = ks;
-            for (let k of ks) {
-                promises.push(get(k, pomodoroSettingsStore));
-            }
-            return Promise.all(promises);
-        })
-        .then(values => {
-            for (let i in values) {
-                let k = tags[i];
-                let v = values[i];
-                pomodoroSettingsDict[k] = v;
-            }
-            return pomodoroSettingsDict;
-        })
-        .catch(() => {
-            throw new Error("Failed to load all pomodoro settings!");
-        });
-
-}
-
-/**
- * saveUISettings
- * @desc Save the UI settings.
- * @param {UISettings} settings - The UI settings to be saved
- * @returns {Promise}  If rejected, it contains an error.
- * @public
- */
-function saveUISettings(settings) {
-    if (!isValidUISettings(settings)) {
-        return Promise.reject(new Error("Invalid input: Not UISettings!"));
+function saveUserSettings(settings) {
+    if (!isValidUserSettings(settings)) {
+        return Promise.reject(new Error("Invalid input: Invalid instance of UserSettings"));
     }
 
-    return set("uiSettings", settings, uiSettingsStore)
+    return set("userSettings", settings, userSettingsStore)
         .catch(() => {
-            throw new Error("Failed to save UI settings!");
+            throw new Error("Failed to save User settings!");
         });
 }
 
 /**
- * loadUISettings
- * @desc Load the UI settings 
- * @returns {Promise<UISettings>} Promise fulfilled by the saved UI settings.
+ * loadUserSettings
+ * @desc Load the User settings from the database
+ * @returns {Promise<UserSettings>} Promise fulfilled by the loaded User settings.
  *                    If rejected when no previous settings saved, it contains an error.
  * @public
  */
-function loadUISettings() {
-    let uiSettings;
-    return get("uiSettings", uiSettingsStore)
+function loadUserSettings() {
+    return get("userSettings", userSettingsStore)
         .then(val => {
             if (val === undefined) {
-                throw new Error("No UI settings saved!");
+                throw new Error("No User settings saved!");
             }
             return val;
         })
         .catch(() => {
-            throw new Error("Failed to load UI settings!");
+            throw new Error("Failed to load User settings!");
         });
 }
 
@@ -181,8 +128,7 @@ function clearAllHistory() {
     return Promise.all(
         [
             clear(timerSessionStore),
-            clear(pomodoroSettingsStore),
-            clear(uiSettingsStore)
+            clear(userSettingsStore)
         ])
         .catch(() => {
             throw new Error("Failed to clear history!");
@@ -223,33 +169,20 @@ function isValidLoadTimerSessionInput(startDate, endDate, types) {
 }
 
 /**
- * isValidPomodoroSettings
- * @desc Verify if the input is an instance of PomodoroSettings
- * @param {PomodoroSettings} settings - The pomodoro settings to be verified
- * @returns {boolean} true if it is an instance of PomodoroSettings, otherwise false
- * @private
- */
-function isValidPomodoroSettings(settings) {
-    return settings instanceof PomodoroSettings;
-}
-
-/**
- * isValidUISettings
- * @desc Verify if the input is an instance of UISettings
- * @param {UISettings} settings - The UI settings to be verified
+ * isValidUserSettings
+ * @desc Verify if the input is an instance of UserSettings
+ * @param {UserSettings} settings - The User settings to be verified
  * @returns {boolean} true if it is an instance of UISettings, otherwise false
  * @private
  */
-function isValidUISettings(settings) {
-    return settings instanceof UISettings;
+function isValidUserSettings(settings) {
+    return settings instanceof UserSettings;
 }
 
 export {
     saveTimerSession,
     loadTimerSessionListByDate,
-    savePomodoroSettings,
-    loadAllPomodoroSettings,
-    saveUISettings,
-    loadUISettings,
+    saveUserSettings,
+    loadUserSettings,
     clearAllHistory,
 }

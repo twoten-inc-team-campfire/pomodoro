@@ -1,7 +1,7 @@
 import './App.css';
 import { GlobalStateProvider } from './GlobalState/GlobalState'
-import Home from './pages/Home.js';
-// import Settings from './pages/Settings.js'
+//import Home from './pages/Home.js';
+import Settings from './pages/Settings.js'
 
 
 function App() {
@@ -9,8 +9,8 @@ function App() {
     <GlobalStateProvider>
       <div className="App">
         <header className="App-header">
-          <Home/>
-          {/* <Settings/> */}
+          {/* <Home/> */}
+          <Settings/>
         </header>
       </div>
     </GlobalStateProvider>

@@ -1,20 +1,39 @@
+import { saveUserSettings, loadUserSettings } from "../services/DataService";
+import { UserSettings } from "../classes/settings/UserSettings"
 
 
 const SettingsActionType = {
     HANDLE: 'handle'
 }
-//initial state of the Settings
-const initSettings = {
-    autoBreak: true,
-    autoFocus: true,
-    focusLength: 25,
-    shortBreakLength: 5,
-    longBreakLength: 20,
-    focusCycleCount: 4,
-    pause: true,
-    fastForward: true,
-    cancel: true,
-    taskSelection: true,
+
+/**
+ * getInitSettings
+ * @desc Load the initial user settings for the application. Function attempts
+ * to load settings from the Database first. Any settings that haven't previously
+ * been saved to the Database by a user event change will be set to the factory
+ * default.
+ * 
+ * @returns {UserSettings} 
+ * 
+ * @public
+ */
+async function getInitSettings() {
+
+    console.log("Getting Initial Settings");
+    try { // try to load settings from DB
+        
+        let savedSettings = await loadUserSettings();
+        console.log("Got settings from DB")
+        console.log(savedSettings)
+        return savedSettings;
+
+    } catch (err) {
+        // Expect Error if settings have never been saved to the DB
+        let factoryDefaultSettings = new UserSettings();
+        console.log("Got factory settings")
+        console.log(factoryDefaultSettings)
+        return factoryDefaultSettings;
+    }
 }
 
 //Reducer takes an action and update the state: these are the actions.
@@ -52,4 +71,4 @@ const handleSettingChange = (state, action) => {
 }
 
 
-export { settingsReducer, initSettings, SettingsActions }
+export { settingsReducer, getInitSettings, SettingsActions }
