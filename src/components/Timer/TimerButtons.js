@@ -3,6 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PlayIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseIcon from '@material-ui/icons/PauseCircleFilled';
 import CancelIcon from '@material-ui/icons/Cancel';
+import {useSettingsGlobalState} from '../../GlobalState/GlobalStateHooks';
 // import FastForwardIcon from '@material-ui/icons/FastForward';
 
 
@@ -12,6 +13,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
  * session.
  */
 function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
+    const { settings } = useSettingsGlobalState();
     const [showPlay, setShowPlay] = useState(true);
 
     /**
@@ -50,12 +52,16 @@ function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
             }
             { !showPlay && 
                 <span>
-                    <IconButton aria-label="pause-button" onClick={handlePause} >
-                        <PauseIcon style={{ fontSize: '75px', color: '#015384' }} />
-                    </IconButton>
+                    { settings.pause && 
+                        <IconButton aria-label="pause-button" onClick={handlePause} >
+                            <PauseIcon style={{ fontSize: '75px', color: '#015384' }} />
+                        </IconButton>
+                    }
+                    { settings.cancel && 
                     <IconButton aria-label="cancel-button" onClick={handleCancel} >
                         <CancelIcon style={{ fontSize: '75px', color: '#015384' }} />
                     </IconButton>
+                    }
                 </span>
             }
         </div>
