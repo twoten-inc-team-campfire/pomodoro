@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import CloseIcon from '@material-ui/icons/Close';
+import {useSettingsGlobalState} from '../../GlobalState/GlobalStateHooks';
 
 
 /**
@@ -16,6 +17,7 @@ import CloseIcon from '@material-ui/icons/Close';
  * pomodoro session.
  */
 function TaskSelector() {
+    const { settings } = useSettingsGlobalState();
     const [showSelector, setShowSelector] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [task, setTask] = useState(null);
@@ -65,48 +67,54 @@ function TaskSelector() {
     }
   
     return ( 
-        <div className="task-box">
-            { showSelector &&
-                <IconButton aria-label="selector-button" onClick={handleToggle} >
-                    <CreateIcon style={{ fontSize: '35px', color: '#015384' }} />
-                </IconButton>
+        <div className="task-outline">
+            { settings.taskSelection &&
+                <div className="task-box">
+                    <span>
+                        { showSelector &&
+                            <IconButton aria-label="selector-button" onClick={handleToggle} >
+                                <CreateIcon style={{ fontSize: '35px', color: '#015384' }} />
+                            </IconButton>
+                        }
+
+                        <span id="taskName" data-testid="taskDescription"> { task || 'No Task Selected' } </span>
+
+                        <br/>
+
+                        { !showSelector &&
+                            <IconButton id="clear-button" data-testid="clearButton" onClick={handleClearTask} >
+                                <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
+                            </IconButton>
+                        }
+
+                        <Dialog id="dialog" open={isDialogOpen} >
+                            <DialogContent>
+                                <form>
+                                    <TextField 
+                                        id="outlined-basic" 
+                                        label="Task name" 
+                                        multiline
+                                        rowsMax={3}
+                                        onChange={e => handleChange(e)}
+                                        data-testid="taskTextArea"
+                                        margin="normal" />
+                                </form>
+                            </DialogContent>
+
+                            <DialogActions>
+                                <Button id="cancel-button" variant="contained" onClick={handleCancel} > 
+                                    Cancel
+                                </Button>
+                                { task &&
+                                    <Button id="confirm-button" variant="contained" onClick={handleSubmit} > 
+                                        Confirm 
+                                    </Button>
+                                }
+                            </DialogActions>
+                        </Dialog>
+                    </span>
+                </div>
             }
-
-            <span id="taskName" data-testid="taskDescription"> { task || 'No Task Selected' } </span>
-
-            <br/>
-
-            { !showSelector &&
-                <IconButton id="clear-button" data-testid="clearButton" onClick={handleClearTask} >
-                    <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
-                </IconButton>
-            }
-
-            <Dialog id="dialog" open={isDialogOpen} >
-                <DialogContent>
-                    <form>
-                        <TextField 
-                            id="outlined-basic" 
-                            label="Task name" 
-                            multiline
-                            rowsMax={3}
-                            onChange={e => handleChange(e)}
-                            data-testid="taskTextArea"
-                            margin="normal" />
-                    </form>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button id="cancel-button" variant="contained" onClick={handleCancel} > 
-                        Cancel
-                    </Button>
-                    { task &&
-                        <Button id="confirm-button" variant="contained" onClick={handleSubmit} > 
-                            Confirm 
-                        </Button>
-                    }
-                </DialogActions>
-            </Dialog>
         </div>
     )
 }
