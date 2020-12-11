@@ -1,13 +1,20 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import TaskSelector from './TaskSelector'
+import { renderHelper } from '../../utils/TestHelper'
 
 const defaultTask = 'No Task Selected'
 
+const initialSettings = {
+    settings: {
+        taskSelection: true,
+    }
+};
+
 test("At initial start, only the task selector and default task are shown", () => {
-    render(<TaskSelector/>);
-    
+    renderHelper(<TaskSelector/>, initialSettings);
+
     const selectorButton = screen.getByRole('button', {name: /selector/i});
     const dialog = screen.queryByLabelText('dialog');
     const clearButton = screen.queryByLabelText('clear-button');
@@ -26,7 +33,7 @@ test("At initial start, only the task selector and default task are shown", () =
 
 test("When the user clicks on the task selector, it is hidden, the \
 dialog opens, and the textbox and cancel button are shown", () => {
-    render(<TaskSelector/>);
+    renderHelper(<TaskSelector/>, initialSettings);
 
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -47,7 +54,7 @@ dialog opens, and the textbox and cancel button are shown", () => {
 
 test("When the user clicks the cancel button and no text is in the text area, \
 the dialog closes, and the task selector and default task are shown", () => {
-    render(<TaskSelector/>);
+    renderHelper(<TaskSelector/>, initialSettings);
     
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -69,7 +76,7 @@ the dialog closes, and the task selector and default task are shown", () => {
 })
 
 test("When the user types in the text area, the confirm button shows", () => {
-    render(<TaskSelector/>);
+    renderHelper(<TaskSelector/>, initialSettings);
 
     const selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -88,7 +95,7 @@ test("When the user types in the text area, the confirm button shows", () => {
 
 test("When the user presses the cancel button and text is in the text area, \
 the dialog closes, and the task selector and default task are shown", () => {
-    render(<TaskSelector/>);
+    renderHelper(<TaskSelector/>, initialSettings);
     
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -118,7 +125,7 @@ the dialog closes, and the task selector and default task are shown", () => {
 
 test("When the user types into the text area and presses confirm, the \
 text shon matches the user's input", () => {
-    render(<TaskSelector/>);
+    renderHelper(<TaskSelector/>, initialSettings);
     
     const selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -136,7 +143,7 @@ text shon matches the user's input", () => {
 
 test("When user clicks the confirm button, the dialog closes, the task \
 selector remains hidden, and the clear button is shown", () => {
-    render(<TaskSelector/>);
+    renderHelper(<TaskSelector/>, initialSettings);
     
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -162,7 +169,7 @@ selector remains hidden, and the clear button is shown", () => {
 
 test("When the user clicks on the clear button, the task selector and \
 default task are shown", () => {
-    render(<TaskSelector/>);
+    renderHelper(<TaskSelector/>, initialSettings);
     
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -184,3 +191,29 @@ default task are shown", () => {
     const taskText = screen.getByTestId('taskDescription');
     expect(taskText.innerHTML).toMatch(defaultTask);
 })
+
+describe("Settings and Task Selector", () => {
+
+	test("Task Selector is visible when settings.taskSelection is true", () => {
+        renderHelper(<TaskSelector/>, initialSettings);
+        
+        // Verify that selector is shown
+        const taskSelector = screen.getByRole('button', {name: /selector/i});
+        expect(taskSelector).toBeInTheDocument();
+    })
+    
+    test("Task Selector is hidden when settings.taskSelection is false", () => {
+		const falseSettings = {
+			settings: {
+				taskSelection: false,
+			}
+		};
+
+        renderHelper(<TaskSelector/>, falseSettings);
+        
+        // Verify that selector is hidden
+        const taskSelector = screen.queryByLabelText('selector-button');
+        expect(taskSelector).toBeNull();
+	})
+
+});
