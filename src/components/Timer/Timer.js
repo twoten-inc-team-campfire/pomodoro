@@ -41,6 +41,7 @@ function Timer (props) {
         <div className={'timer'}>
             <ClockFace min={timer.min} sec={timer.sec}/>
             <TimerButtons
+                showStartButton={!timer.isTimerRunning}
                 onClickStart={startTimer}
                 onClickPause={pauseTimer}
                 onClickCancel={resetTimer}
