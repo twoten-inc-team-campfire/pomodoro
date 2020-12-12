@@ -16,25 +16,32 @@ import {dateToHtmlDateString, htmlDateStringToDate, shiftDate} from "../../utils
  * DateNavigator
  * @desc Allows the user to select the date for which they want to view stats.
  * @param {Date} date - The current date being displayed
- * @param {onDateChange} onDateChange - The
+ * @param {onDateChange} onDateChange - The callback to be called whenever the date changes.
+ * @param {Date} maxDate - The latest date the user is allowed to navigate to
  */
-function DateNavigator({date, onDateChange}) {
+function DateNavigator({date, onDateChange, maxDate = new Date()}) {
     return (
         <div style={{"display": "flex", "alignItems": "center", "justifyContent": "center"}}>
             <IconButton
+                name={"Decrease"}
+                aria-label={"Decrease date"}
                 onClick={() => onDateChange(date, shiftDate(date,-1))}
             >
                 <ArrowLeftIcon/>
             </IconButton>
             <input type="date"
+                   name={"Date input"}
+                   aria-label={"Date input"}
                    value={dateToHtmlDateString(date)}
                    style={{border: "none"}}
-                   onInput={(ev) => onDateChange(date, htmlDateStringToDate(ev.target.value))}
-                   max={dateToHtmlDateString(new Date())}
+                   onChange={(ev) => onDateChange(date, htmlDateStringToDate(ev.target.value))}
+                   max={dateToHtmlDateString(maxDate)}
             />
             <IconButton
+                name={"Increase"}
+                aria-label={"Increase date"}
                 onClick={() => onDateChange(date, shiftDate(date,1))}
-                disabled={dateToHtmlDateString(date) === dateToHtmlDateString(new Date())}
+                disabled={dateToHtmlDateString(date) === dateToHtmlDateString(maxDate)}
             >
                 <ArrowRightIcon/>
             </IconButton>
