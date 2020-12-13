@@ -1,7 +1,13 @@
-import { PomodoroManager, initState, forward } from './PomodoroManager'
+import { PomodoroManager, forward } from './PomodoroManager'
 import { fireEvent, screen, waitFor, act } from '@testing-library/react'
 import { renderHelper } from '../utils/TestHelper'
 import { TIMER_SESSION_TYPE, TimerSession } from "../classes/TimerSession"
+
+const initState = {
+    type: TIMER_SESSION_TYPE.POMODORO,
+    count: 0,
+    sessionIngterval: 4
+}
 
 beforeEach(() => {
 	//because we used "setInterval" and "clear Interval", need to use a fake one in testing

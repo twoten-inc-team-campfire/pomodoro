@@ -42,13 +42,13 @@ const TimerActions = {
  */
 const timerReducer = (state, action) => {
     if (action.type === 'reset') {
-        return initTimer;
+        return state.initTime;
     }
     else if (action.type === 'decrement') {
-        return decrementTimer(state, action);
+        return decrementTimer(state.timer, action);
     } 
     else if (action.type === 'pause') {
-        return state
+        return state.timer;
     }
 }
 
