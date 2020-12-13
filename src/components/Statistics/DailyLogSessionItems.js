@@ -47,25 +47,6 @@ export function getFormattedPauseTime(time) {
 }
 
 /**
- * getTasksString
- * @desc Takes an array of tasks and reduces them into a single string that describes the tasks completed.
- * @param {[string]} tasks - The array of tasks to be reduced into a string.
- * @returns {string}
- * @ignore
- */
-export function getTasksString(tasks) {
-    if (tasks.length > 0) {
-        let str = "";
-        for (let i = 0; i < tasks.length - 1; i += 1) {
-            str += tasks[i] + ", "
-        }
-        str += tasks[tasks.length - 1];
-        return str;
-    }
-    return "";
-}
-
-/**
  * getDailyLogSessionItem
  * @desc Returns a new row to be displayed in the DailyLogSession table
  * @param {DailyLog#TimerCycle} session - The session used to create a new DailyLogSessionItem row
@@ -100,6 +81,7 @@ export function DailyLogShortRestItems(session) {
         </svg>,
         <p style={{"gridColumn": "3", "overflow": "hide", "justifySelf": "start",
             "color": textSecondary}}
+           aria-label={"Short rest description"}
         >
             {shortRestDescription}
         </p>
@@ -124,6 +106,7 @@ export function DailyLogLongRestItems(session) {
         </svg>,
         <p style={{"gridColumn": "3", "overflow": "hide", "justifySelf": "start",
             "color": textSecondary}}
+           aria-label={"Long rest description"}
         >
             {longRestDescription}
         </p>
@@ -142,10 +125,10 @@ export function DailyLogPomodoroItems(session) {
         <div style={{"display": "flex", "flexDirection": "column", "gridColumn": "1",
             "justifySelf": "end", "color": textSecondary}}
         >
-            <p style={{"margin": "0 0 0 0"}}>
+            <p aria-label={"Pomodoro start time"} style={{"margin": "0 0 0 0"}}>
                 {`${getDateHours(session.startTime)}:${getDateMinutes(session.startTime)}`}
             </p>
-            <p style={{"margin": "0 0 0 0"}}>
+            <p aria-label={"Pomodoro end time"} style={{"margin": "0 0 0 0"}}>
                 {`${getDateHours(session.endTime)}:${getDateMinutes(session.endTime)}`}
             </p>
         </div>,
@@ -155,12 +138,17 @@ export function DailyLogPomodoroItems(session) {
             <line x1={"5"} y1={"0"} x2={"5"} y2={"100"} stroke={colorPrimary} strokeWidth={"2"} strokeDasharray={"8 2"}/>
         </svg>,
         <div style={{"gridColumn": "3", "height": "inherit", "overflow": "hide", "justifySelf": "start",
-            "textAlign": "start"}}>
+            "textAlign": "start"}}
+            aria-label={"Pomodoro description"}
+        >
             <p style={{"color": textPrimary, "margin": "0 0 0 0"}}
+               aria-label={"Pomodoro tasks"}
             >
-                {`Task(s): ${getTasksString(session.tasks)}`}
+                {`Task(s): ${session.tasks.join(", ")}`}
             </p>
-            <p style={{"color": textSecondary, "margin": "0 0 0 0"}}>
+            <p style={{"color": textSecondary, "margin": "0 0 0 0"}}
+                aria-label={"Pomodoro pause time"}
+            >
                 {session.pauseTime >= 1000 ? `Time paused: ${getFormattedPauseTime(session.pauseTime)}` : ""}
             </p>
         </div>
