@@ -19,25 +19,27 @@ let textSecondary = "#838383";
  * @ignore
  */
 export function getTimerCyclesFromTimerSessions(timerSessions) {
-    let currentSession = timerSessions[0].copy();
-    currentSession.pauseTime = 0;
-    currentSession.tasks = [currentSession.task];
     let timerCycles = [];
-    for (const session of timerSessions) {
-        if (session.type !== currentSession.type) {
-            timerCycles.push(currentSession);
-            currentSession = session.copy();
-            currentSession.pauseTime = 0;
-            currentSession.tasks = [currentSession.task];
-        } else {
-            if (session.startTime > currentSession.endTime)
-                currentSession.pauseTime += session.startTime.getTime() - currentSession.endTime.getTime();
-            currentSession.endTime = session.endTime;
-            if (!currentSession.tasks.includes(session.task))
-                currentSession.tasks.push(session.task);
+    if (timerSessions.length > 0) {
+        let currentSession = timerSessions[0].copy();
+        currentSession.pauseTime = 0;
+        currentSession.tasks = [currentSession.task];
+        for (const session of timerSessions) {
+            if (session.type !== currentSession.type) {
+                timerCycles.push(currentSession);
+                currentSession = session.copy();
+                currentSession.pauseTime = 0;
+                currentSession.tasks = [currentSession.task];
+            } else {
+                if (session.startTime > currentSession.endTime)
+                    currentSession.pauseTime += session.startTime.getTime() - currentSession.endTime.getTime();
+                currentSession.endTime = session.endTime;
+                if (!currentSession.tasks.includes(session.task))
+                    currentSession.tasks.push(session.task);
+            }
         }
+        timerCycles.push(currentSession);
     }
-    timerCycles.push(currentSession);
     return timerCycles;
 }
 
@@ -63,14 +65,14 @@ export function getTotalTimeWorked(timerSessions) {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function DailyLogSession({timerSessions}) {
+export function DailyLogSession({timerSessions}) {
     let timeWorked = getTotalTimeWorked(timerSessions);
     let timerCycles = getTimerCyclesFromTimerSessions(timerSessions);
     let dailyLogItems = [];
     for (const cycle of timerCycles) {
         dailyLogItems.push(...getDailyLogSessionItems(cycle))
     }
-    let hoursWorked = Math.floor(timeWorked % (24 * 60 * 60 * 1000) / (60 * 60 * 1000));
+    let hoursWorked = Math.floor(timeWorked / (60 * 60 * 1000));
     let minutesWorked = Math.floor( timeWorked % (60 * 60 * 1000) / (60 * 1000));
     return (
         <div style={{
@@ -79,14 +81,18 @@ export default function DailyLogSession({timerSessions}) {
             "alignItems": "center",
             "gap": "0em 1em",
         }}>
-            <p style={{"justifySelf": "center", "color": textPrimary}}>
+            <p style={{"justifySelf": "center", "color": textPrimary}}
+                aria-label={"Session start time"}
+            >
                 {`${getDateHours(timerSessions[0].startTime)}:${getDateMinutes(timerSessions[0].startTime)}`}
             </p>
             <svg style={{"width": "3em", "height": "auto",
                 "justifySelf": "center", "alignSelf": "center"}} viewBox={"0, 0, 2, 2"}>
                 <circle cx={"1"} cy={"1"} r={"1"} fill={colorPrimary}/>
             </svg>
-            <p style={{"justifySelf": "center", "color": textPrimary}}>
+            <p style={{"justifySelf": "center", "color": textPrimary}}
+                aria-label={"Session time worked"}
+            >
                 {`Time Worked: ${hoursWorked} Hours, ${minutesWorked} Minutes`}
             </p>
             {dailyLogItems}
