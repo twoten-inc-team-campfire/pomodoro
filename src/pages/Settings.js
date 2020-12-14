@@ -60,7 +60,7 @@ function Settings(props) {
         let name = event.target.name;
         let newValue = event.target.checked;
 
-        dispatch(SettingsActions.HANDLE_CHANGE(name, newValue));
+        dispatch(SettingsActions.CHANGE_SINGLE_SETTING(name, newValue));
     }
 
     /**
@@ -72,7 +72,7 @@ function Settings(props) {
         let name = event.target.name;
         let newValue = event.target.value;
 
-        dispatch(SettingsActions.HANDLE_CHANGE(name, newValue));
+        dispatch(SettingsActions.CHANGE_SINGLE_SETTING(name, newValue));
     }
 
     return (

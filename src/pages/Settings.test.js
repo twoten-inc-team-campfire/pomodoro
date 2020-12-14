@@ -6,16 +6,16 @@ import { renderHelper } from '../utils/TestHelper'
 
 const initialSettings = {
     settings: {
-        autoBreak: true,
-        autoFocus: false,
-        focusLength: 25,
+        autoStartBreaks: true,
+        autoStartPomodoros: false,
+        pomodoroLength: 25,
         shortBreakLength: 5,
         longBreakLength: 20,
-        focusCycleCount: 4,
-        pause: true,
-        fastForward: true,
-        cancel: false,
-        taskSelection: false,
+        numPomodorosInCyle: 4,
+        displayPauseButton: true,
+        displayFastForwardButton: true,
+        displayCancelButton: false,
+        displayTaskSelector: false,
     }
 }
 
@@ -103,7 +103,7 @@ describe("Value Selectors on Settings Page", () => {
     test("Pomodoro Length Selector", () => {
         basicSetup();
 
-        const selectButton = screen.getByRole('button', {name: /focus length selector/i})
+        const selectButton = screen.getByRole('button', {name: /pomodoro length selector/i})
         expect(selectButton.innerHTML).toMatch(/25:/i);
 
         // Open ListBox to display all the values

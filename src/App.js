@@ -2,11 +2,12 @@ import './App.css';
 import { GlobalStateProvider } from './GlobalState/GlobalState'
 //import Home from './pages/Home.js';
 import Settings from './pages/Settings.js'
+import {loadUserSettings} from './services/DataService.js'
 
 
 function App() {
   return (
-    <GlobalStateProvider>
+    <GlobalStateProvider loadUserSettings={loadUserSettings}>
       <div className="App">
         <header className="App-header">
           {/* <Home/> */}
