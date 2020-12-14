@@ -14,7 +14,7 @@ import { withStyles } from '@material-ui/core/styles'
  * events to the Global context.
  */
 
-let textPrimary = "#000000";
+//let textPrimary = "#000000";
 let textSecondary = "#838383";
 let colorPrimary = "#086788";
 let colorSecondary = "#07a0c3";
