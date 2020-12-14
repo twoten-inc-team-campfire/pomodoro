@@ -58,9 +58,8 @@ function Settings(props) {
         let name = event.target.name;
         let newValue = event.target.checked;
 
-    const {autoBreak, autoFocus, focusLength, shortBreakLength,
-        longBreakLength, focusCycleCount, pause, fastForward, 
-        cancel, taskSelection} = settings;
+        dispatch(SettingsActions.HANDLE_CHANGE(name, newValue));
+    }
 
     /**
      * Receives user events from Select components, and dispatches
@@ -77,6 +76,9 @@ function Settings(props) {
     return (
         <div className="Settings">
             <Grid container spacing={1} direction="column">
+                <Grid item>
+                    <h4>General Settings</h4>
+                </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <Grid item xs={9}>
                         <p>Auto Start Break after Pomodoro</p>
@@ -162,10 +164,10 @@ function Settings(props) {
                     </Grid>
                 </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="center">
-                    <Grid item xs={9}>
+                    <Grid item xs={8}>
                         <p>Pomodoros Before Long Break</p>
                     </Grid>
-                    <Grid item xs>
+                    <Grid item xs={4}>
                         <FormControl variant="outlined">
                             <Select
                                 label="pomodoro-count"
@@ -181,6 +183,10 @@ function Settings(props) {
                             </Select>
                         </FormControl>
                     </Grid>
+                </Grid>
+                <Grid item>
+                    <hr></hr>
+                    <h4>Home Page Settings</h4>
                 </Grid>
                 <Grid container direction="row" justify="space-between" alignItems="baseline">
                     <Grid item xs={9}>

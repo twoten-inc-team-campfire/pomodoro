@@ -72,17 +72,17 @@ function TaskSelector() {
                 </IconButton>
             }
 
-            <span id="task"> { task || 'No Task Selected' } </span>
+            <span id="taskName" data-testid="taskDescription"> { task || 'No Task Selected' } </span>
 
             <br/>
 
             { !showSelector &&
-                <IconButton id="clear-button" onClick={handleClearTask} >
+                <IconButton id="clear-button" data-testid="clearButton" onClick={handleClearTask} >
                     <CloseIcon style={{ fontSize: '35px', color: '#015384' }} />
                 </IconButton>
             }
 
-            <Dialog id="dialog" open={isDialogOpen} onClose={handleCancel} >
+            <Dialog id="dialog" open={isDialogOpen} >
                 <DialogContent>
                     <form>
                         <TextField 
@@ -91,6 +91,7 @@ function TaskSelector() {
                             multiline
                             rowsMax={3}
                             onChange={e => handleChange(e)}
+                            data-testid="taskTextArea"
                             margin="normal" />
                     </form>
                 </DialogContent>
