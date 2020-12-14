@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import ClockFace from './ClockFace';
 import TimerButtons from './TimerButtons';
 import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
