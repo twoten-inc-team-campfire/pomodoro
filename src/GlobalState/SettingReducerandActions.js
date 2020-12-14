@@ -46,10 +46,7 @@ const settingsReducer = (state, action) => {
 
 
 const handleSettingChange = (state, action) => {
-    state[action.setting] = action.value;
-    return {
-        state
-    }
+    return ({...state, [action.setting]: action.value });
 }
 
 
