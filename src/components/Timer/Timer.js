@@ -16,7 +16,7 @@ function Timer (props) {
 
     const startTimer = () => {
         // start the timer
-        if (timer.timerId == -1) {
+        if (timer.timerId === -1) {
             let tid = setInterval(
                 () => dispatch(TimerActions.DECREMENT(onComplete, tid)), //for every second, 
                 1000 //1 second
@@ -40,7 +40,7 @@ function Timer (props) {
     }
 
     //should only show the start button when when the timer is not running
-    const showStartButton = (timer.min == 0 && timer.sec == 0) || //timer reaches 0 == timer is not running
+    const showStartButton = (timer.min === 0 && timer.sec === 0) || //timer reaches 0 == timer is not running
                             !timer.isTimerRunning  //timer is not running
 
     return (
