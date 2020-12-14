@@ -1,5 +1,19 @@
 .App {
   text-align: center;
+  position: relative;
+}
+
+.application {
+ position: relative;
+}
+
+.page-content {
+  position: relative;
+}
+
+.bottom-navbar {
+  position: fixed;
+  bottom: 0px;
 }
 
 .App-logo {
