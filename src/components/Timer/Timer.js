@@ -39,11 +39,15 @@ function Timer (props) {
         if (onCancel) onCancel();
     }
 
+    //should only show the start button when when the timer is not running
+    const showStartButton = (timer.min == 0 && timer.sec == 0) || //timer reaches 0 == timer is not running
+                            !timer.isTimerRunning  //timer is not running
+
     return (
         <div className={'timer'}>
             <ClockFace min={timer.min} sec={timer.sec}/>
             <TimerButtons
-                showStartButton={!timer.isTimerRunning}
+                showStartButton={showStartButton}
                 onClickStart={startTimer}
                 onClickPause={pauseTimer}
                 onClickCancel={resetTimer}
