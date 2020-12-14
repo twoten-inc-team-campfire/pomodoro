@@ -104,7 +104,8 @@ function PomodoroManager ({onNewTimerSession}) {
 
     const onStart = useCallback(() => {
         startTime.current = new Date(Date.now());
-    }, [])
+        dispatch(sessionTypeToAction(managerState.type)());
+    }, [managerState, dispatch])
 
     const onPause = useCallback(() => {
         endTime.current = new Date(Date.now());
