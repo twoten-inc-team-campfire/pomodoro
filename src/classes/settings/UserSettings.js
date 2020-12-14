@@ -12,17 +12,16 @@ export class UserSettings {
      * @param {PomodoroSettings} pomodoro - The settings for the pomodoro timer
      * @param {UISettings} ui - The settings for the UI
      */
-    constructor(pomodoro= PomodoroSettings.defaults(),
-                ui= UISettings.defaults()) {
+    constructor() {
         /**
          * @member {PomodoroSettings} UserSettings#pomodoro
          * @desc The settings for the pomodoro timer
          */
-        this.pomodoro = pomodoro
+        this.pomodoro = new PomodoroSettings();
         /**
          * @member {UISettings} UserSettings#ui
          * @desc The settings for the UI
          */
-        this.ui = ui
+        this.ui = new UISettings();
     }
 }
