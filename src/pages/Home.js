@@ -1,7 +1,7 @@
 import React from 'react';
 import TaskSelector from '../components/Timer/TaskSelector';
 import { PomodoroManager } from '../parts/PomodoroManager';
-import { saveTimerSession } from "../services/DataService"
+import { saveTimerSession } from "../services/DefaultDataService"
 
 function Home () {
     const onNewTimerSession = (timerSession) => {
