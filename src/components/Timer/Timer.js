@@ -10,28 +10,30 @@ import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
  * @implements {React.Component}
  */
 function Timer (props) {
-    const [timerId, setTid] = useState(-1)
+
     const { timer, dispatch, TimerActions } = useTimerGlobalState()
     const { onStart, onPause, onCancel, onComplete } = props;
 
     const startTimer = () => {
-        let tid = setInterval(
-            () => dispatch(TimerActions.DECREMENT(onComplete, tid)), //for every second, 
-            1000 //1 second
-        )
-        setTid(tid)
+        // start the timer
+        if (timer.timerId == -1) {
+            let tid = setInterval(
+                () => dispatch(TimerActions.DECREMENT(onComplete, tid)), //for every second, 
+                1000 //1 second
+            )
+        }
+
+
         if (onStart) onStart();
     }
 
     const pauseTimer = () => {
-        clearInterval(timerId);
         dispatch(TimerActions.PAUSE());
 
         if (onPause) onPause();
     }
 
     const resetTimer = () => {
-        clearInterval(timerId);
         dispatch(TimerActions.RESET());
 
         if (onCancel) onCancel();

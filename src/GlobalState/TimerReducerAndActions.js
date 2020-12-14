@@ -7,7 +7,8 @@ const TimerActionType = {
 const initTimer = { 
     min: 25, 
     sec: 0,
-    isTimerRunning: false
+    isTimerRunning: false,
+    timerId: -1
 }
 
 //Reducer takes an action and update the state: these are the actions.
@@ -43,13 +44,17 @@ const TimerActions = {
  */
 const timerReducer = (state, action) => {
     if (action.type === 'reset') {
+        clearInterval(state.timerId)
         return initTimer;
     }
     else if (action.type === 'decrement') {
         return decrementTimer(state, action);
     } 
     else if (action.type === 'pause') {
-        return {...state, isTimerRunning: false};
+        clearInterval(state.timerId)
+        return {...state, 
+                timerId: -1,
+                isTimerRunning: false};
     }
 }
 
@@ -75,6 +80,7 @@ const decrementTimer = (state, action) => {
         return {
             min: state.min - 1,
             sec: 59,
+            timerId: action.timerId,
             isTimerRunning: true
         }
     } 
@@ -82,6 +88,7 @@ const decrementTimer = (state, action) => {
         return {
             min: state.min,
             sec: state.sec - 1,
+            timerId: action.timerId,
             isTimerRunning: true
         }
     }
