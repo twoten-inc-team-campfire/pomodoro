@@ -6,6 +6,7 @@ import {
 } from '../GlobalState/GlobalState';
 import { render } from '@testing-library/react'
 
+
 /*
 Test Helper for jest render
 
@@ -38,8 +39,7 @@ Usage:
 
 const renderHelper = (Component, custom_state={}, renderOptions={}) => {
 	//apply the custom_state to the init (default) state
-	const customInitState = Object.assign(initGlobalState, custom_state);
-	
+	const customInitState = {...initGlobalState, ...custom_state};
 	function Helper(props) {
 		//define a helper component that renders the given component
 		const [state, dispatch] = useReducer(globalStateReducer, customInitState);

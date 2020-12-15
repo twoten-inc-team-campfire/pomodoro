@@ -6,6 +6,7 @@ import Home from './pages/Home.js';
 import Settings from './pages/Settings.js'
 import BottomNavBar from './components/BottomNavBar';
 import AppLayout from './components/AppLayout';
+import {Statistics} from "./pages/Statistics";
 
 
 function App() {
@@ -18,6 +19,8 @@ function App() {
         return <Home/>
       case 1:
         return <Settings/>
+      case 2:
+        return <Statistics/>
       default:
         return <div> 404 </div>
     }
