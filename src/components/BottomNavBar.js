@@ -15,6 +15,7 @@ const useStyles = makeStyles({
 
 const BottomNavBar = ({value, setValue}) => {
   const classes = useStyles();
+  // const { timer } = 
   return (
       <BottomNavigation
           aria-label="buttom-nav-bar"
@@ -26,7 +27,7 @@ const BottomNavBar = ({value, setValue}) => {
           className={classes.root}
       >
             <BottomNavigationAction aria-label="timer-button" label="Timer" icon={<TimerIcon />} />
-            <BottomNavigationAction aria-label="settings-button" label="Settings" icon={<SettingsIcon />} />
+            <BottomNavigationAction aria-label="settings-button" disabled label="Settings" icon={<SettingsIcon />} />
             <BottomNavigationAction aria-label="summary-button" label="Summary" icon={<EqualizerIcon />} />
       </BottomNavigation>
   )

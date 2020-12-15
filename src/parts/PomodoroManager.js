@@ -43,18 +43,6 @@ const forward = (state) => {
     }
 }
 
-const sessionTypeToAction = (type) => {
-    switch(type) {
-        case TIMER_SESSION_TYPE.POMODORO:
-            return TimerInitActions.POMODORO();
-        case TIMER_SESSION_TYPE.LONG_REST:
-            return TimerInitActions.LONG_REST();
-        case TIMER_SESSION_TYPE.SHORT_REST:
-            return TimerInitActions.SHORT_REST();
-        default:
-            throw new Error('Unexpected type');
-    }
-}
 
 const textGeneration = (type) => {
     switch(type) {
@@ -82,13 +70,13 @@ function PomodoroManager ({onNewTimerSession}) {
 
     const {
         settings,
-        dispatch as dispatchSettings,
+        dispatch,
         SettingsActions
     } = useSettingsGlobalState()
 
     const  {
         timer,
-        dispatch as dispatchTimer,
+        dispatchTimer,
         TimerActions
     } = useTimerGlobalState()
 
@@ -102,21 +90,22 @@ function PomodoroManager ({onNewTimerSession}) {
 
     //stop and update timer when user changes setting
     useEffect(() => {
-        let newTimer = {
-            min: -1,
-            sec: 0
-        } 
-        if (action.type === TIMER_SESSION_TYPE.POMODORO) {
+        let newTimer = timer
+        if (managerState.type === TIMER_SESSION_TYPE.POMODORO) {
             newTimer.min = settings.focusLength;
+            newTimer.sec = 0
         }
-        else if (action.type === TIMER_SESSION_TYPE.LONG_REST) {
+        else if (managerState.type === TIMER_SESSION_TYPE.LONG_REST) {
             newTimer.min = settings.longBreakLength;
+            newTimer.sec = 0
         } 
-        else if (action.type === TIMER_SESSION_TYPE.SHORT_REST) {
-            newTimer.min = settings.shortBreakLength
+        else if (managerState.type === TIMER_SESSION_TYPE.SHORT_REST) {
+            newTimer.min = settings.shortBreakLength;
+            newTimer.sec = 0
         }
 
-        dispatchTimer(TimerActions.RESET())
+
+        dispatchTimer(TimerActions.RESET(newTimer))
     }, [settings, managerState])
     /**
      * Callback to pass a new TimerSession to the parent.
