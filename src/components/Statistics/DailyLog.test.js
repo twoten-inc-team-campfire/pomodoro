@@ -213,7 +213,7 @@ describe("DailyLog should correctly display a sequence of DailyLogSessions based
     })
     test("The component should only display a single DailyLogSession if all TimerSessions go in a single block", () => {
         const timerSessions = timerSessionsTestData();
-        render(<DailyLog timerSessions={timerSessions} gap={15 * 60}/>);
+        render(<DailyLog timerSessions={timerSessions} gap={24 * 60}/>);
         let containerDiv = screen.getByLabelText("Timer sessions log");
         expect(containerDiv).not.toBeEmptyDOMElement();
         expect(containerDiv.childElementCount).toEqual(1);

@@ -42,7 +42,7 @@ function saveTimerSessionWithStore(session, store) {
 
 /**
  * loadTimerSessionListByDateWithStore
- * @desc Load ordered timer sessions of a specific range of dates from the given store.
+ * @desc Load timer sessions of a specific range of dates from the given store.
  * @param {Date} startDate - The start date of the query.
  * @param {Date} endDate - The end date of the query.
  * @param {Store} store - The store where timer sessions will be loaded. 
@@ -75,9 +75,7 @@ function loadTimerSessionListByDateWithStore(startDate, endDate, store,
                     resList.push(...list);
                 }
             }
-            let timerSessions = resList.map(obj => TimerSession.hydrate(obj));
-            timerSessions.sort((t1, t2) => t1.startTime - t2.startTime);
-            return timerSessions;
+            return resList.map(obj => TimerSession.hydrate(obj));
         })
         .catch((err) => {
             throw new Error(`Failed to load timer sessions: ${err}`);
