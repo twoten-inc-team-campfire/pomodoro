@@ -10,7 +10,7 @@ export class TimerSession {
      * @param {Date} startTime - The time the work session started
      * @param {Date} endTime - The time the work session ended
      * @param {TIMER_SESSION_TYPE} type - The type of session, a TIMER_SESSION_TYPE enum
-     * @param {string} task - The title of the task as a string
+     * @param {string} [task] - The title of the task as a string
      */
     constructor(startTime, endTime, type = TIMER_SESSION_TYPE.POMODORO, task = null) {
         if (!this.isValidConstructorInput(startTime, endTime, type)) {
@@ -28,17 +28,17 @@ export class TimerSession {
         this.type = type;
         /** @member {string} TimerSession#task
          * @desc The title of the task as a string */
-        this.task = task
+        this.task = task;
     }
 
     /**
      * getDuration
      * @desc Get the duration that the TimerSession lasted.
-     * @returns {number} The duration of the TimerSession.
+     * @returns {number} The duration of the TimerSession in milliseconds
      * @public
      */
     getDuration() {
-        return (this.endTime - this.startTime)
+        return (this.endTime - this.startTime);
     }
 
     /**
@@ -54,7 +54,39 @@ export class TimerSession {
         return startTime instanceof Date
             && endTime instanceof Date
             && typeof type == 'number'
-            && Object.values(TIMER_SESSION_TYPE).includes(type)
+            && Object.values(TIMER_SESSION_TYPE).includes(type);
+    }
+
+    /**
+     * copy
+     * @desc Returns a copy of the given TimerSession.
+     * @returns {TimerSession} The copy of the current TimerSession.
+     */
+    copy() {
+        return new TimerSession(
+            new Date(this.startTime),
+            new Date(this.endTime),
+            this.type,
+            this.task
+        );
+    }
+
+    /**
+     * hydrate
+     * @desc Hydrates an instantiation of TimerSession from a generic object
+     * @param {Date} obj.startTime
+     * @param {Date} obj.endTime
+     * @param {number} obj.type
+     * @param {string} obj.task
+     * @returns {TimerSession}
+     */
+    static hydrate(obj) {
+        return new TimerSession(
+            new Date(obj.startTime),
+            new Date(obj.endTime),
+            obj.type,
+            obj.task
+        );
     }
 }
 

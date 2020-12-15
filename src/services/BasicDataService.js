@@ -75,10 +75,10 @@ function loadTimerSessionListByDateWithStore(startDate, endDate, store,
                     resList.push(...list);
                 }
             }
-            return resList;
+            return resList.map(obj => TimerSession.hydrate(obj));
         })
-        .catch(() => {
-            throw new Error("Failed to load timer sessions!");
+        .catch((err) => {
+            throw new Error(`Failed to load timer sessions: ${err}`);
         });
 }
 
