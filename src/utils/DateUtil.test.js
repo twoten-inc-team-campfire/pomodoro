@@ -57,7 +57,7 @@ describe("shiftDate should be capable of arbitrarily shifting a date forward or 
         let correctDate = new Date(2024, 1, 29);
         expect(oneDayMore).toEqual(correctDate);
         // Wha...? That's not how the song goes.
-        const oneDayLess = shift(oldDate, -1);
+        const oneDayLess = shiftDate(oldDate, -1);
         correctDate = new Date(2024, 1, 27);
         expect(oneDayLess).toEqual(correctDate);
     })
@@ -69,8 +69,8 @@ describe("shiftDate should be capable of arbitrarily shifting a date forward or 
         // June? More like SWOON.
         let correctDate = new Date(2021, 5, 1);
         expect(oneMonthMore).toEqual(correctDate);
-        const oneMonthLess = shiftDate(oldDate, 31);
-        correctDate = new Date(2021, 1, 31);
+        const oneMonthLess = shiftDate(oldDate, -30);
+        correctDate = new Date(2021, 2, 31);
         expect(oneMonthLess).toEqual(correctDate);
     })
     test("shiftDate should be able to shift a Date forward/backward by a year", () => {
@@ -79,7 +79,7 @@ describe("shiftDate should be capable of arbitrarily shifting a date forward or 
         const oneYearMore = shiftDate(oldDate, 366);
         let correctDate = new Date(2024, 0, 1);
         expect(oneYearMore).toEqual(correctDate);
-        const oneYearLess = shiftDate(oldDate, 720);
+        const oneYearLess = shiftDate(oldDate, -730);
         // But when will I get a date?
         correctDate = new Date(2020, 11, 31);
         expect(oneYearLess).toEqual(correctDate);

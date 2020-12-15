@@ -21,7 +21,9 @@ import {dateToHtmlDateString, htmlDateStringToDate, shiftDate} from "../../utils
  */
 function DateNavigator({date, onDateChange, maxDate = new Date()}) {
     return (
-        <div style={{"display": "flex", "alignItems": "center", "justifyContent": "center"}}>
+        <div style={{"display": "flex", "alignItems": "center", "justifyContent": "center"}}
+            aria-label={"Date selector"}
+        >
             <IconButton
                 name={"Decrease"}
                 aria-label={"Decrease date"}

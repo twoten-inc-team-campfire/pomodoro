@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { getTimerCyclesFromTimerSessions, getTotalTimeWorked, DailyLogSession } from "./DailyLogSession";
 import {TIMER_SESSION_TYPE, TimerSession} from "../../classes/TimerSession";
 import {getDateHours, getDateMinutes} from "../../utils/DateUtil";
-import {getDailyLogSessionItems} from "./DailyLogSessionItems";
 
 function timerSessionsLongTestData() {
     return [
