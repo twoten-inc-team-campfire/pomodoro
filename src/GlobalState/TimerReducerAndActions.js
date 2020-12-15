@@ -46,7 +46,11 @@ const TimerActions = {
 const timerReducer = (state, action) => {
     if (action.type === 'reset') {
         clearInterval(state.timerId)
-        return {...initTimer, ...action.newTimer};
+        return {
+            ...initTimer, 
+            min: action.newTimer.min,
+            sec: action.newTimer.sec
+        };
     }
     else if (action.type === 'decrement') {
         return decrementTimer(state, action);

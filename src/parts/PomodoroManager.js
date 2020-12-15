@@ -79,6 +79,13 @@ function PomodoroManager ({onNewTimerSession}) {
 
     const [managerState, setManagerState] = useState(initState);
     
+    useEffect(() => {
+        const newTimer = newTime(managerState.type)
+        dispatchTimer(TimerActions.RESET(newTimer));
+    }, [settings.focusLength, settings.shortBreakLength, settings.longBreakLength,
+        managerState.type, 
+    ])
+
     /*
      * Callback to pass a new TimerSession to the parent.
      * @callback onNewTimerSession
