@@ -78,27 +78,7 @@ function PomodoroManager ({onNewTimerSession}) {
     };
 
     const [managerState, setManagerState] = useState(initState);
-
-    //stop and update timer when user changes setting
-    // useEffect(() => {
-    //     let newTimer = timer
-    //     if (managerState.type === TIMER_SESSION_TYPE.POMODORO) {
-    //         newTimer.min = settings.focusLength;
-    //         newTimer.sec = 0
-    //     }
-    //     else if (managerState.type === TIMER_SESSION_TYPE.LONG_REST) {
-    //         newTimer.min = settings.longBreakLength;
-    //         newTimer.sec = 0
-    //     } 
-    //     else if (managerState.type === TIMER_SESSION_TYPE.SHORT_REST) {
-    //         newTimer.min = settings.shortBreakLength;
-    //         newTimer.sec = 0
-    //     }
-
-
-    //     dispatchTimer(TimerActions.RESET(newTimer))
-    // }, [settings, managerState])
-
+    
     /*
      * Callback to pass a new TimerSession to the parent.
      * @callback onNewTimerSession
