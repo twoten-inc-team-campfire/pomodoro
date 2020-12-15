@@ -1,5 +1,6 @@
 import React from 'react'
 import { fireEvent, screen, waitFor, act } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Timer from './Timer'
 import { renderHelper } from '../../utils/TestHelper'
 
@@ -39,15 +40,16 @@ test("After start button is clicked and 3 seconds passed, the timer should not b
 	const time = screen.getByRole('heading', {name: "time-remaining"});
 	const timerContentBeforeClick = time.textContent;
 	const startButton = screen.queryByLabelText('start-button');
-
-	fireEvent.click(startButton);
-
+	expect(startButton).toBeInTheDocument();
+	console.log("timerContentBeforeClick: ", timerContentBeforeClick)
+	userEvent.click(startButton)
+	
 	act(() => 
-		jest.advanceTimersByTime(4000)
+		jest.advanceTimersByTime(3000)
 	)
 	
+	// screen.debug()
 	const timerContentAfterClick = time.textContent;
-	
-	expect(startButton).not.toBeInTheDocument();
+	console.log("timerContentAfterClick: ", timerContentAfterClick)
 	expect(timerContentAfterClick).not.toEqual(timerContentBeforeClick);
 })

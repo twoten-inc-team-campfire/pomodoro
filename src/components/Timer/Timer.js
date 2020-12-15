@@ -15,6 +15,7 @@ function Timer (props) {
     const { onStart, onPause, onCancel, onComplete } = props;
 
     const startTimer = () => {
+        console.log("timer starteed....")
         // start the timer
         if (timer.timerId === -1) {
             let tid = setInterval(
@@ -22,7 +23,6 @@ function Timer (props) {
                 1000 //1 second
             )
         }
-
 
         if (onStart) onStart();
     }
