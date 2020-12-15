@@ -136,7 +136,9 @@ export function TimelineGraph({date, timerSessions, maxGap = 10}) {
 
 
     return (
-        <svg viewBox={"0 0 100 16"}>
+        <svg viewBox={"0 0 100 16"}
+            aria-label={"Timeline graph"}
+        >
             {/* Icons are aligned along the "top row" of the svg */}
             <NightsStayOutlinedIcon style={{"color":textSecondary}}
                                     width={iconWidth} height={iconHeight} x={"13.75"} y={iconY}/>
