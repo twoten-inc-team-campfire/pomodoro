@@ -101,7 +101,6 @@ export function TimelineGraph({date, timerSessions, maxGap = 10}) {
         // Second, get the ms bounds for our day.
         let currentDay = new Date(date);
         currentDay.setHours(0, 0, 0, 0);
-        const dayStartMs = currentDay.getTime();
         let nextDay = new Date(currentDay);
         nextDay.setDate(currentDay.getDate() + 1);
 
