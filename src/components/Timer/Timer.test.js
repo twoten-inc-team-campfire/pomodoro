@@ -3,6 +3,8 @@ import { fireEvent, screen, waitFor, act } from '@testing-library/react'
 import Timer from './Timer'
 import { renderHelper } from '../../utils/TestHelper'
 
+jest.mock('idb-keyval');
+
 beforeEach(() => {
 	//because we used "setInterval" and "clear Interval", need to use a fake one in testing
 	jest.useFakeTimers()

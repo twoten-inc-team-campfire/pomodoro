@@ -34,20 +34,15 @@ const globalStateReducer = (state, action) => {
 const GlobalStateProvider = (props) => {
 	const [state, dispatch] = useReducer(globalStateReducer, initGlobalState);
 
-	/**
-	 * getInitSettings
-	 * @desc Load the initial user settings for the application. Function attempts
-	 * to load settings from the Database first. Any settings that haven't previously
-	 * been saved to the Database by a user event change will be set to the factory
-	 * default.
-	 * 
-	 * @returns {} 
-	 * 
-	 */
+	
 	useEffect(() => {
-
-		//
-		async function getInitSettings() {
+		/**
+		 * getSavedSettings
+		 * @desc Performs an asynchronous load of the saved user settings from the
+		 * database. Settings may not have been saved from the Database, if so we catch
+		 * the error and leave the initial settings alone.
+		 */
+		async function getSavedSettings() {
 			try { 
 				// try to load settings from DB
 				let savedSettings = await loadUserSettings();
@@ -59,7 +54,7 @@ const GlobalStateProvider = (props) => {
 		}
 		
 		// Actually call the async function
-		getInitSettings();
+		getSavedSettings();
 
 		// Second parameter of useEffect is an empty array 
 		// -> tells the useEffect hook to only run on first render

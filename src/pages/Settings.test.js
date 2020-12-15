@@ -4,6 +4,10 @@ import userEvent from '@testing-library/user-event'
 import Settings from './Settings'
 import { renderHelper } from '../utils/TestHelper'
 import { UserSettings } from '../classes/settings/UserSettings.js'
+import { saveUserSettings } from '../services/DefaultDataService.js'
+
+jest.mock('../services/DefaultDataService');
+jest.mock('idb-keyval');
 
 const initialSettings = {
     settings: new UserSettings(
