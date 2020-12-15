@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import PlayIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseIcon from '@material-ui/icons/PauseCircleFilled';
@@ -11,8 +11,12 @@ import CancelIcon from '@material-ui/icons/Cancel';
  * @desc Allows users to start, pause, and cancel the current pomodoro
  * session.
  */
-function TimerButtons ({onClickStart, onClickPause, onClickCancel}) {
+function TimerButtons ({showStartButton, onClickStart, onClickPause, onClickCancel}) {
     const [showPlay, setShowPlay] = useState(true);
+
+    useEffect(() => {
+        setShowPlay(showStartButton)
+    }, [showStartButton])
 
     /**
      * handlePlay

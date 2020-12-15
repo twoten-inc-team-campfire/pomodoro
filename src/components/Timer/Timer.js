@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import ClockFace from './ClockFace';
 import TimerButtons from './TimerButtons';
 import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
@@ -10,37 +10,43 @@ import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
  * @implements {React.Component}
  */
 function Timer (props) {
-    const [timerId, setTid] = useState(-1)
+
     const { timer, dispatch, TimerActions } = useTimerGlobalState()
     const { onStart, onPause, onCancel, onComplete } = props;
 
     const startTimer = () => {
-        let tid = setInterval(
-            () => dispatch(TimerActions.DECREMENT(onComplete, tid)), //for every second, 
-            1000 //1 second
-        )
-        setTid(tid)
+        // start the timer
+        if (timer.timerId === -1) {
+            let tid = setInterval(
+                () => dispatch(TimerActions.DECREMENT(onComplete, tid)), //for every second, 
+                1000 //1 second
+            )
+        }
+
         if (onStart) onStart();
     }
 
     const pauseTimer = () => {
-        clearInterval(timerId);
         dispatch(TimerActions.PAUSE());
 
         if (onPause) onPause();
     }
 
     const resetTimer = () => {
-        clearInterval(timerId);
         dispatch(TimerActions.RESET());
 
         if (onCancel) onCancel();
     }
 
+    //should only show the start button when when the timer is not running
+    const showStartButton = (timer.min === 0 && timer.sec === 0) || //timer reaches 0 == timer is not running
+                            !timer.isTimerRunning  //timer is not running
+
     return (
         <div className={'timer'}>
             <ClockFace min={timer.min} sec={timer.sec}/>
             <TimerButtons
+                showStartButton={showStartButton}
                 onClickStart={startTimer}
                 onClickPause={pauseTimer}
                 onClickCancel={resetTimer}
