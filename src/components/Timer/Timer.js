@@ -17,6 +17,7 @@ function Timer (props) {
     const startTimer = () => {
         // start the timer
         if (timer.timerId === -1) {
+            dispatchTimer(TimerActions.DECREMENT(onComplete, -1))
             let tid = setInterval(
                 () => dispatchTimer(TimerActions.DECREMENT(onComplete, tid)), //for every second, 
                 1000 //1 second
