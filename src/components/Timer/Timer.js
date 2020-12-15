@@ -11,14 +11,14 @@ import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
  */
 function Timer (props) {
 
-    const { timer, dispatch, TimerActions } = useTimerGlobalState()
-    const { onStart, onPause, onCancel, onComplete } = props;
+    const { timer, dispatchTimer, TimerActions } = useTimerGlobalState()
+    const { onStart, onPause, onCancel, onComplete, newTimer } = props;
 
     const startTimer = () => {
         // start the timer
         if (timer.timerId === -1) {
             let tid = setInterval(
-                () => dispatch(TimerActions.DECREMENT(onComplete, tid)), //for every second, 
+                () => dispatchTimer(TimerActions.DECREMENT(onComplete, tid)), //for every second, 
                 1000 //1 second
             )
         }
@@ -27,13 +27,13 @@ function Timer (props) {
     }
 
     const pauseTimer = () => {
-        dispatch(TimerActions.PAUSE());
+        dispatchTimer(TimerActions.PAUSE());
 
         if (onPause) onPause();
     }
 
     const resetTimer = () => {
-        dispatch(TimerActions.RESET());
+        dispatchTimer(TimerActions.RESET(newTimer));
 
         if (onCancel) onCancel();
     }

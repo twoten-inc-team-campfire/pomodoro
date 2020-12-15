@@ -16,7 +16,7 @@ const initGlobalState = {
 const globalStateReducer = (state, action) => {
 	switch (action.target) {
 		case 'Timer':
-			const newTimer = timerReducer(state.Timer, action)
+			const newTimer = timerReducer(state.timer, action)
 			return {...state, timer: newTimer}
 		case 'Settings':
 			const newSettings = settingsReducer(state.settings, action)

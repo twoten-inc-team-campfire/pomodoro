@@ -5,6 +5,8 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
+import CloseIcon from '@material-ui/icons/Close';
+import { useTimerGlobalState } from '../GlobalState/GlobalStateHooks';
 
 const useStyles = makeStyles({
   root: {
@@ -15,7 +17,9 @@ const useStyles = makeStyles({
 
 const BottomNavBar = ({value, setValue}) => {
   const classes = useStyles();
-  // const { timer } = 
+  const { timer } = useTimerGlobalState();
+  const disableButton = timer.isTimerRunning
+
   return (
       <BottomNavigation
           aria-label="buttom-nav-bar"
@@ -26,9 +30,23 @@ const BottomNavBar = ({value, setValue}) => {
           showLabels
           className={classes.root}
       >
-            <BottomNavigationAction aria-label="timer-button" label="Timer" icon={<TimerIcon />} />
-            <BottomNavigationAction aria-label="settings-button" disabled label="Settings" icon={<SettingsIcon />} />
-            <BottomNavigationAction aria-label="summary-button" label="Summary" icon={<EqualizerIcon />} />
+            <BottomNavigationAction 
+                aria-label="timer-button" 
+                label="Timer" 
+                icon={<TimerIcon />} 
+            />
+            <BottomNavigationAction 
+                aria-label="settings-button" 
+                disabled={disableButton} 
+                label="Settings" 
+                icon={disableButton ? <CloseIcon/> : <SettingsIcon />} 
+            />
+            <BottomNavigationAction 
+                aria-label="summary-button" 
+                disabled={disableButton}
+                label="Summary" 
+                icon={disableButton ? <CloseIcon/> : <EqualizerIcon />} 
+            />
       </BottomNavigation>
   )
 }

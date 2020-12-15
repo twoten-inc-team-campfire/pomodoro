@@ -23,9 +23,10 @@ const TimerActions = {
         target: 'Timer',
         type: TimerActionType.PAUSE
     }),
-    RESET: () => ({
+    RESET: (newTimer={}) => ({
         target: 'Timer',
-        type: TimerActionType.RESET
+        type: TimerActionType.RESET,
+        newTimer: newTimer
     })
 };
 
@@ -45,7 +46,7 @@ const TimerActions = {
 const timerReducer = (state, action) => {
     if (action.type === 'reset') {
         clearInterval(state.timerId)
-        return initTimer;
+        return {...initTimer, ...action.newTimer};
     }
     else if (action.type === 'decrement') {
         return decrementTimer(state, action);
@@ -81,6 +82,7 @@ const decrementTimer = (state, action) => {
             ...state,
             min: state.min - 1,
             sec: 59,
+            timerId: action.timerId,
             isTimerRunning: true
         }
     } 
@@ -89,6 +91,7 @@ const decrementTimer = (state, action) => {
             ...state,
             min: state.min,
             sec: state.sec - 1,
+            timerId: action.timerId,
             isTimerRunning: true
         }
     }
