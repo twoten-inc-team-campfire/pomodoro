@@ -42,9 +42,9 @@ const BottomNavBar = ({value, setValue}) => {
                 icon={disableButton ? <CloseIcon/> : <SettingsIcon />} 
             />
             <BottomNavigationAction 
-                aria-label="summary-button" 
+                aria-label="statistics-button" 
                 disabled={disableButton}
-                label="Summary" 
+                label="Statistics" 
                 icon={disableButton ? <CloseIcon/> : <EqualizerIcon />} 
             />
       </BottomNavigation>
