@@ -1,5 +1,4 @@
 import React from 'react';
-import {TimerSession} from "../../classes/TimerSession";
 import {DailyLogSession} from "./DailyLogSession";
 
 /**

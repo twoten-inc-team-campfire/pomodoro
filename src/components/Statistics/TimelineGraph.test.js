@@ -1,5 +1,4 @@
-import {getTimerSessionsTimeBlocks, getPercentIntoRange, TimelineGraph} from "./TimelineGraph";
-import {timerSessionsInSingleDay} from "../../test_data/TimerSession";
+import {getTimerSessionsTimeBlocks, getPercentIntoRange } from "./TimelineGraph";
 import {TIMER_SESSION_TYPE, TimerSession} from "../../classes/TimerSession";
 
 function timerSessionsTestData() {

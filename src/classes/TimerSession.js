@@ -28,7 +28,7 @@ export class TimerSession {
         this.type = type;
         /** @member {string} TimerSession#task
          * @desc The title of the task as a string */
-        this.task = task
+        this.task = task;
     }
 
     /**
@@ -38,7 +38,7 @@ export class TimerSession {
      * @public
      */
     getDuration() {
-        return (this.endTime.getTime() - this.startTime.getTime())
+        return (this.endTime.getTime() - this.startTime.getTime());
     }
 
     /**
@@ -55,7 +55,6 @@ export class TimerSession {
             && endTime instanceof Date
             && typeof type == 'number'
             && Object.values(TIMER_SESSION_TYPE).includes(type)
-        return (this.endTime.getTime() - this.startTime.getTime())
     }
 
     /**
