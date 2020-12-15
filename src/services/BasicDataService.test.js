@@ -159,10 +159,18 @@ describe("loadTimerSessionListByDateWithStore()", () => {
         let dateDate = new Date('2020-1-1');
         get.mockRejectedValue(new Error());
 
-        return expect(loadTimerSessionListByDate(dateDate, dateDate))
+        return expect(loadTimerSessionListByDateWithStore(dateDate, dateDate, testStore))
             .rejects
             .toThrow();
     });
+
+    test('should throw an error if not Store object', () => {
+        let dateDate = new Date('2020-1-1');
+
+        return expect(loadTimerSessionListByDateWithStore(dateDate, dateDate, 'testStore'))
+            .rejects
+            .toThrow();
+    })
 });
 
 describe("saveUserSettingsWithStore()", () => {
