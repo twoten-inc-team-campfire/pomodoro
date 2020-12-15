@@ -61,7 +61,6 @@ const timerReducer = (state, action) => {
 
 // separate out the logic that decrements the timer. The code should be self-explanatory
 const decrementTimer = (state, action) => {
-    console.log("decing....")
     if (state.sec === 0 && state.min === 0) {
         //inside here is when the timer completes
 

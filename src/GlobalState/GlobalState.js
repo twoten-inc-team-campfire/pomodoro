@@ -1,6 +1,5 @@
 import React, { useReducer } from 'react';
 import { timerReducer, initTimer } from './TimerReducerAndActions'
-import { timerInitReducer } from './TimerInitReducerAndActions'
 import { settingsReducer, initSettings } from './SettingReducerandActions'
 
 const GlobalStateContext = React.createContext([{}, () => {}]);

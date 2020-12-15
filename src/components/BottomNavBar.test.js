@@ -1,9 +1,10 @@
 import React from 'react'
-import { render, fireEvent, screen } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
+import { renderHelper } from '../utils/TestHelper'
 import BottomNavBar from './BottomNavBar'
 
 test("Buttom Nav Bar should show 3 buttons: Timer, Settings, and Summary", () => {
-	render(<BottomNavBar/>);
+	renderHelper(<BottomNavBar/>);
 	const timerButton = screen.queryByLabelText('timer-button')
 	const settingsButton = screen.queryByLabelText('settings-button');
 	const summaryButton = screen.queryByLabelText('summary-button');

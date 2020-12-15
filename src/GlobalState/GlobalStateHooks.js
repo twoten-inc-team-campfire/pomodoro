@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import { GlobalStateContext } from './GlobalState';
 import { TimerActions } from './TimerReducerAndActions';
 import { SettingsActions } from './SettingReducerandActions';
-import { TimerInitActions } from './TimerInitReducerAndActions'
 
 const useTimerGlobalState = () => {
 	const [state, dispatch] = useContext(GlobalStateContext);
