@@ -63,7 +63,7 @@ const GlobalStateProvider = (props) => {
 
 		// Second parameter of useEffect is an empty array 
 		// -> tells the useEffect hook to only run on first render
-	}, [loadUserSettings])
+	}, [])
 
 
 	return (
