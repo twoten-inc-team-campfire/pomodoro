@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ClockFace from './ClockFace';
 import TimerButtons from './TimerButtons';
@@ -8,8 +9,8 @@ import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
  * @desc Timer handles the functionality and logic of a countdown timer.
  * @implements {React.Component}
  */
-function Timer ({ onStart, onPause, onCancel, onComplete }) {
-    const [timerId, setTid] = useState(-1)
+function Timer (props) {
+
     const { timer, dispatch, TimerActions } = useTimerGlobalState()
     const { onStart, onPause, onCancel, onComplete } = props;
 

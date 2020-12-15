@@ -1,10 +1,9 @@
-import React, { useContext, useState, useCallback, useRef } from 'react';
-import { GlobalStateContext } from '../GlobalState/GlobalState';
+import React, { useContext, useState, useCallback, useRef, useEffect } from 'react';
 import { TimerSession, TIMER_SESSION_TYPE } from "../classes/TimerSession";
 import Timer from "../components/Timer/Timer";
-import { useTimerInitGlobalState } from '../GlobalState/GlobalStateHooks';
-import { TimerInitActions } from '../GlobalState/TimerInitReducerAndActions';
-import { useTimerGlobalState } from '../GlobalState/GlobalStateHooks';
+import { useTimerGlobalState, useSettingsGlobalState } from '../GlobalState/GlobalStateHooks';
+
+
 
 const initState = {
     type: TIMER_SESSION_TYPE.POMODORO,
@@ -47,11 +46,11 @@ const forward = (state) => {
 const sessionTypeToAction = (type) => {
     switch(type) {
         case TIMER_SESSION_TYPE.POMODORO:
-            return TimerInitActions.POMODORO;
+            return TimerInitActions.POMODORO();
         case TIMER_SESSION_TYPE.LONG_REST:
-            return TimerInitActions.LONG_REST;
+            return TimerInitActions.LONG_REST();
         case TIMER_SESSION_TYPE.SHORT_REST:
-            return TimerInitActions.SHORT_REST;
+            return TimerInitActions.SHORT_REST();
         default:
             throw new Error('Unexpected type');
     }
@@ -81,20 +80,44 @@ function PomodoroManager ({onNewTimerSession}) {
     let endTime = useRef(null);
     let onNewTimerSessionRef = useRef(onNewTimerSession);
 
-    const { dispatch } = useTimerInitGlobalState();
-    
-    const [state] = useContext(GlobalStateContext);
-    const timerDispatch = useTimerGlobalState().dispatch;
-    const { TimerActions } = useTimerGlobalState();
-    
+    const {
+        settings,
+        dispatch as dispatchSettings,
+        SettingsActions
+    } = useSettingsGlobalState()
+
+    const  {
+        timer,
+        dispatch as dispatchTimer,
+        TimerActions
+    } = useTimerGlobalState()
+
     const initState = {
         type: TIMER_SESSION_TYPE.POMODORO,
         count: 0,
-        sessionIngterval: state.settings.focusCycleCount,
+        sessionIngterval: settings.focusCycleCount,
     };
 
     const [managerState, setManagerState] = useState(initState);
 
+    //stop and update timer when user changes setting
+    useEffect(() => {
+        let newTimer = {
+            min: -1,
+            sec: 0
+        } 
+        if (action.type === TIMER_SESSION_TYPE.POMODORO) {
+            newTimer.min = settings.focusLength;
+        }
+        else if (action.type === TIMER_SESSION_TYPE.LONG_REST) {
+            newTimer.min = settings.longBreakLength;
+        } 
+        else if (action.type === TIMER_SESSION_TYPE.SHORT_REST) {
+            newTimer.min = settings.shortBreakLength
+        }
+
+        dispatchTimer(TimerActions.RESET())
+    }, [settings, managerState])
     /**
      * Callback to pass a new TimerSession to the parent.
      * @callback onNewTimerSession
@@ -102,14 +125,24 @@ function PomodoroManager ({onNewTimerSession}) {
      * @memberOf PomodoroManager
      */
 
-    const onStart = useCallback(() => {
+    const onStart = () => {
         startTime.current = new Date(Date.now());
-        dispatch(sessionTypeToAction(managerState.type)());
-    }, [managerState, dispatch])
+    }
 
     const onPause = useCallback(() => {
         endTime.current = new Date(Date.now());
 
+        if (startTime.current && endTime.current) {
+            onNewTimerSessionRef.current(new TimerSession(startTime.current, endTime.current, managerState.type));
+        }
+
+        startTime.current = null;
+        endTime.current = null;
+    }, [managerState])
+
+    const onCancel = useCallback(() => {
+        endTime.current = new Date(Date.now());
+        
         if (startTime.current && endTime.current) {
             onNewTimerSessionRef.current(new TimerSession(startTime.current, endTime.current, managerState.type));
         }
@@ -130,20 +163,8 @@ function PomodoroManager ({onNewTimerSession}) {
         
         let {type} = forward(managerState);
         setManagerState(forward(managerState));
-        dispatch(sessionTypeToAction(type)());
-        timerDispatch(TimerActions.RESET())
-    }, [managerState, dispatch, timerDispatch, TimerActions])
+    }, [managerState, TimerActions])
 
-    const onCancel = useCallback(() => {
-        endTime.current = new Date(Date.now());
-        
-        if (startTime.current && endTime.current) {
-            onNewTimerSessionRef.current(new TimerSession(startTime.current, endTime.current, managerState.type));
-        }
-
-        startTime.current = null;
-        endTime.current = null;
-    }, [managerState])
 
     return (
         <div className={'pomodoroManager'}>
@@ -153,6 +174,7 @@ function PomodoroManager ({onNewTimerSession}) {
                 onPause={onPause}
                 onCancel={onCancel}
                 onComplete={onComplete}
+                newTimer={{}}
             />
         </div>
     )

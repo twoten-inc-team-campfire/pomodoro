@@ -24,14 +24,4 @@ const useSettingsGlobalState = () => {
 	}
 }
 
-const useTimerInitGlobalState = () => {
-	const [state, dispatch] = useContext(GlobalStateContext);
-	const { initTime } = state;
-	return { 
-		initTime,
-		dispatch,
-		TimerInitActions
-	}
-}
-
-export { useTimerGlobalState, useSettingsGlobalState, useTimerInitGlobalState };
+export { useTimerGlobalState, useSettingsGlobalState };

@@ -11,23 +11,16 @@ const GlobalStateContext = React.createContext([{}, () => {}]);
 //initial state of the timer
 const initGlobalState = { 
 	timer: initTimer,
-	settings: initSettings,
-	initTime: {
-		min: 0,
-		sec: 10,
-	}
+	settings: initSettings
 }
 const globalStateReducer = (state, action) => {
 	switch (action.target) {
 		case 'Timer':
-			const newTimer = timerReducer(state, action)
+			const newTimer = timerReducer(state.Timer, action)
 			return {...state, timer: newTimer}
 		case 'Settings':
 			const newSettings = settingsReducer(state.settings, action)
 			return {...state, settings: newSettings}
-		case 'TimerInit':
-			const newTimerInit = timerInitReducer(state, action)
-			return {...state, initTime: newTimerInit}
 		default:
 			return state
 	}
