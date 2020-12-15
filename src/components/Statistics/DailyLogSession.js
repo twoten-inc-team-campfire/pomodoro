@@ -1,13 +1,12 @@
-import {TIMER_SESSION_TYPE, TimerSession} from "../../classes/TimerSession";
+import {TIMER_SESSION_TYPE} from "../../classes/TimerSession";
 import {getDailyLogSessionItems} from "./DailyLogSessionItems";
-import DailyLog from "./DailyLog";
 import React from "react";
 import {getDateHours, getDateMinutes} from "../../utils/DateUtil";
 
 let colorPrimary = "#086788";
-let colorSecondary = "#07a0c3";
+// let colorSecondary = "#07a0c3";
 let textPrimary = "#000000";
-let textSecondary = "#838383";
+// let textSecondary = "#838383";
 
 /**
  * compressTimerSessions

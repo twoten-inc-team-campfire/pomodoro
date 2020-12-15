@@ -1,10 +1,9 @@
 import React from 'react';
 import WbSunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined';
 import NightsStayOutlinedIcon from '@material-ui/icons/NightsStayOutlined';
-import {TimerSession} from "../../classes/TimerSession";
 import {fitTimerSessionsIntoRange} from "../../utils/StatisticsPageUtil";
 
-let textPrimary = "#000000";
+// let textPrimary = "#000000";
 let textSecondary = "#838383";
 let textTertiary = "#c4c4c4";
 let colorPrimary = "#086788";
@@ -105,7 +104,6 @@ export function TimelineGraph({date, timerSessions, maxGap = 10}) {
         const dayStartMs = currentDay.getTime();
         let nextDay = new Date(currentDay);
         nextDay.setDate(currentDay.getDate() + 1);
-        const dayLengthMs = nextDay.getTime() - dayStartMs;
 
         // Third, edit the first and last timerSessions to make sure they completely fall within the current day.
         timerSessions = fitTimerSessionsIntoRange(timerSessions, currentDay, nextDay);

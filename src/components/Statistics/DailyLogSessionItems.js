@@ -1,7 +1,6 @@
 import React from "react";
-import {TimerSession, TIMER_SESSION_TYPE} from "../../classes/TimerSession";
+import {TIMER_SESSION_TYPE} from "../../classes/TimerSession";
 import {getDateMinutes, getDateHours} from "../../utils/DateUtil";
-import DailyLog from "./DailyLog";
 
 let colorPrimary = "#086788";
 let colorSecondary = "#07a0c3";

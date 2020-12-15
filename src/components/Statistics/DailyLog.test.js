@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { getTimerCyclesFromTimerSessions, getTotalTimeWorked, DailyLogSession } from "./DailyLogSession";
 import {TIMER_SESSION_TYPE, TimerSession} from "../../classes/TimerSession";
 import {breakTimerSessionsIntoSeparateBlocks, DailyLog} from "./DailyLog";
 

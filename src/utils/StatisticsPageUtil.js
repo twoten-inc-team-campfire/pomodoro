@@ -1,5 +1,3 @@
-import {TimerSession} from "../classes/TimerSession";
-
 /**
  * fitTimerSessionsInRange
  * @desc Takes a list of TimerSessions and strips it down to only TimerSessions that fit within the range,
