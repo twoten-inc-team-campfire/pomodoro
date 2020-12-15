@@ -10,7 +10,7 @@ export class TimerSession {
      * @param {Date} startTime - The time the work session started
      * @param {Date} endTime - The time the work session ended
      * @param {TIMER_SESSION_TYPE} type - The type of session, a TIMER_SESSION_TYPE enum
-     * @param {string} task - The title of the task as a string
+     * @param {string} [task] - The title of the task as a string
      */
     constructor(startTime, endTime, type = TIMER_SESSION_TYPE.POMODORO, task = null) {
         if (!this.isValidConstructorInput(startTime, endTime, type)) {

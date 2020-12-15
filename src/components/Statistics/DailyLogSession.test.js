@@ -143,7 +143,6 @@ function timerCyclesShortTestData() {
             endTime: new Date(2020, 10, 11, 14, 35, 0, 0),
             type: TIMER_SESSION_TYPE.SHORT_REST,
             tasks: ["Sampling the samples of sample data"],
-            // 3 minutes, 30 seconds
             pauseTime: 0
         },
         {
@@ -151,7 +150,6 @@ function timerCyclesShortTestData() {
             endTime: new Date(2020, 10, 11, 15, 0, 0, 0),
             type: TIMER_SESSION_TYPE.POMODORO,
             tasks: ["Sampling sample dates for samples of sample data"],
-            // 3 minutes, 30 seconds
             pauseTime: 0
         },
         {
@@ -159,7 +157,6 @@ function timerCyclesShortTestData() {
             endTime: new Date(2020, 10, 11, 15, 15, 0, 0),
             type: TIMER_SESSION_TYPE.LONG_REST,
             tasks: ["Whew, sampling sample sample data wears me out"],
-            // 3 minutes, 30 seconds
             pauseTime: 0
         },
         {
@@ -167,7 +164,6 @@ function timerCyclesShortTestData() {
             endTime: new Date(2020, 10, 11, 15, 55, 0, 0),
             type: TIMER_SESSION_TYPE.POMODORO,
             tasks: ["Confusing people trying to read my sample data"],
-            // 3 minutes, 30 seconds
             pauseTime: 0
         },
     ];
@@ -222,6 +218,18 @@ describe("getTotalTimeWorked should correctly return the time worked", () => {
 
 describe("getTimerCyclesFromTimerSessions should compress an array of Timer Sessions into correct \
 Timer Cycles", () => {
+
+    function testTimerCyclesEquality(actualCycles, expectedCycles) {
+        expect(actualCycles.length).toEqual(expectedCycles.length)
+        for (let i = 0; i < actualCycles.length; i += 1) {
+            expect(actualCycles[i].startTime).toEqual(expectedCycles[i].startTime);
+            expect(actualCycles[i].endTime).toEqual(expectedCycles[i].endTime);
+            expect(actualCycles[i].type).toEqual(expectedCycles[i].type);
+            expect(actualCycles[i].tasks).toEqual(expectedCycles[i].tasks);
+            expect(actualCycles[i].pauseTime).toEqual(expectedCycles[i].pauseTime);
+        }
+    }
+
     test("The function should correctly return no Timer Cycles for an empty input array", () => {
         const timerSessions = [];
         const correctTimerCycles = [];
@@ -273,7 +281,7 @@ Timer Cycles", () => {
                 "Testing component's ability to handle samples that straddle two dates"
             ),
         ];
-        const correctTimerCycle = {
+        const correctTimerCycles = [{
                 startTime: new Date(2020, 10, 11, 0, 0, 0, 0),
                 endTime: new Date(2020, 10, 11, 23, 22, 15, 0),
                 type: TIMER_SESSION_TYPE.POMODORO,
@@ -282,28 +290,101 @@ Timer Cycles", () => {
                     "Testing component's ability to handle samples that straddle two dates"],
                 // 21 hours, 4 minutes, 15 seconds, 0 ms
                 pauseTime: 21 * 60 * 60 * 1000 + 4 * 60 * 1000 + 15 * 1000,
-            };
+            }];
         const timerCycles = getTimerCyclesFromTimerSessions(timerSessions);
-        expect(timerCycles.length).toEqual(1);
-        const timerCycle = timerCycles[0];
-        expect(timerCycle.startTime).toEqual(correctTimerCycle.startTime);
-        expect(timerCycle.endTime).toEqual(correctTimerCycle.endTime);
-        expect(timerCycle.type).toEqual(correctTimerCycle.type);
-        expect(timerCycle.tasks).toEqual(correctTimerCycle.tasks);
-        expect(timerCycle.pauseTime).toEqual(correctTimerCycle.pauseTime);
+        testTimerCyclesEquality(timerCycles, correctTimerCycles);
     })
     test("The function should correctly return the Timer Cycles for given Timer Sessions", () => {
         const timerSessions = timerSessionsShortTestData();
         const correctTimerCycles = timerCyclesShortTestData();
         const timerCycles = getTimerCyclesFromTimerSessions(timerSessions);
-        expect(timerCycles.length).toEqual(correctTimerCycles.length);
-        for (let i = 0; i < timerCycles.length; i += 1) {
-            expect(timerCycles[i].startTime).toEqual(correctTimerCycles[i].startTime);
-            expect(timerCycles[i].endTime).toEqual(correctTimerCycles[i].endTime);
-            expect(timerCycles[i].type).toEqual(correctTimerCycles[i].type);
-            expect(timerCycles[i].tasks).toEqual(correctTimerCycles[i].tasks);
-            expect(timerCycles[i].pauseTime).toEqual(correctTimerCycles[i].pauseTime);
-        }
+        testTimerCyclesEquality(timerCycles, correctTimerCycles);
+    })
+    test("The function should be able to handle some of the TimerSessions missing tasks", () => {
+        const timerSessions = [
+            new TimerSession (
+                new Date(2020, 10, 11, 14, 7, 0, 0),
+                new Date(2020, 10, 11, 14, 17, 0, 0),
+                TIMER_SESSION_TYPE.POMODORO,
+                "Making samples of sample data"
+            ),
+            new TimerSession (
+                new Date(2020, 10, 11, 14, 20, 30, 0),
+                new Date(2020, 10, 11, 14, 29, 0, 0),
+                TIMER_SESSION_TYPE.POMODORO,
+                null
+            ),
+            new TimerSession (
+                new Date(2020, 10, 11, 14, 30, 0, 0),
+                new Date(2020, 10, 11, 14, 35, 0, 0),
+                TIMER_SESSION_TYPE.SHORT_REST,
+                "Sampling the samples of sample data"
+            ),
+            new TimerSession (
+                new Date(2020, 10, 11, 14, 35, 0, 0),
+                new Date(2020, 10, 11, 15, 0, 0, 0),
+                TIMER_SESSION_TYPE.POMODORO,
+                null
+            ),
+            new TimerSession (
+                new Date(2020, 10, 11, 15, 0, 0, 0),
+                new Date(2020, 10, 11, 15, 15, 0, 0),
+                TIMER_SESSION_TYPE.LONG_REST,
+                "Whew, sampling sample sample data wears me out"
+            ),
+            new TimerSession (
+                new Date(2020, 10, 11, 15, 30, 0, 0),
+                new Date(2020, 10, 11, 15, 45, 0, 0),
+                TIMER_SESSION_TYPE.POMODORO,
+                null
+            ),
+            new TimerSession (
+                new Date(2020, 10, 11, 15, 45, 0, 0),
+                new Date(2020, 10, 11, 15, 55, 0, 0),
+                TIMER_SESSION_TYPE.POMODORO,
+                "Confusing people trying to read my sample data"
+            )
+        ];
+        const correctTimerCycles = [
+            {
+                startTime: new Date(2020, 10, 11, 14, 7, 0, 0),
+                endTime: new Date(2020, 10, 11, 14, 29, 0, 0),
+                type: TIMER_SESSION_TYPE.POMODORO,
+                tasks: ["Making samples of sample data"],
+                // 3 minutes, 30 seconds
+                pauseTime: 3 * 60 * 1000 + 30 * 1000
+            },
+            {
+                startTime: new Date(2020, 10, 11, 14, 30, 0, 0),
+                endTime: new Date(2020, 10, 11, 14, 35, 0, 0),
+                type: TIMER_SESSION_TYPE.SHORT_REST,
+                tasks: ["Sampling the samples of sample data"],
+                pauseTime: 0
+            },
+            {
+                startTime: new Date(2020, 10, 11, 14, 35, 0, 0),
+                endTime: new Date(2020, 10, 11, 15, 0, 0, 0),
+                type: TIMER_SESSION_TYPE.POMODORO,
+                tasks: [],
+                pauseTime: 0
+            },
+            {
+                startTime: new Date(2020, 10, 11, 15, 0, 0, 0),
+                endTime: new Date(2020, 10, 11, 15, 15, 0, 0),
+                type: TIMER_SESSION_TYPE.LONG_REST,
+                tasks: ["Whew, sampling sample sample data wears me out"],
+                pauseTime: 0
+            },
+            {
+                startTime: new Date(2020, 10, 11, 15, 30, 0, 0),
+                endTime: new Date(2020, 10, 11, 15, 55, 0, 0),
+                type: TIMER_SESSION_TYPE.POMODORO,
+                tasks: ["Confusing people trying to read my sample data"],
+                pauseTime: 0
+            },
+        ];
+        const timerCycles = getTimerCyclesFromTimerSessions(timerSessions);
+        testTimerCyclesEquality(timerCycles, correctTimerCycles);
     })
 })
 

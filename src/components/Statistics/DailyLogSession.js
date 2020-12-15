@@ -22,18 +22,18 @@ export function getTimerCyclesFromTimerSessions(timerSessions) {
     if (timerSessions.length > 0) {
         let currentSession = timerSessions[0].copy();
         currentSession.pauseTime = 0;
-        currentSession.tasks = [currentSession.task];
+        currentSession.tasks = currentSession.task ? [currentSession.task] : [];
         for (const session of timerSessions) {
             if (session.type !== currentSession.type) {
                 timerCycles.push(currentSession);
                 currentSession = session.copy();
                 currentSession.pauseTime = 0;
-                currentSession.tasks = [currentSession.task];
+                currentSession.tasks = session.task ? [currentSession.task] : [];
             } else {
                 if (session.startTime > currentSession.endTime)
                     currentSession.pauseTime += session.startTime.getTime() - currentSession.endTime.getTime();
                 currentSession.endTime = session.endTime;
-                if (!currentSession.tasks.includes(session.task))
+                if (session.task && !currentSession.tasks.includes(session.task))
                     currentSession.tasks.push(session.task);
             }
         }
