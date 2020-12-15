@@ -3,20 +3,11 @@ import { screen, render, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Settings from './Settings'
 import { renderHelper } from '../utils/TestHelper'
+import { UserSettings } from '../classes/settings/UserSettings.js'
 
 const initialSettings = {
-    settings: {
-        autoStartBreaks: true,
-        autoStartPomodoros: false,
-        pomodoroLength: 25,
-        shortBreakLength: 5,
-        longBreakLength: 20,
-        numPomodorosInCyle: 4,
-        displayPauseButton: true,
-        displayFastForwardButton: true,
-        displayCancelButton: false,
-        displayTaskSelector: false,
-    }
+    settings: new UserSettings(
+        25, 5, 20, 4, true, true, true, true, true, true)
 }
 
 function basicSetup() {
@@ -37,11 +28,11 @@ describe("Setting Switches and CheckBoxes", () => {
         basicSetup();
         // Initial Condition
         const autoBreakSwitch = screen.getByRole('checkbox', {name: /auto break checkbox/i});
-        expect(autoBreakSwitch.checked).toEqual(initialSettings.settings.autoBreak);
+        expect(autoBreakSwitch.checked).toEqual(initialSettings.settings.autoStartBreaks);
 
         // Change after user event
         userEvent.click(autoBreakSwitch);
-        expect(autoBreakSwitch.checked).not.toEqual(initialSettings.settings.autoBreak);
+        expect(autoBreakSwitch.checked).not.toEqual(initialSettings.settings.autoStartBreaks);
     })
 
     test("Auto Focus Switch Functions Properly", () => {
@@ -49,51 +40,51 @@ describe("Setting Switches and CheckBoxes", () => {
 
         // Initial Condition
         const autoFocusSwitch = screen.getByRole('checkbox', {name: /auto focus checkbox/i});
-        expect(autoFocusSwitch.checked).toEqual(initialSettings.settings.autoFocus);
+        expect(autoFocusSwitch.checked).toEqual(initialSettings.settings.autoStartPomodoros);
 
         // Change after user event
         userEvent.click(autoFocusSwitch);
-        expect(autoFocusSwitch.checked).not.toEqual(initialSettings.settings.autoFocus);
+        expect(autoFocusSwitch.checked).not.toEqual(initialSettings.settings.autoStartPomodoros);
     })
 
     test("Pause Checkbox functions correctly", () => {
         basicSetup();
 
         const pauseButtonCheckbox = screen.getByRole('checkbox', {name: /pause button checkbox/i});
-        expect(pauseButtonCheckbox.checked).toEqual(initialSettings.settings.pause);
+        expect(pauseButtonCheckbox.checked).toEqual(initialSettings.settings.displayPauseButton);
 
         userEvent.click(pauseButtonCheckbox);
-        expect(pauseButtonCheckbox.checked).not.toEqual(initialSettings.settings.pause);
+        expect(pauseButtonCheckbox.checked).not.toEqual(initialSettings.settings.displayPauseButton);
     })
 
     test("Cancel Checkbox functions correctly", () => {
         basicSetup();
 
         const cancelButtonCheckbox = screen.getByRole('checkbox', {name: /cancel button checkbox/i});
-        expect(cancelButtonCheckbox.checked).toEqual(initialSettings.settings.cancel);
+        expect(cancelButtonCheckbox.checked).toEqual(initialSettings.settings.displayCancelButton);
        
         userEvent.click(cancelButtonCheckbox);
-        expect(cancelButtonCheckbox.checked).not.toEqual(initialSettings.settings.cancel);
+        expect(cancelButtonCheckbox.checked).not.toEqual(initialSettings.settings.displayCancelButton);
     })
 
     test("Fast Forward Checkbox functions correctly", () => {
         basicSetup();
 
         const fastForwardCheckbox = screen.getByRole('checkbox', {name: /fast forward button checkbox/i});
-        expect(fastForwardCheckbox.checked).toEqual(initialSettings.settings.fastForward);
+        expect(fastForwardCheckbox.checked).toEqual(initialSettings.settings.displayFastForwardButton);
         
         userEvent.click(fastForwardCheckbox);
-        expect(fastForwardCheckbox.checked).not.toEqual(initialSettings.settings.fastForward);
+        expect(fastForwardCheckbox.checked).not.toEqual(initialSettings.settings.displayFastForwardButton);
     })
 
     test("Task Selector Checkbox functions correctly", () => {
         basicSetup();
 
         const taskSelectorCheckbox = screen.getByRole('checkbox', {name: /task selector checkbox/i});
-        expect(taskSelectorCheckbox.checked).toEqual(initialSettings.settings.taskSelection);
+        expect(taskSelectorCheckbox.checked).toEqual(initialSettings.settings.displayTaskSelector);
         
         userEvent.click(taskSelectorCheckbox);
-        expect(taskSelectorCheckbox.checked).not.toEqual(initialSettings.settings.taskSelection);
+        expect(taskSelectorCheckbox.checked).not.toEqual(initialSettings.settings.displayTaskSelector);
     })
 
 });

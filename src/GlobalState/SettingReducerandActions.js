@@ -1,5 +1,3 @@
-import { saveUserSettings, loadUserSettings } from "../services/DataService";
-import { UserSettings } from "../classes/settings/UserSettings"
 
 
 //Reducer takes an action and update the state: these are the actions.
