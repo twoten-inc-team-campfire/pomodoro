@@ -78,17 +78,17 @@ const decrementTimer = (state, action) => {
     } 
     else if (state.sec === 0) {
         return {
+            ...state,
             min: state.min - 1,
             sec: 59,
-            timerId: action.timerId,
             isTimerRunning: true
         }
     } 
     else {
         return {
+            ...state,
             min: state.min,
             sec: state.sec - 1,
-            timerId: action.timerId,
             isTimerRunning: true
         }
     }

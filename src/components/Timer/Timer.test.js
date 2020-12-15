@@ -41,15 +41,14 @@ test("After start button is clicked and 3 seconds passed, the timer should not b
 	const timerContentBeforeClick = time.textContent;
 	const startButton = screen.queryByLabelText('start-button');
 	expect(startButton).toBeInTheDocument();
-	console.log("timerContentBeforeClick: ", timerContentBeforeClick)
-	userEvent.click(startButton)
-	
+
+	fireEvent.click(startButton)	
 	act(() => 
 		jest.advanceTimersByTime(3000)
 	)
 	
 	// screen.debug()
 	const timerContentAfterClick = time.textContent;
-	console.log("timerContentAfterClick: ", timerContentAfterClick)
+	expect(startButton).not.toBeInTheDocument();
 	expect(timerContentAfterClick).not.toEqual(timerContentBeforeClick);
 })
