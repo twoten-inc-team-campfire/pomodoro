@@ -207,13 +207,13 @@ describe("DailyLog should correctly display a sequence of DailyLogSessions based
     and gap", () => {
     test("The component should not display anything if the timerSession input is empty", () => {
         const timerSessions = [];
-        render(<DailyLog timerSessions={timerSessions} gap={20}/>);
+        render(<DailyLog timerSessions={timerSessions} maxGap={20}/>);
         let containerDiv = screen.getByLabelText("Timer sessions log");
         expect(containerDiv).toBeEmptyDOMElement();
     })
     test("The component should only display a single DailyLogSession if all TimerSessions go in a single block", () => {
         const timerSessions = timerSessionsTestData();
-        render(<DailyLog timerSessions={timerSessions} gap={15 * 60}/>);
+        render(<DailyLog timerSessions={timerSessions} maxGap={24 * 60}/>);
         let containerDiv = screen.getByLabelText("Timer sessions log");
         expect(containerDiv).not.toBeEmptyDOMElement();
         expect(containerDiv.childElementCount).toEqual(1);
@@ -222,7 +222,7 @@ describe("DailyLog should correctly display a sequence of DailyLogSessions based
     block", () => {
         const timerSessions = timerSessionsTestData();
         const timerSessionBlocks = timerSessionTestDataBlocks();
-        render(<DailyLog timerSessions={timerSessions} gap={15}/>);
+        render(<DailyLog timerSessions={timerSessions} maxGap={15}/>);
         let containerDiv = screen.getByLabelText("Timer sessions log");
         expect(containerDiv).not.toBeEmptyDOMElement();
         expect(containerDiv.childElementCount).toEqual(timerSessionBlocks.length);

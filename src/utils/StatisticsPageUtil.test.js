@@ -116,8 +116,9 @@ describe("fitTimerSessionsIntoRange correctly fits TimerSessions into the specif
         }
         const startDate = new Date(2020, 10, 11,0, 0, 0, 0);
         const endDate = new Date(2020, 10, 12,0, 0, 0, 0);
-        const correctTimerSessionTasks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
+        const correctTimerSessionTasks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"];
         let fittedTimerSessions = fitTimerSessionsIntoRange(timerSessions, startDate, endDate);
+        expect(fittedTimerSessions.length).toEqual(correctTimerSessionTasks.length);
         for (let i = 0; i < fittedTimerSessions.length; i += 1)
             expect(fittedTimerSessions[i].task).toEqual(correctTimerSessionTasks[i])
     })

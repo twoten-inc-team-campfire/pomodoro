@@ -28,6 +28,7 @@ export class Statistics extends Component {
         endDate.setDate(startDate.getDate() + 1);
         endDate.setHours(0, 0, 0, 0);
         let timerSessions = await loadTimerSessionListByDate(startDate, endDate);
+        timerSessions.sort((t1, t2) => t1.startTime - t2.startTime);
         this.setState({...this.state, date, timerSessions});
     }
 
