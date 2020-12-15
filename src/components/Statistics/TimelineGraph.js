@@ -117,7 +117,7 @@ export function TimelineGraph({date, timerSessions, maxGap = 10}) {
         // Finally, transform these into svg coordinates
         for (const block of timeBlocksInRange) {
             let x = timelineX + block.startTime * timelineWidth;
-            let width = block.endTime * timelineWidth;
+            let width = (block.endTime - block.startTime) * timelineWidth;
             timeBlockSvgs.push(<rect
                 width={width}
                 height={"7"}

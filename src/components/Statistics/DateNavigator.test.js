@@ -8,7 +8,7 @@ describe("DateNavigator should allow the use to navigate between different dates
 
     const currDate = new Date(2020, 1, 1);
     const prevDate = new Date(2020, 0, 31);
-    const callback = jest.fn((pDate, cDate) => console.log(pDate, cDate));
+    const callback = jest.fn();
     callback.bind(this);
 
     test("DateNavigator should display the initial date passed in as a prop", () => {
