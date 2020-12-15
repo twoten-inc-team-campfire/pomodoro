@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
@@ -87,45 +87,36 @@ function Settings(props) {
         dispatch(SettingsActions.CHANGE_SINGLE_SETTING(name, newValue));
     }
 
-    // latestSettings is a wrapper reference to the settings object 
-    // - Each change to the settings causes the useEffect to trigger
-    //   and update the reference. 
-    // - We use the reference to save settings to the database.
-    const latestSettings = useRef(settings);
-    useEffect(() => {
-        latestSettings.current = settings;
-    })
     // The following useEffect only runs on mount and unmount because
     // we don't need to make a call to the database on each UI change.
     // We wait until the Settings page unmounts before sending the most
     // up to date settings to the database. 
     useEffect(() => {
-        return ( () => {
-            async function callSaveUserSettings() {
-                try {
-                    const settingsToSave = new UserSettings(
-                        latestSettings.current.pomodoroLength,
-                        latestSettings.current.shortBreakLength,
-                        latestSettings.current.longBreakLength,
-                        latestSettings.current.numPomodorosInCycle,
-                        latestSettings.current.autoStartBreaks,
-                        latestSettings.current.autoStartPomodoros,
-                        latestSettings.current.displayPauseButton,
-                        latestSettings.current.displayCancelButton,
-                        latestSettings.current.displayFastForwardButton,
-                        latestSettings.current.displayTaskSelector
-                    )
-                    saveUserSettings(settingsToSave);
-                } catch (error) {
-                    console.log(error)
-                }
+        async function callSaveUserSettings() {
+            try {
+                const settingsToSave = new UserSettings(
+                    settings.pomodoroLength,
+                    settings.shortBreakLength,
+                    settings.longBreakLength,
+                    settings.numPomodorosInCycle,
+                    settings.autoStartBreaks,
+                    settings.autoStartPomodoros,
+                    settings.displayPauseButton,
+                    settings.displayCancelButton,
+                    settings.displayFastForwardButton,
+                    settings.displayTaskSelector
+                )
+                saveUserSettings(settingsToSave);
+            } catch (error) {
+                console.log(error)
             }
+        }
 
-            callSaveUserSettings();
-        })
-        // The seconds parameter, [], is an empty dependency array which
-        // tells the useEffect hooks to only run on mount and unmount.
-    }, [])
+        callSaveUserSettings();
+        // The seconds parameter is the dependency array. Every time 
+        // there is a change to settings, the useEffect hook will 
+        // trigger the async call back to update the database.
+    }, [settings])
 
     return (
         <div className="Settings" aria-label="settings-page">
