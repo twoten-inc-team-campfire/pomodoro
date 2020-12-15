@@ -184,14 +184,14 @@ describe("breakTimerSessionsIntoSeparateBlocks should successfully break an arra
     test("The function should return nothing for an empty input", () => {
         const timerSessions = [];
         const timerSessionBlocks = [];
-        const res = breakTimerSessionsIntoSeparateBlocks(timerSessions, 15 * 60 * 1000);
+        const res = breakTimerSessionsIntoSeparateBlocks(timerSessions, 15);
         expect(res).toEqual(timerSessionBlocks);
     })
     test("The function should return a single block if all the gaps between TimerSessions are within maxGap", () => {
         const timerSessions = timerSessionsTestData();
         const timerSessionBlocks = [timerSessionsTestData()];
         // 15 hours. Quite a long gap!
-        const res = breakTimerSessionsIntoSeparateBlocks(timerSessions, 15 * 60 * 60 * 1000);
+        const res = breakTimerSessionsIntoSeparateBlocks(timerSessions, 15 * 60);
         expect(res).toEqual(timerSessionBlocks);
     })
     test("The function should return multiple blocks if some gaps between TImerSessions are longer \
@@ -199,7 +199,7 @@ describe("breakTimerSessionsIntoSeparateBlocks should successfully break an arra
         const timerSessions = timerSessionsTestData();
         const timerSessionBlocks = timerSessionTestDataBlocks();
         // 15 minutes. A bit more reasonable!
-        const res = breakTimerSessionsIntoSeparateBlocks(timerSessions, 15 * 60 * 1000);
+        const res = breakTimerSessionsIntoSeparateBlocks(timerSessions, 15);
         expect(res).toEqual(timerSessionBlocks);
     })
 })

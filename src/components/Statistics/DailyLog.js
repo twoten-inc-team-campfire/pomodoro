@@ -15,11 +15,12 @@ import {DailyLogSession} from "./DailyLogSession";
  * breakTimerSessionsIntoSeparateBlocks
  * @desc Breaks an ordered sequence of TimerSessions into blocks of consecutive TimerSessions
  * @param {TimerSession[]} timerSessions - The TimerSessions to be split up
- * @param {number} maxGap - The maximum allowable gap in ms between two TimerSessions before they're split into separate blocks.
+ * @param {number} maxGap - The maximum allowable gap in minutes between two TimerSessions before they're split into separate blocks.
  * @returns {[TimerSession[]]}
  */
 export function breakTimerSessionsIntoSeparateBlocks(timerSessions, maxGap) {
     let blocks = [];
+    maxGap = maxGap * 60 * 1000;
     if (timerSessions.length > 0) {
         let currentBlock = [timerSessions[0]];
         for (let i = 1; i < timerSessions.length; i += 1) {
@@ -41,17 +42,16 @@ export function breakTimerSessionsIntoSeparateBlocks(timerSessions, maxGap) {
  * @desc Displays a log of the TimerSessions for a specific day, showing information about groups of consecutive
  * TimerSessions: time started, total amount of work done, tasks that were worked on, etc.
  * @param {TimerSessions[]} timerSessions - The TimerSessions recorded on the date passed in as an argument.
- * @param {number} gap - The permitted time gap between consecutive TimerSessions before they're split into separate
+ * @param {number} maxGap - The permitted time gap between consecutive TimerSessions before they're split into separate
  * segments (in minutes).
  * @returns {JSX.Element}
  * @constructor
  */
-export function DailyLog({timerSessions, gap=20}) {
+export function DailyLog({timerSessions, maxGap = 20}) {
     let items = []
     if (timerSessions.length > 0) {
-        gap = gap * 60 * 1000;
         timerSessions = [...timerSessions];
-        let blocks = breakTimerSessionsIntoSeparateBlocks(timerSessions, gap);
+        let blocks = breakTimerSessionsIntoSeparateBlocks(timerSessions, maxGap);
         items = blocks.map((session, index) => (
             <div key={index} style={{"marginTop": "0.5em", "marginBottom": "0.5em"}}>
                 <DailyLogSession timerSessions={session}/>
