@@ -11,11 +11,14 @@ export class Statistics extends Component {
     constructor({date = new Date(), maxDate = new Date()}) {
         super();
         this.state = {date, maxDate, timerSessions: []}
-        this.fetchTimerSessionsForDate(date);
     }
 
-    updateDate(oldDate, newDate) {
-        this.fetchTimerSessionsForDate(newDate);
+    async componentDidMount() {
+        await this.fetchTimerSessionsForDate(this.state.date);
+    }
+
+    async updateDate(oldDate, newDate) {
+        await this.fetchTimerSessionsForDate(newDate);
     }
 
     async fetchTimerSessionsForDate(date) {
@@ -35,7 +38,8 @@ export class Statistics extends Component {
                  style={{
                     "display": "flex",
                     "flexDirection": "column",
-                    "alignItems": "center"
+                    "alignItems": "center",
+                     "width": "90%"
                 }}
             >
                 Statistics Page
@@ -51,7 +55,7 @@ export class Statistics extends Component {
                 <br/>
                 <div
                     style={{
-                        "width": "min(max(50em,50%), 80%)",
+                        "width": "min(30em, 80%)",
                         "height": "auto",
                         "marginTop": "1em"
                     }}

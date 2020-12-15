@@ -70,6 +70,24 @@ export class TimerSession {
             this.task
         );
     }
+
+    /**
+     * hydrate
+     * @desc Hydrates an instantiation of TimerSession from a generic object
+     * @param {Date} obj.startTime
+     * @param {Date} obj.endTime
+     * @param {number} obj.type
+     * @param {string} obj.task
+     * @returns {TimerSession}
+     */
+    static hydrate(obj) {
+        return new TimerSession(
+            new Date(obj.startTime),
+            new Date(obj.endTime),
+            obj.type,
+            obj.task
+        );
+    }
 }
 
 /**
