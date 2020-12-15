@@ -47,6 +47,7 @@ export function getTimerCyclesFromTimerSessions(timerSessions) {
  * @desc Calculates the total amount of time the user worked (the sum of all TIMER_SESSION_TYPE.POMODORO lengths).
  * @param {TimerSession[]} timerSessions
  * @return {number} - The length of time worked in milliseconds.
+ * @ignore
  */
 export function getTotalTimeWorked(timerSessions) {
     let timeWorked = 0;

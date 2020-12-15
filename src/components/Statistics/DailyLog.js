@@ -5,7 +5,7 @@ import {DailyLogSession} from "./DailyLogSession";
  * @typedef {TimerSession} DailyLog#TimerCycle
  * @desc A compressed sequence of TimerSessions of the same type; contains additional info about all the tasks
  * completed during that timer cycle and the amount of time the timer was paused.
- * @property {[string]} tasks - All tasks that were undertaken during the timer cycle
+ * @property {string[]} tasks - All tasks that were undertaken during the timer cycle
  * @property {number} pauseTime - The length of time the timer was paused during a part of the cycle in milliseconds.
  * @ignore
  */
@@ -15,7 +15,7 @@ import {DailyLogSession} from "./DailyLogSession";
  * @desc Breaks an ordered sequence of TimerSessions into blocks of consecutive TimerSessions
  * @param {TimerSession[]} timerSessions - The TimerSessions to be split up
  * @param {number} maxGap - The maximum allowable gap in minutes between two TimerSessions before they're split into separate blocks.
- * @returns {[TimerSession[]]}
+ * @returns {TimerSession[][]}
  */
 export function breakTimerSessionsIntoSeparateBlocks(timerSessions, maxGap) {
     let blocks = [];

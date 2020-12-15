@@ -63,6 +63,7 @@ export function getTimerSessionsTimeBlocks(timerSessions, maxGap) {
  * @param {Date} startTime - When the range starts
  * @param {Date} endTime - When the range ends
  * @returns {TimelineGraph#TimeBlockInRange[]}
+ * @ignore
  */
 export function getPercentIntoRange(timeBlocks, startTime, endTime) {
     let rangeOffset = startTime.getTime();
