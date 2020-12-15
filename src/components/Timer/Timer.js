@@ -12,7 +12,7 @@ import { useTimerGlobalState } from '../../GlobalState/GlobalStateHooks';
 function Timer (props) {
 
     const { timer, dispatchTimer, TimerActions } = useTimerGlobalState()
-    const { onStart, onPause, onCancel, onComplete, newTimer } = props;
+    const { onStart, onPause, onCancel, onComplete } = props;
 
     const startTimer = () => {
         // start the timer
@@ -34,7 +34,7 @@ function Timer (props) {
     }
 
     const resetTimer = () => {
-        dispatchTimer(TimerActions.RESET(newTimer));
+        dispatchTimer(TimerActions.RESET());
 
         if (onCancel) onCancel();
     }

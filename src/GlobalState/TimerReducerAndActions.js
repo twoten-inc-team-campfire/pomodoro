@@ -5,8 +5,8 @@ const TimerActionType = {
 }
 //initial state of the timer
 const initTimer = { 
-    min: 25, 
-    sec: 0,
+    min: 0, 
+    sec: 5,
     isTimerRunning: false,
     timerId: -1
 }
@@ -61,6 +61,7 @@ const timerReducer = (state, action) => {
 
 // separate out the logic that decrements the timer. The code should be self-explanatory
 const decrementTimer = (state, action) => {
+    console.log("decing....")
     if (state.sec === 0 && state.min === 0) {
         //inside here is when the timer completes
 
@@ -68,14 +69,31 @@ const decrementTimer = (state, action) => {
         clearInterval(action.timerId)
 
         //calls onComplete.
+        let newTimer = null
         if (action.onComplete) 
-            action.onComplete()
+            newTimer = action.onComplete()
         else
             console.warn("onComplete props is not provided to <Timer/>" + 
                     "Therefore nothing happens when timer reaches 00:00");
-
         //no state change, the time is still 00:00
-        return {...state, isTimerRunning: false};
+        let nextTimer;
+
+        if (newTimer) {
+            nextTimer = {
+                ...state, 
+                min: newTimer.min,
+                sec: newTimer.sec, 
+                timerId: -1,
+                isTimerRunning: false
+            } 
+        } else {
+            nextTimer = {
+                ...state, 
+                timerId: -1,
+                isTimerRunning: false
+            };
+        }
+        return nextTimer
     } 
     else if (state.sec === 0) {
         return {

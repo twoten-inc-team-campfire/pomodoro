@@ -5,12 +5,6 @@ import { useTimerGlobalState, useSettingsGlobalState } from '../GlobalState/Glob
 
 
 
-const initState = {
-    type: TIMER_SESSION_TYPE.POMODORO,
-    count: 0,
-    sessionIngterval: 4
-}
-
 const forward = (state) => {
     let type = state.type;
     let count = state.count;
@@ -63,43 +57,29 @@ const textGeneration = (type) => {
  * @component
  */
 function PomodoroManager ({onNewTimerSession}) {
-    return (
-        <div className={'pomodoroManager'}>
-            <h2>{textGeneration(managerState.type)}</h2>
-            <Timer 
-                onStart={onStart}
-                onPause={onPause}
-                onCancel={onCancel}
-                onComplete={onComplete}
-                newTimer={{}}
-            />
-        </div>
-    )
-    // let startTime = useRef(null);
-    // let endTime = useRef(null);
-    // let onNewTimerSessionRef = useRef(onNewTimerSession);
+    let startTime = useRef(null);
+    let endTime = useRef(null);
 
-    // const {
-    //     settings,
-    //     dispatch,
-    //     SettingsActions
-    // } = useSettingsGlobalState()
+    const {
+        settings,
+        dispatch,
+        SettingsActions
+    } = useSettingsGlobalState()
+    const  {
+        timer,
+        dispatchTimer,
+        TimerActions
+    } = useTimerGlobalState()
 
-    // const  {
-    //     timer,
-    //     dispatchTimer,
-    //     TimerActions
-    // } = useTimerGlobalState()
+    const initState = {
+        type: TIMER_SESSION_TYPE.POMODORO,
+        count: 0,
+        sessionIngterval: settings.focusCycleCount,
+    };
 
-    // const initState = {
-    //     type: TIMER_SESSION_TYPE.POMODORO,
-    //     count: 0,
-    //     sessionIngterval: settings.focusCycleCount,
-    // };
+    const [managerState, setManagerState] = useState(initState);
 
-    // const [managerState, setManagerState] = useState(initState);
-
-    // //stop and update timer when user changes setting
+    //stop and update timer when user changes setting
     // useEffect(() => {
     //     let newTimer = timer
     //     if (managerState.type === TIMER_SESSION_TYPE.POMODORO) {
@@ -118,66 +98,87 @@ function PomodoroManager ({onNewTimerSession}) {
 
     //     dispatchTimer(TimerActions.RESET(newTimer))
     // }, [settings, managerState])
-    // *
-    //  * Callback to pass a new TimerSession to the parent.
-    //  * @callback onNewTimerSession
-    //  * @param {TimerSession} newTimerSession - New TimerSession the PomodoroManager just created
-    //  * @memberOf PomodoroManager
-     
 
-    // const onStart = () => {
-    //     startTime.current = new Date(Date.now());
-    // }
+    /*
+     * Callback to pass a new TimerSession to the parent.
+     * @callback onNewTimerSession
+     * @param {TimerSession} newTimerSession - New TimerSession the PomodoroManager just created
+     * @memberOf PomodoroManager
+     */ 
+    const onStart = () => {
+        startTime.current = new Date(Date.now());
+    }
 
-    // const onPause = useCallback(() => {
-    //     endTime.current = new Date(Date.now());
+    const onPause = () => {
+        endTime.current = new Date(Date.now());
 
-    //     if (startTime.current && endTime.current) {
-    //         onNewTimerSessionRef.current(new TimerSession(startTime.current, endTime.current, managerState.type));
-    //     }
+        if (startTime.current && endTime.current) {
+            onNewTimerSession(new TimerSession(startTime.current, endTime.current, managerState.type));
+        }
 
-    //     startTime.current = null;
-    //     endTime.current = null;
-    // }, [managerState])
+        startTime.current = null;
+        endTime.current = null;
+    }
 
-    // const onCancel = useCallback(() => {
-    //     endTime.current = new Date(Date.now());
+    const onCancel = () => {
+        endTime.current = new Date(Date.now());
         
-    //     if (startTime.current && endTime.current) {
-    //         onNewTimerSessionRef.current(new TimerSession(startTime.current, endTime.current, managerState.type));
-    //     }
+        if (startTime.current && endTime.current) {
+            onNewTimerSession(new TimerSession(startTime.current, endTime.current, managerState.type));
+        }
 
-    //     startTime.current = null;
-    //     endTime.current = null;
-    // }, [managerState])
+        startTime.current = null;
+        endTime.current = null;
+    }
 
-    // const onComplete = useCallback(() => {
-    //     endTime.current = new Date(Date.now());
+    const onComplete = () => {
+        endTime.current = new Date(Date.now());
 
-    //     if (startTime.current && endTime.current) {
-    //         onNewTimerSessionRef.current(new TimerSession(startTime.current, endTime.current, managerState.type));
-    //     }
+        if (startTime.current && endTime.current) {
+            onNewTimerSession(new TimerSession(startTime.current, endTime.current, managerState.type));
+        }
 
-    //     startTime.current = null;
-    //     endTime.current = null;
+        startTime.current = null;
+        endTime.current = null;
         
-    //     let {type} = forward(managerState);
-    //     setManagerState(forward(managerState));
-    // }, [managerState, TimerActions])
+        let {type} = forward(managerState);
+        setManagerState(forward(managerState));
 
+        return newTime(type)
+    }
 
-    // return (
-    //     <div className={'pomodoroManager'}>
-    //         <h2>{textGeneration(managerState.type)}</h2>
-    //         <Timer 
-    //             onStart={onStart}
-    //             onPause={onPause}
-    //             onCancel={onCancel}
-    //             onComplete={onComplete}
-    //             newTimer={{}}
-    //         />
-    //     </div>
-    // )
+    const newTime = (pomo_type) => {
+        if (pomo_type === TIMER_SESSION_TYPE.POMODORO) {
+            return {
+                min: settings.focusLength,
+                sec: 0
+            };
+        }
+        else if (pomo_type === TIMER_SESSION_TYPE.LONG_REST) {
+            return {
+                min: settings.longBreakLength,
+                sec:0
+            }
+        } 
+        else if (pomo_type === TIMER_SESSION_TYPE.SHORT_REST) {
+            return {
+                min: settings.shortBreakLength,
+                sec: 0
+            }
+        }
+    }
+
+    return (
+        <div className={'pomodoroManager'}>
+            <h2>{textGeneration(managerState.type)}</h2>
+            <Timer 
+                onStart={onStart}
+                onPause={onPause}
+                onCancel={onCancel}
+                onComplete={onComplete}
+            />
+        </div>
+    )
 }
 
-export { PomodoroManager, initState, forward };
+export { PomodoroManager, forward };
