@@ -27,7 +27,7 @@ const BottomNavBar = ({value, setValue}) => {
       >
             <BottomNavigationAction aria-label="timer-button" label="Timer" icon={<TimerIcon />} />
             <BottomNavigationAction aria-label="settings-button" label="Settings" icon={<SettingsIcon />} />
-            <BottomNavigationAction aria-label="summary-button" label="Summary" icon={<EqualizerIcon />} />
+            <BottomNavigationAction aria-label="statistics-button" label="Statistics" icon={<EqualizerIcon />} />
       </BottomNavigation>
   )
 }
