@@ -2,29 +2,29 @@
  * @file The services and methods to save and load data from IndexedDB.
  */
 
-import { Store, get, set, clear, keys } from 'idb-keyval';
+import { Store, get, set, clear } from 'idb-keyval';
 import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
 import { UserSettings } from '../classes/settings/UserSettings';
 
-
-let timerSessionStore = new Store('IndexedDB', 'TimerSessionStore');
-let userSettingsStore = new Store('IndexedDB', 'UserSettingsStore');
-
 /**
- * saveTimerSession
- * @desc Save the timer session.
+ * saveTimerSessionWithStore
+ * @desc Save the timer session in the give store.
  * @param {TimerSession} session - The session to be saved
+ * @param {Store} store - The store where the session will be saved.
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-function saveTimerSession(session) {
+function saveTimerSessionWithStore(session, store) {
     if (!isValidTimerSession(session)) {
         return Promise.reject(new Error('Invalid input: Not TimerSession!'));
+    }
+    if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
     }
 
     // mapping: date string -> {type: [session array]}
     let dateString = session.startTime.toDateString();
-    return get(dateString, timerSessionStore)
+    return get(dateString, store)
         .then(dict => {
             dict = dict || {};
             let list = dict[session.type] || [];
@@ -33,7 +33,7 @@ function saveTimerSession(session) {
             return dict;
         })
         .then(dict => {
-            return set(dateString, dict, timerSessionStore);
+            return set(dateString, dict, store);
         })
         .catch(() => {
             throw new Error("Failed to save timer session!");
@@ -41,17 +41,19 @@ function saveTimerSession(session) {
 }
 
 /**
- * loadTimerSessionListByDate
- * @desc Load timer sessions of a specific range of dates.
+ * loadTimerSessionListByDateWithStore
+ * @desc Load timer sessions of a specific range of dates from the given store.
  * @param {Date} startDate - The start date of the query.
  * @param {Date} endDate - The end date of the query.
+ * @param {Store} store - The store where timer sessions will be loaded. 
  * @param {Array} [types=[TIMER_SESSION_TYPE.POMODORO, TIMER_SESSION_TYPE.SHORT_REST ,TIMER_SESSION_TYPE.LONG_REST]] - The list of timer session types to query
  * @returns {Promise<TimerSession[]>} Promise fulfilled by the array of the TimerSession.
  *                                    If rejected, it contains an error.
  * @public
  */
-function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TIMER_SESSION_TYPE)) {
-    if (!isValidLoadTimerSessionInput(startDate, endDate, types)) {
+function loadTimerSessionListByDateWithStore(startDate, endDate, store,
+    types = Object.values(TIMER_SESSION_TYPE)) {
+    if (!isValidLoadTimerSessionInput(startDate, endDate, store, types)) {
         return Promise.reject(new Error('Invalid input for loading timer sessions!'));
     }
 
@@ -60,7 +62,7 @@ function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TI
         currDate <= endDate;
         currDate.setDate(currDate.getDate() + 1)) {
         let dateString = currDate.toDateString();
-        promises.push(get(dateString, timerSessionStore));
+        promises.push(get(dateString, store));
     }
 
     let resList = [];
@@ -81,58 +83,78 @@ function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TI
 }
 
 /**
- * saveUserSettings
- * @desc Save the instance of UserSettings to the database.
- * @param {UserSettings} settings - The User settings to be saved
+ * saveUserSettingsWithStore
+ * @desc Save the user settings in the given store.
+ * @param {UserSettings} settings - The user settings to be saved.
+ * @param {Store} store - The store where user settings will be saved.
  * @returns {Promise}  If rejected, it contains an error.
  * @public
  */
-function saveUserSettings(settings) {
+function saveUserSettingsWithStore(settings, store) {
     if (!isValidUserSettings(settings)) {
-        return Promise.reject(new Error("Invalid input: Invalid instance of UserSettings"));
+        return Promise.reject(new Error("Invalid input: Not UserSettings!"));
+    }
+    if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
     }
 
-    return set("userSettings", settings, userSettingsStore)
+    return set("userSettings", settings, store)
         .catch(() => {
-            throw new Error("Failed to save User settings!");
+            throw new Error("Failed to save user settings!");
         });
 }
 
 /**
- * loadUserSettings
- * @desc Load the User settings from the database
- * @returns {Promise<UserSettings>} Promise fulfilled by the loaded User settings.
+ * loadUserSettingsWithStore
+ * @desc Load the user settings from the given store.
+ * @param {Store} store - The store where user settings will be loaded.
+ * @returns {Promise<UserSettings>} Promise fulfilled by the saved user settings.
  *                    If rejected when no previous settings saved, it contains an error.
  * @public
  */
-function loadUserSettings() {
-    return get("userSettings", userSettingsStore)
+function loadUserSettingsWithStore(store) {
+    if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
+    }
+
+    return get("userSettings", store)
         .then(val => {
             if (val === undefined) {
-                throw new Error("No User settings saved!");
+                throw new Error("No user settings saved!");
             }
             return val;
         })
         .catch(() => {
-            throw new Error("Failed to load User settings!");
+            throw new Error("Failed to load user settings!");
         });
 }
 
 /**
- * clearAllHistory
- * @desc Clear all timer sessions, Pomodoro settings, and UI settings in database.
+ * clearAllHistoryWithStore
+ * @desc Clear data in the given object store in database IndexedDB.
+ * @param {Store} store - The store where history will be cleared
  * @returns {Promise} If rejected, it contains an error.
  * @public
  */
-function clearAllHistory() {
-    return Promise.all(
-        [
-            clear(timerSessionStore),
-            clear(userSettingsStore)
-        ])
+function clearHistoryWithStore(store) {
+    if (!isValidStore(store)) {
+        return Promise.reject(new Error("Invalid input: Not Store!"));
+    }
+    return clear(store)
         .catch(() => {
             throw new Error("Failed to clear history!");
         });
+}
+
+/**
+ * isValidStore
+ * @desc Verify if the input is an instance of Store
+ * @param {Store} store - The store to be verified
+ * @returns {boolean} true if it is an instance of Store, otherwise false
+ * @private
+ */
+function isValidStore(store) {
+    return store instanceof Store;
 }
 
 
@@ -150,13 +172,14 @@ function isValidTimerSession(session) {
 /**
  * isValidLoadTimerSessionInput
  * @desc Verify if the inputs are valid for loading the query
- * @param {Date} startDate - The start date of the query. Must be in the granularity of date.
- * @param {Date} endDate - The end date of the query. Must be in the granularity of date.
+ * @param {Date} startDate - The start date of the query.
+ * @param {Date} endDate - The end date of the query.
+ * @param {Store} store - The store to be verified
  * @param {Array} types - The list of timer session types to query
  * @returns {boolean} true the inputs are valid for loading the query, otherwise false
  * @private
  */
-function isValidLoadTimerSessionInput(startDate, endDate, types) {
+function isValidLoadTimerSessionInput(startDate, endDate, store, types) {
     if (!(types instanceof Array)) {
         return false;
     }
@@ -165,14 +188,14 @@ function isValidLoadTimerSessionInput(startDate, endDate, types) {
             return false;
         }
     }
-    return startDate instanceof Date && endDate instanceof Date;
+    return startDate instanceof Date && endDate instanceof Date && store instanceof Store;
 }
 
 /**
  * isValidUserSettings
  * @desc Verify if the input is an instance of UserSettings
- * @param {UserSettings} settings - The User settings to be verified
- * @returns {boolean} true if it is an instance of UISettings, otherwise false
+ * @param {UserSettings} settings - The user settings to be verified
+ * @returns {boolean} true if it is an instance of UserSettings, otherwise false
  * @private
  */
 function isValidUserSettings(settings) {
@@ -180,9 +203,9 @@ function isValidUserSettings(settings) {
 }
 
 export {
-    saveTimerSession,
-    loadTimerSessionListByDate,
-    saveUserSettings,
-    loadUserSettings,
-    clearAllHistory,
+    saveTimerSessionWithStore,
+    loadTimerSessionListByDateWithStore,
+    saveUserSettingsWithStore,
+    loadUserSettingsWithStore,
+    clearHistoryWithStore,
 }

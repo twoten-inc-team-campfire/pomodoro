@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import { timerReducer, initTimer } from './TimerReducerAndActions'
 import { settingsReducer, SettingsActions } from './SettingReducerandActions'
 import { UserSettings } from '../classes/settings/UserSettings';
+import { loadUserSettings } from '../services/DefaultDataService.js'
 
 const GlobalStateContext = React.createContext([{}, () => {}]);
 /* this is the provider of the global state to our app
@@ -33,7 +34,6 @@ const globalStateReducer = (state, action) => {
 const GlobalStateProvider = (props) => {
 	const [state, dispatch] = useReducer(globalStateReducer, initGlobalState);
 
-	const loadUserSettings = props.loadUserSettings;
 	/**
 	 * getInitSettings
 	 * @desc Load the initial user settings for the application. Function attempts
@@ -48,17 +48,13 @@ const GlobalStateProvider = (props) => {
 
 		//
 		async function getInitSettings() {
-
-			console.log("Getting Initial Settings");
 			try { 
 				// try to load settings from DB
 				let savedSettings = await loadUserSettings();
-				console.log("Got settings to load from the DB");
 				dispatch(SettingsActions.REPLACE_ALL_SETTINGS(savedSettings));
 
 			} catch (err) {
 				// Expect Error if settings have never been saved to the DB
-				console.log("Previously no settings were saved")
 			}
 		}
 		

@@ -1,20 +1,18 @@
-import { get, set, clear, keys } from 'idb-keyval';
+import { Store, get, set, clear } from 'idb-keyval';
 import {
-    saveTimerSession,
-    loadTimerSessionListByDate,
-    savePomodoroSettings,
-    loadAllPomodoroSettings,
-    saveUISettings,
-    loadUISettings,
-    clearAllHistory,
-} from './DataService';
+    saveTimerSessionWithStore,
+    loadTimerSessionListByDateWithStore,
+    saveUserSettingsWithStore,
+    loadUserSettingsWithStore,
+    clearHistoryWithStore,
+} from './BasicDataService';
 import { TimerSession, TIMER_SESSION_TYPE } from '../classes/TimerSession';
 import { UserSettings } from '../classes/settings/UserSettings';
-import { UISettings } from '../classes/settings/UISettings';
 
 jest.mock('idb-keyval');
+let testStore = new Store('test-db', 'test-store');
 
-describe("saveTimerSession()", () => {
+describe("saveTimerSessionWithStore()", () => {
     test('should save the TimerSession object when given a valid session', () => {
         // expected store construction
         let date1 = new Date('2020-2-27 10:51:05'), date2 = new Date('2020-3-2 9:01:05');
@@ -39,15 +37,15 @@ describe("saveTimerSession()", () => {
             return Promise.resolve(actualStore);
         });
 
-        return saveTimerSession(session1)
-            .then(() => saveTimerSession(session2))
-            .then(() => saveTimerSession(session3))
+        return saveTimerSessionWithStore(session1, testStore)
+            .then(() => saveTimerSessionWithStore(session2, testStore))
+            .then(() => saveTimerSessionWithStore(session3, testStore))
             .then(store => expect(store).toEqual(expectedStore));
     });
 
     test('should throw an error if input is not an instance of TimerSession', () => {
         let session = 'TimerSession';
-        return expect(saveTimerSession(session))
+        return expect(saveTimerSessionWithStore(session, testStore))
             .rejects
             .toThrow();
     });
@@ -57,7 +55,7 @@ describe("saveTimerSession()", () => {
         let session = new TimerSession(date, date);
         get.mockRejectedValue(new Error());
 
-        return expect(saveTimerSession(session))
+        return expect(saveTimerSessionWithStore(session, testStore))
             .rejects
             .toThrow();
     });
@@ -68,19 +66,28 @@ describe("saveTimerSession()", () => {
         get.mockResolvedValue({});
         set.mockRejectedValue(new Error());
 
-        return expect(saveTimerSession(session))
+        return expect(saveTimerSessionWithStore(session, testStore))
+            .rejects
+            .toThrow();
+    });
+
+    test('should throw an error if not Store object', () => {
+        let date = new Date('2020-1-1 10:51:05');
+        let session = new TimerSession(date, date);
+
+        return expect(saveTimerSessionWithStore(session, 'testStore'))
             .rejects
             .toThrow();
     });
 });
 
-describe("loadTimerSessionListByDate()", () => {
+describe("loadTimerSessionListByDateWithStore()", () => {
     test('should load an empty result list when the input is valid but results don\'t exist', () => {
         let date = new Date('2020-2-27 10:51:05');
         let expectedStore = {};
         get.mockImplementation(str => Promise.resolve(expectedStore[str]));
 
-        return expect(loadTimerSessionListByDate(date, date))
+        return expect(loadTimerSessionListByDateWithStore(date, date, testStore))
             .resolves
             .toEqual([]);
     });
@@ -113,9 +120,10 @@ describe("loadTimerSessionListByDate()", () => {
         get.mockImplementation(str => Promise.resolve(store[str]));
         let expectedList = [session1, session3, session1];
 
-        return expect(loadTimerSessionListByDate(
+        return expect(loadTimerSessionListByDateWithStore(
             date1,
             date4,
+            testStore,
             [
                 TIMER_SESSION_TYPE.POMODORO,
                 TIMER_SESSION_TYPE.LONG_REST
@@ -126,7 +134,7 @@ describe("loadTimerSessionListByDate()", () => {
 
     test('should throw an error if input time is not an instance of Date', () => {
         let date = '2020-1-1';
-        return expect(loadTimerSessionListByDate(date, date))
+        return expect(loadTimerSessionListByDateWithStore(date, date, testStore))
             .rejects
             .toThrow();
     });
@@ -134,7 +142,7 @@ describe("loadTimerSessionListByDate()", () => {
     test('should throw an error if input types is not an Array', () => {
         let date = new Date('2020-1-1');
 
-        return expect(loadTimerSessionListByDate(date, date, 1))
+        return expect(loadTimerSessionListByDateWithStore(date, date, testStore, 1))
             .rejects
             .toThrow();
     });
@@ -142,7 +150,7 @@ describe("loadTimerSessionListByDate()", () => {
     test('should throw an error if input types are not TIMER_SESSION_TYPE', () => {
         let date = new Date('2020-1-1');
 
-        return expect(loadTimerSessionListByDate(date, date, [4, 5]))
+        return expect(loadTimerSessionListByDateWithStore(date, date, testStore, [4, 5]))
             .rejects
             .toThrow();
     });
@@ -157,33 +165,24 @@ describe("loadTimerSessionListByDate()", () => {
     });
 });
 
-describe("savePomodoroSettings()", () => {
-    test('should save the PomodoroSettings object when given the valid settings', () => {
-        let expectedStore = {
-            'settings1': new UserSettings(1500000),
-            'settings2': new UserSettings(3000000),
-        }
-        let actualStore = {};
-        set.mockImplementation((k, v) => {
-            actualStore[k] = v;
-            return Promise.resolve(actualStore);
+describe("saveUserSettingsWithStore()", () => {
+    test('should save the UserSettings object when given the valid settings', () => {
+        let settings = new UserSettings();
+        let dict = { "userSettings": settings };
+        set.mockImplementation((k = "userSettings", v) => {
+            let item = {};
+            item[k] = v;
+            return Promise.resolve(item);
         });
 
-        return savePomodoroSettings('settings1', expectedStore['settings1'])
-            .then(s => savePomodoroSettings('settings2', expectedStore['settings2']))
-            .then(s => expect(s).toEqual(expectedStore))
+        return expect(saveUserSettingsWithStore(settings, testStore))
+            .resolves
+            .toEqual(dict);
+
     });
 
-    test('should throw an error if the input is invalid (not PomodoroSettings)', () => {
-        let settings = {
-            pomodoroLength: 1500000, // 25 * 60 * 1000
-            shortBreakLength: 300000, // 5 * 60 * 1000
-            longBreakLength: 900000, // 15 * 60 * 1000
-            numPomodorosInCycle: 4,
-            autoStartBreaks: false,
-            autoStartPomodoros: false
-        };
-        return expect(savePomodoroSettings(settings))
+    test('should throw an error if the input is invalid (not UserSettings)', () => {
+        return expect(saveUserSettingsWithStore('settings', testStore))
             .rejects
             .toThrow();
     });
@@ -192,97 +191,34 @@ describe("savePomodoroSettings()", () => {
         let settings = new UserSettings();
         set.mockRejectedValue(new Error());
 
-        return expect(savePomodoroSettings('settings', settings))
+        return expect(saveUserSettingsWithStore(settings, testStore))
+            .rejects
+            .toThrow();
+    });
+
+    test('should throw an error if not Store object', () => {
+        let settings = new UserSettings();
+
+        return expect(saveUserSettingsWithStore(settings, 'testStore'))
             .rejects
             .toThrow();
     });
 });
 
-describe("loadAllPomodoroSettings()", () => {
-    test('should load all PomodoroSettings', () => {
-        let store = {
-            'settings1': new UserSettings(1500000),
-            'settings2': new UserSettings(3000000),
-        }
-        keys.mockResolvedValue(Object.keys(store));
-        get.mockResolvedValueOnce(store['settings1'])
-            .mockResolvedValueOnce(store['settings2']);
+describe("loadUserSettingsWithStore()", () => {
+    test('should load the saved UserSettings if there is one saved', () => {
+        let userSettings = new UserSettings();
+        get.mockResolvedValue(userSettings);
 
-        return expect(loadAllPomodoroSettings(store))
+        return expect(loadUserSettingsWithStore(testStore))
             .resolves
-            .toEqual(store);
-    });
-
-    test('should throw an error if idb keys() has error', () => {
-        keys.mockRejectedValue(new Error());
-
-        return expect(loadAllPomodoroSettings())
-            .rejects
-            .toThrow();
-    });
-
-    test('should throw an error if idb get() has error', () => {
-        keys.mockResolvedValue([1, 2, 3]);
-        get.mockRejectedValue(new Error());
-
-        return expect(loadAllPomodoroSettings())
-            .rejects
-            .toThrow();
-    });
-});
-
-describe("saveUISettings()", () => {
-    test('should save the UISettings object when given the valid settings', () => {
-        let settings = new UISettings();
-        let dict = { "uiSettings": settings };
-        set.mockImplementation((k = "uiSettings", v) => {
-            let item = {};
-            item[k] = v;
-            return Promise.resolve(item);
-        });
-
-        return expect(saveUISettings(settings))
-            .resolves
-            .toEqual(dict);
-
-    });
-
-    test('should throw an error if the input is invalid (not UISettings)', () => {
-        let settings = {
-            displayPauseButton: true,
-            displayCancelButton: true,
-            displayFastForwardButton: true,
-            displayTaskSelector: true
-        };
-        return expect(saveUISettings(settings))
-            .rejects
-            .toThrow();
-    });
-
-    test('should throw an error if idb set() has error', () => {
-        let settings = new UISettings();
-        set.mockRejectedValue(new Error());
-
-        return expect(saveUISettings(settings))
-            .rejects
-            .toThrow();
-    });
-});
-
-describe("loadUISettings()", () => {
-    test('should load the saved UISettings if there is one saved', () => {
-        let uiSettings = new UISettings();
-        get.mockResolvedValue(uiSettings);
-
-        return expect(loadUISettings())
-            .resolves
-            .toEqual(uiSettings);
+            .toEqual(userSettings);
     });
 
     test('should throw an error if no previously saved settings', () => {
         get.mockResolvedValue(undefined);
 
-        return expect(loadUISettings())
+        return expect(loadUserSettingsWithStore(testStore))
             .rejects
             .toThrow();
     });
@@ -290,28 +226,37 @@ describe("loadUISettings()", () => {
     test('should throw an error if idb get() has error', () => {
         get.mockRejectedValue(new Error());
 
-        return expect(loadUISettings())
+        return expect(loadUserSettingsWithStore(testStore))
+            .rejects
+            .toThrow();
+    });
+
+    test('should throw an error if not Store object', () => {
+        return expect(loadUserSettingsWithStore('testStore'))
             .rejects
             .toThrow();
     });
 });
 
-jest.mock('idb-keyval');
-
-describe("clearAllHistory()", () => {
-    test('should clear all storage of timer sessions, ' +
-        'pomodoro settings and UI settings', () => {
+describe("clearHistoryWithStore()", () => {
+    test('should clear data in the given object store', () => {
             clear.mockResolvedValue(true);
 
-            return expect(clearAllHistory())
+            return expect(clearHistoryWithStore(testStore))
                 .resolves
-                .toEqual([true, true, true]);
+                .toEqual(true);
         });
 
     test('should throw an error if idb clear() has error', () => {
         clear.mockRejectedValue(new Error());
 
-        return expect(clearAllHistory())
+        return expect(clearHistoryWithStore(testStore))
+            .rejects
+            .toThrow();
+    });
+
+    test('should throw an error if not Store object', () => {
+        return expect(clearHistoryWithStore('testStore'))
             .rejects
             .toThrow();
     });

@@ -1,21 +1,39 @@
 import './App.css';
+import React from 'react';
 import { GlobalStateProvider } from './GlobalState/GlobalState'
-//import Home from './pages/Home.js';
+
+import Home from './pages/Home.js';
 import Settings from './pages/Settings.js'
-import {loadUserSettings} from './services/DataService.js'
+import BottomNavBar from './components/BottomNavBar';
+import AppLayout from './components/AppLayout';
 
 
 function App() {
+  const [value, setValue] = React.useState(0);
+
+
+  const PageToRender = () => {
+    switch (value) {
+      case 0:
+        return <Home/>
+      case 1:
+        return <Settings/>
+      default:
+        return <div> 404 </div>
+    }
+  }
   return (
-    <GlobalStateProvider loadUserSettings={loadUserSettings}>
+    <GlobalStateProvider>
       <div className="App">
         <header className="App-header">
-          {/* <Home/> */}
-          <Settings/>
+          <AppLayout 
+            PageToRender={PageToRender()}
+            ButtomNavBar={<BottomNavBar value={value} setValue={setValue}/>}
+          />
         </header>
       </div>
     </GlobalStateProvider>
-  );
+    )
 }
 
 export default App;
