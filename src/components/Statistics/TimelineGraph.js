@@ -1,7 +1,6 @@
 import React from 'react';
 import WbSunnyOutlinedIcon from '@material-ui/icons/WbSunnyOutlined';
 import NightsStayOutlinedIcon from '@material-ui/icons/NightsStayOutlined';
-import {fitTimerSessionsIntoRange} from "../../utils/StatisticsPageUtil";
 
 // let textPrimary = "#000000";
 let textSecondary = "#838383";
@@ -105,13 +104,10 @@ export function TimelineGraph({date, timerSessions, maxGap = 10}) {
         let nextDay = new Date(currentDay);
         nextDay.setDate(currentDay.getDate() + 1);
 
-        // Third, edit the first and last timerSessions to make sure they completely fall within the current day.
-        timerSessions = fitTimerSessionsIntoRange(timerSessions, currentDay, nextDay);
-
-        // Fourth, process the timerSessions to extract their lengths.
+        // Third, process the timerSessions to extract their lengths.
         let timeBlocks = getTimerSessionsTimeBlocks(timerSessions, maxGap);
 
-        // Fifth, find what percentage of the range each timeBlock spans
+        // Fourth, find what percentage of the range each timeBlock spans
         let timeBlocksInRange = getPercentIntoRange(timeBlocks, currentDay, nextDay);
 
         // Finally, transform these into svg coordinates
