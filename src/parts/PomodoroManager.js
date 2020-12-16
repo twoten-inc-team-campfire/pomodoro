@@ -86,6 +86,9 @@ function PomodoroManager ({onNewTimerSession}) {
 
         startTime.current = null;
         endTime.current = null;
+
+        let type = manager.type;
+        return newTime(type)
     }
 
     const onComplete = () => {
@@ -100,8 +103,6 @@ function PomodoroManager ({onNewTimerSession}) {
         
         let {type} = forward(stateSimulate(settings, manager));
         dispatchManager(ManagerActions.NEXT());
-
-        console.log(newTime(type))
 
         return newTime(type)
     }

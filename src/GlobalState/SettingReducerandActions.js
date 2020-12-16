@@ -5,7 +5,7 @@ const SettingsActionType = {
 const initSettings = {
     autoBreak: true,
     autoFocus: true,
-    focusLength: 25,
+    focusLength: 1,
     shortBreakLength: 5,
     longBreakLength: 20,
     focusCycleCount: 4,
