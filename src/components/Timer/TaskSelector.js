@@ -9,13 +9,18 @@ import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import CloseIcon from '@material-ui/icons/Close';
 
-
+/**
+ * Callback to pass the newly selected task to the parent.
+ * @callback onTaskChange
+ * @param {string} task - The new task being passed to the parent
+ * @memberOf TaskSelector
+ */
 /**
  * TaskSelector
  * @desc Component that allows users to enter a task for the current
  * pomodoro session.
  */
-function TaskSelector() {
+function TaskSelector({onTaskChange}) {
     const [showSelector, setShowSelector] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [task, setTask] = useState(null);
@@ -25,8 +30,8 @@ function TaskSelector() {
      * @desc Hides the selector and opens the dialog.
      */
     const handleToggle = () => {
-        setShowSelector(!showSelector)
-        setIsDialogOpen(!isDialogOpen)
+        setShowSelector(!showSelector);
+        setIsDialogOpen(!isDialogOpen);
     }
 
     /**
@@ -34,7 +39,8 @@ function TaskSelector() {
      * @desc Sets the task to the input provided by the user.
      */
     const handleChange = (event) => {
-        setTask(event.target.value)
+        onTaskChange(event.target.value);
+        setTask(event.target.value);
     }
 
     /**
@@ -42,7 +48,7 @@ function TaskSelector() {
      * @desc Closes the dialog.
      */
     const handleSubmit = () => {
-        setIsDialogOpen(!isDialogOpen)
+        setIsDialogOpen(!isDialogOpen);
     }
 
     /**
@@ -51,8 +57,9 @@ function TaskSelector() {
      * to null.
      */
     const handleCancel = () => {
-        handleToggle()
-        setTask(null)
+        handleToggle();
+        onTaskChange(null);
+        setTask(null);
     }
 
     /**
@@ -60,8 +67,9 @@ function TaskSelector() {
      * @desc Shows the selector and sets the task to null.
      */
     const handleClearTask = () => {
-        setShowSelector(!showSelector)
-        setTask(null)
+        setShowSelector(!showSelector);
+        onTaskChange(null);
+        setTask(null);
     }
   
     return ( 
