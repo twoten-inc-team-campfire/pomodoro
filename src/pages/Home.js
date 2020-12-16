@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import TaskSelector from '../components/Timer/TaskSelector';
-import Timer from '../components/Timer/Timer';
 import { PomodoroManager } from '../parts/PomodoroManager'
 import { saveTimerSession } from "../services/DefaultDataService"
 
