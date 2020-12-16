@@ -6,7 +6,8 @@ import TaskSelector from './TaskSelector'
 const defaultTask = 'No Task Selected'
 
 test("At initial start, only the task selector and default task are shown", () => {
-    render(<TaskSelector/>);
+    let callback = jest.fn();
+    render(<TaskSelector onTaskChange={callback}/>);
     
     const selectorButton = screen.getByRole('button', {name: /selector/i});
     const dialog = screen.queryByLabelText('dialog');
@@ -26,7 +27,8 @@ test("At initial start, only the task selector and default task are shown", () =
 
 test("When the user clicks on the task selector, it is hidden, the \
 dialog opens, and the textbox and cancel button are shown", () => {
-    render(<TaskSelector/>);
+    let callback = jest.fn();
+    render(<TaskSelector onTaskChange={callback}/>);
 
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -47,7 +49,8 @@ dialog opens, and the textbox and cancel button are shown", () => {
 
 test("When the user clicks the cancel button and no text is in the text area, \
 the dialog closes, and the task selector and default task are shown", () => {
-    render(<TaskSelector/>);
+    let callback = jest.fn();
+    render(<TaskSelector onTaskChange={callback}/>);
     
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -66,10 +69,15 @@ the dialog closes, and the task selector and default task are shown", () => {
     // Verify that default task is shown
     const taskText = screen.getByTestId('taskDescription');
     expect(taskText.innerHTML).toMatch(defaultTask);
+
+    // Verify that the callback function is called appropriately.
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith(null);
 })
 
 test("When the user types in the text area, the confirm button shows", () => {
-    render(<TaskSelector/>);
+    let callback = jest.fn();
+    render(<TaskSelector onTaskChange={callback}/>);
 
     const selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -88,7 +96,8 @@ test("When the user types in the text area, the confirm button shows", () => {
 
 test("When the user presses the cancel button and text is in the text area, \
 the dialog closes, and the task selector and default task are shown", () => {
-    render(<TaskSelector/>);
+    let callback = jest.fn();
+    render(<TaskSelector onTaskChange={callback}/>);
     
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -114,11 +123,16 @@ the dialog closes, and the task selector and default task are shown", () => {
     // Verify that default task is shown
     taskText = screen.getByTestId('taskDescription');
     expect(taskText.innerHTML).toMatch(defaultTask);
+
+    // Verify that the callback function is called appropriately.
+    expect(callback).toHaveBeenCalledTimes(9);
+    expect(callback).toHaveBeenCalledWith(null);
 })
 
 test("When the user types into the text area and presses confirm, the \
 text shon matches the user's input", () => {
-    render(<TaskSelector/>);
+    let callback = jest.fn();
+    render(<TaskSelector onTaskChange={callback}/>);
     
     const selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -132,11 +146,16 @@ text shon matches the user's input", () => {
     // Verify that the text matches user's input
     const taskText = screen.getByTestId('taskDescription');
     expect(taskText.innerHTML).toMatch('Work out');
+
+    // Verify that the callback function is called appropriately.
+    expect(callback).toHaveBeenCalledTimes(8);
+    expect(callback).toHaveBeenCalledWith("Work out");
 })
 
 test("When user clicks the confirm button, the dialog closes, the task \
 selector remains hidden, and the clear button is shown", () => {
-    render(<TaskSelector/>);
+    let callback = jest.fn();
+    render(<TaskSelector onTaskChange={callback}/>);
     
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -158,11 +177,16 @@ selector remains hidden, and the clear button is shown", () => {
     // Verify that the clear button is visible
     const clearButton = screen.getByTestId('clearButton');
     expect(clearButton).toBeTruthy();
+
+    // Verify that the callback function is called appropriately.
+    expect(callback).toHaveBeenCalledTimes(8);
+    expect(callback).toHaveBeenCalledWith("Work out");
 })
 
 test("When the user clicks on the clear button, the task selector and \
 default task are shown", () => {
-    render(<TaskSelector/>);
+    let callback = jest.fn();
+    render(<TaskSelector onTaskChange={callback}/>);
     
     let selectorButton = screen.getByRole('button', {name: /selector/i});
     userEvent.click(selectorButton);
@@ -183,4 +207,8 @@ default task are shown", () => {
     // Verify that default task is shown
     const taskText = screen.getByTestId('taskDescription');
     expect(taskText.innerHTML).toMatch(defaultTask);
+
+    // Verify that the callback function is called appropriately.
+    expect(callback).toHaveBeenCalledTimes(9);
+    expect(callback).toHaveBeenCalledWith(null);
 })

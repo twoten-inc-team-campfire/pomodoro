@@ -6,9 +6,10 @@ import { SettingsActions } from './SettingReducerandActions';
 const useTimerGlobalState = () => {
 	const [state, dispatch] = useContext(GlobalStateContext);
 	const { timer } = state;
+	const dispatchTimer = dispatch;
 	return { 
 		timer,
-		dispatch,
+		dispatchTimer,
 		TimerActions
 	}
 }

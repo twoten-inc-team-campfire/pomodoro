@@ -19,7 +19,6 @@ test("When start button is clicked, \
 	render(<TimerButtons showStartButton={true}/>)
 	
 	let startButton = screen.queryByLabelText('start-button')
-	// console.log("start button", startButton)
 	userEvent.click(startButton);
 	startButton = screen.queryByLabelText('start-button')
 	const pauseButton = screen.queryByLabelText('pause-button');

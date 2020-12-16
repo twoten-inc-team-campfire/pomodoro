@@ -1,120 +1,172 @@
-import React, {Component} from 'react';
-import {UserSettings} from "../classes/settings/UserSettings";
-import {TimerSession} from "../classes/TimerSession";
+import React, { useState, useRef, useEffect } from 'react';
+import { TimerSession, TIMER_SESSION_TYPE } from "../classes/TimerSession";
+import Timer from "../components/Timer/Timer";
+import { useTimerGlobalState, useSettingsGlobalState } from '../GlobalState/GlobalStateHooks';
+
+
+
+const forward = (state) => {
+    let type = state.type;
+    let count = state.count;
+    let sessionIngterval = state.sessionIngterval;
+    
+    switch(type) {
+        case TIMER_SESSION_TYPE.POMODORO:
+            if (count === sessionIngterval - 1) {
+                type = TIMER_SESSION_TYPE.LONG_REST;
+            }
+            else {
+                type = TIMER_SESSION_TYPE.SHORT_REST;
+            }
+            count = (count + 1) % sessionIngterval;
+            return {
+                type: type,
+                count: count,
+                sessionIngterval: state.sessionIngterval
+            }
+        case TIMER_SESSION_TYPE.SHORT_REST:
+        case TIMER_SESSION_TYPE.LONG_REST:
+            type = TIMER_SESSION_TYPE.POMODORO;
+            return {
+                type: type,
+                count: count,
+                sessionIngterval: state.sessionIngterval
+            }
+        default:
+            throw new Error('Unexpected type');
+    }
+}
+
+
+const textGeneration = (type) => {
+    switch(type) {
+        case TIMER_SESSION_TYPE.POMODORO:
+            return "Focus";
+        case TIMER_SESSION_TYPE.LONG_REST:
+            return "Long Break";
+        case TIMER_SESSION_TYPE.SHORT_REST:
+            return "Short Break";
+        default:
+            throw new Error('Unexpected type');
+    }
+}
 
 /**
  * PomodoroManager
  * @desc PomodoroManager that encapsulates the pomodoro logic applied to a timer object.
  * @component
  */
-class PomodoroManager extends Component {
+function PomodoroManager ({onNewTimerSession}) {
+    let startTime = useRef(null);
+    let endTime = useRef(null);
 
-    /**
+    const { settings } = useSettingsGlobalState();
+    const  {
+        dispatchTimer,
+        TimerActions
+    } = useTimerGlobalState()
+
+    const initState = {
+        type: TIMER_SESSION_TYPE.POMODORO,
+        count: 0,
+        sessionIngterval: settings.numPomodorosInCycle,
+    };
+
+    const [managerState, setManagerState] = useState(initState);
+
+    const newTime = (pomo_type) => {
+        if (pomo_type === TIMER_SESSION_TYPE.POMODORO) {
+            return {
+                min: settings.pomodoroLength,
+                sec: 0
+            };
+        }
+        else if (pomo_type === TIMER_SESSION_TYPE.LONG_REST) {
+            return {
+                min: settings.longBreakLength,
+                sec:0
+            }
+        }
+        else if (pomo_type === TIMER_SESSION_TYPE.SHORT_REST) {
+            return {
+                min: settings.shortBreakLength,
+                sec: 0
+            }
+        }
+    }
+    
+    useEffect(() => {
+        const newTimer = newTime(managerState.type)
+        dispatchTimer(TimerActions.RESET(newTimer));
+
+        // The comment below disables the linter from throwing a warning
+        // about our dependency array. We know what we're doing better
+        // than the linter. We don't want to add more things to the 
+        // dependency array, and all other dependencies are not going to change.
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [managerState.type])
+
+    /*
      * Callback to pass a new TimerSession to the parent.
      * @callback onNewTimerSession
      * @param {TimerSession} newTimerSession - New TimerSession the PomodoroManager just created
      * @memberOf PomodoroManager
-     */
-    /**
-     * @constructs
-     * @param {Object} props - Props passed to component.
-     * @param {TimerInterface} props.Timer - The React Component timer to be rendered. It should support the
-     * TimerInterface interface.
-     * @param {UserSettings} props.UserSettings - The user's settings
-     * @param {onNewTimerSession} props.onNewTimerSession - Callback to pass a new TimerSession to the parent
-     */
-    constructor(props) {
-        super(props);
+     */ 
+    const onStart = () => {
+        startTime.current = new Date();
     }
 
-    /**
-     * @desc Public function to start/resume the PomodoroManager
-     * @public
-     */
-    start() {
+    const onPause = () => {
+        endTime.current = new Date();
 
+        if (startTime.current && endTime.current) {
+            onNewTimerSession(new TimerSession(startTime.current, endTime.current, managerState.type));
+        }
+
+        startTime.current = null;
+        endTime.current = null;
     }
 
-    /**
-     * @desc Public function to pause the PomodoroManager
-     * This should return a TimerSession to the parent for the time elapsed.
-     * @public
-     */
-    pause() {
+    const onCancel = () => {
+        endTime.current = new Date(Date.now());
+        
+        if (startTime.current && endTime.current) {
+            onNewTimerSession(new TimerSession(startTime.current, endTime.current, managerState.type));
+        }
 
+        startTime.current = null;
+        endTime.current = null;
+        return newTime(managerState.type)
     }
 
-    /**
-     * @desc Public function to reset the timer back to the beginning of the current cycle.
-     * This should not return a TimerSession to the parent.
-     * @public
-     */
-    reset() {
+    const onComplete = () => {
+        endTime.current = new Date(Date.now());
 
+        if (startTime.current && endTime.current) {
+            onNewTimerSession(new TimerSession(startTime.current, endTime.current, managerState.type));
+        }
+
+        startTime.current = null;
+        endTime.current = null;
+        
+        let {type} = forward(managerState);
+        setManagerState(forward(managerState));
+
+        return newTime(type)
     }
 
-    /**
-     * @desc Public function to skip to the end of the current part of the cycle.
-     * This should return a TimeSession for the duration the timer ran.
-     * If the timer has not started running, return nothing.
-     * @public
-     */
-    skip() {
-
-    }
-
-    render() {
-        return "Display the timer here"
-    }
+    return (
+        <div className={'pomodoroManager'}>
+            <h2>{textGeneration(managerState.type)}</h2>
+            <Timer 
+                onStart={onStart}
+                onPause={onPause}
+                onCancel={onCancel}
+                onComplete={onComplete}
+            />
+        </div>
+    )
 }
 
-/**
- * @interface TimerInterface
- * @desc Interface for timer Components that are compatible with the PomodoroManager
- */
-class TimerInterface extends React.Component {
-
-    /**
-     * Callback to notify the parent that the timer has completed.
-     * @callback onComplete
-     * @param {Date} endTime - Time at which the timer finished.
-     * @memberOf TimerInterface
-     */
-    /**
-     * @lends TimerInterface
-     * @constructs
-     * @param {Object} props - Props passed to the component.
-     * @param {number} props.duration - Duration of the timer in milliseconds
-     * @param {onComplete} props.onComplete - Callback to notify the parent that the timer has completed.
-     */
-    constructor(props) {
-        super(props)
-    }
-
-    /**
-     * @desc Public method to start timer.
-     * @public
-     */
-    start() {
-        throw new Error("Start method not implemented")
-    }
-
-    /**
-     * @desc Public method to pause the timer.
-     * @public
-     */
-    pause() {
-        throw new Error("Pause method not implemented")
-    }
-
-    /**
-     * @desc Public method to reset the timer.
-     * @public
-     */
-    reset() {
-        throw new Error("Reset method not implemented")
-    }
-
-}
-
-export { PomodoroManager, TimerInterface };
+export { PomodoroManager, forward };
