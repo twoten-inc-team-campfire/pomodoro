@@ -170,7 +170,7 @@ describe("loadTimerSessionListByDateWithStore()", () => {
         return expect(loadTimerSessionListByDateWithStore(dateDate, dateDate, 'testStore'))
             .rejects
             .toThrow();
-    });
+    })
 });
 
 describe("saveUserSettingsWithStore()", () => {

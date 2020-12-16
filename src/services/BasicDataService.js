@@ -92,14 +92,14 @@ function loadTimerSessionListByDateWithStore(startDate, endDate, store,
  */
 function saveUserSettingsWithStore(settings, store) {
     if (!isValidUserSettings(settings)) {
-        return Promise.reject(new Error("Invalid input: Not UserSettings!"));
+        return Promise.reject(new Error("Invalid input: Undefined!"));
     }
     if (!isValidStore(store)) {
         return Promise.reject(new Error("Invalid input: Not Store!"));
     }
 
     return set("userSettings", settings, store)
-        .catch(() => {
+        .catch((error) => {
             throw new Error("Failed to save user settings!");
         });
 }
