@@ -17,7 +17,7 @@ import {dateToHtmlDateString, htmlDateStringToDate, shiftDate} from "../../utils
  * @desc Allows the user to select the date for which they want to view stats.
  * @param {Date} date - The current date being displayed
  * @param {onDateChange} onDateChange - The callback to be called whenever the date changes.
- * @param {Date} maxDate - The latest date the user is allowed to navigate to
+ * @param {Date} [maxDate] - The latest date the user is allowed to navigate to
  */
 function DateNavigator({date, onDateChange, maxDate = new Date()}) {
     return (
