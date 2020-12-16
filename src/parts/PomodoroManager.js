@@ -77,9 +77,14 @@ function PomodoroManager ({onNewTimerSession}) {
     useEffect(() => {
         const newTimer = newTime(managerState.type)
         dispatchTimer(TimerActions.RESET(newTimer));
-    }, [settings.pomodoroLength, settings.shortBreakLength, settings.longBreakLength,
-        managerState.type, 
-    ])
+
+        // The comment below disables the linter from throwing a warning
+        // about our dependency array. We know what we're doing better
+        // than the linter. We don't want to add more things to the 
+        // dependency array, and all other dependencies are not going to change.
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [managerState.type])
 
     /*
      * Callback to pass a new TimerSession to the parent.
