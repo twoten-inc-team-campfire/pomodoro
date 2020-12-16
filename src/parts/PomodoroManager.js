@@ -116,6 +116,7 @@ function PomodoroManager ({onNewTimerSession}) {
 
         startTime.current = null;
         endTime.current = null;
+        return newTime(managerState.type)
     }
 
     const onComplete = () => {
