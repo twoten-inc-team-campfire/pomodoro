@@ -10,8 +10,7 @@ function Home () {
 
     const onNewTimerSession = (timerSession) => {
         timerSession.task = task;
-        console.log(timerSession);
-        // saveTimerSession(timerSession);
+        saveTimerSession(timerSession);
     }
     
     return (
