@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TimerSession, TIMER_SESSION_TYPE } from "../classes/TimerSession";
 import Timer from "../components/Timer/Timer";
 import { useTimerGlobalState, useSettingsGlobalState } from '../GlobalState/GlobalStateHooks';
@@ -60,13 +60,8 @@ function PomodoroManager ({onNewTimerSession}) {
     let startTime = useRef(null);
     let endTime = useRef(null);
 
-    const {
-        settings,
-        dispatch,
-        SettingsActions
-    } = useSettingsGlobalState()
+    const { settings } = useSettingsGlobalState();
     const  {
-        timer,
         dispatchTimer,
         TimerActions
     } = useTimerGlobalState()
@@ -74,7 +69,7 @@ function PomodoroManager ({onNewTimerSession}) {
     const initState = {
         type: TIMER_SESSION_TYPE.POMODORO,
         count: 0,
-        sessionIngterval: settings.focusCycleCount,
+        sessionIngterval: settings.numPomodorosInCycle,
     };
 
     const [managerState, setManagerState] = useState(initState);
@@ -82,7 +77,7 @@ function PomodoroManager ({onNewTimerSession}) {
     useEffect(() => {
         const newTimer = newTime(managerState.type)
         dispatchTimer(TimerActions.RESET(newTimer));
-    }, [settings.focusLength, settings.shortBreakLength, settings.longBreakLength,
+    }, [settings.pomodoroLength, settings.shortBreakLength, settings.longBreakLength,
         managerState.type, 
     ])
 
@@ -93,11 +88,11 @@ function PomodoroManager ({onNewTimerSession}) {
      * @memberOf PomodoroManager
      */ 
     const onStart = () => {
-        startTime.current = new Date(Date.now());
+        startTime.current = new Date();
     }
 
     const onPause = () => {
-        endTime.current = new Date(Date.now());
+        endTime.current = new Date();
 
         if (startTime.current && endTime.current) {
             onNewTimerSession(new TimerSession(startTime.current, endTime.current, managerState.type));
@@ -138,7 +133,7 @@ function PomodoroManager ({onNewTimerSession}) {
     const newTime = (pomo_type) => {
         if (pomo_type === TIMER_SESSION_TYPE.POMODORO) {
             return {
-                min: settings.focusLength,
+                min: settings.pomodoroLength,
                 sec: 0
             };
         }
