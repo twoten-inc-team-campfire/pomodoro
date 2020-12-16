@@ -34,9 +34,7 @@ function Timer (props) {
     }
 
     const resetTimer = () => {
-        dispatchTimer(TimerActions.RESET());
-
-        if (onCancel) onCancel();
+        if (onCancel) dispatchTimer(TimerActions.RESET(onCancel()));
     }
 
     //should only show the start button when when the timer is not running
