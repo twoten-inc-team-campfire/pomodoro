@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import { timerReducer, initTimer } from './TimerReducerAndActions'
 import { settingsReducer, initSettings } from './SettingReducerandActions'
+import { managerReducer, initManager } from './PomodoroManagerReducerAndActions'
 
 const GlobalStateContext = React.createContext([{}, () => {}]);
 /* this is the provider of the global state to our app
@@ -10,7 +11,8 @@ const GlobalStateContext = React.createContext([{}, () => {}]);
 //initial state of the timer
 const initGlobalState = { 
 	timer: initTimer,
-	settings: initSettings
+	settings: initSettings,
+	manager: initManager,
 }
 const globalStateReducer = (state, action) => {
 	switch (action.target) {
@@ -20,6 +22,9 @@ const globalStateReducer = (state, action) => {
 		case 'Settings':
 			const newSettings = settingsReducer(state.settings, action)
 			return {...state, settings: newSettings}
+		case 'Manager':
+			const newManager = managerReducer(state, action)
+			return {...state, manager: newManager}
 		default:
 			return state
 	}

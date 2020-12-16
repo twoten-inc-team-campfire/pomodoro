@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { GlobalStateContext } from './GlobalState';
 import { TimerActions } from './TimerReducerAndActions';
 import { SettingsActions } from './SettingReducerandActions';
+import { ManagerActions } from './PomodoroManagerReducerAndActions';
 
 const useTimerGlobalState = () => {
 	const [state, dispatch] = useContext(GlobalStateContext);
@@ -24,4 +25,15 @@ const useSettingsGlobalState = () => {
 	}
 }
 
-export { useTimerGlobalState, useSettingsGlobalState };
+const useManagerGlobalState = () => {
+	const [state, dispatch] = useContext(GlobalStateContext);
+	const { manager } = state;
+	const dispatchManager = dispatch;
+	return {
+		manager,
+		dispatchManager,
+		ManagerActions
+	}
+}
+
+export { useTimerGlobalState, useSettingsGlobalState, useManagerGlobalState };
