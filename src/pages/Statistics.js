@@ -3,6 +3,7 @@ import DateNavigator from "../components/Statistics/DateNavigator";
 import {TimelineGraph} from "../components/Statistics/TimelineGraph";
 import {DailyLog} from "../components/Statistics/DailyLog";
 import {loadTimerSessionListByDate} from "../services/DefaultDataService";
+import {fitTimerSessionsIntoRange} from "../utils/StatisticsPageUtil";
 
 export const statisticsLogMaxGap = 20;
 export const statisticsTimelineMaxGap = 10;
@@ -26,9 +27,10 @@ export class Statistics extends Component {
         startDate.setHours(0, 0, 0, 0);
         let endDate = new Date(startDate);
         endDate.setDate(startDate.getDate() + 1);
-        endDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, -1);
         let timerSessions = await loadTimerSessionListByDate(startDate, endDate);
         timerSessions.sort((t1, t2) => t1.startTime - t2.startTime);
+        timerSessions = fitTimerSessionsIntoRange(timerSessions, startDate, endDate);
         this.setState({...this.state, date, timerSessions});
     }
 

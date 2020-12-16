@@ -41,6 +41,7 @@ function Timer (props) {
     const showStartButton = (timer.min === 0 && timer.sec === 0) || //timer reaches 0 == timer is not running
                             !timer.isTimerRunning  //timer is not running
 
+    
     return (
         <div className={'timer'}>
             <ClockFace min={timer.min} sec={timer.sec}/>
