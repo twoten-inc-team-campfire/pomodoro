@@ -108,7 +108,7 @@ function Settings(props) {
                 )
                 saveUserSettings(settingsToSave);
             } catch (error) {
-                console.log(error)
+                throw new Error(error);
             }
         }
 

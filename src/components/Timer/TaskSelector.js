@@ -25,6 +25,11 @@ function TaskSelector({onTaskChange}) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [task, setTask] = useState(null);
 
+    const setTaskState = (task) => {
+        onTaskChange(task);
+        setTask(task);
+    }
+
     /**
      * handleToggle
      * @desc Hides the selector and opens the dialog.
@@ -39,8 +44,7 @@ function TaskSelector({onTaskChange}) {
      * @desc Sets the task to the input provided by the user.
      */
     const handleChange = (event) => {
-        onTaskChange(event.target.value);
-        setTask(event.target.value);
+        setTaskState(event.target.value);
     }
 
     /**
@@ -58,8 +62,7 @@ function TaskSelector({onTaskChange}) {
      */
     const handleCancel = () => {
         handleToggle();
-        onTaskChange(null);
-        setTask(null);
+        setTaskState(null);
     }
 
     /**
@@ -68,8 +71,7 @@ function TaskSelector({onTaskChange}) {
      */
     const handleClearTask = () => {
         setShowSelector(!showSelector);
-        onTaskChange(null);
-        setTask(null);
+        setTaskState(null);
     }
   
     return ( 

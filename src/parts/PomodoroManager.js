@@ -73,6 +73,27 @@ function PomodoroManager ({onNewTimerSession}) {
     };
 
     const [managerState, setManagerState] = useState(initState);
+
+    const newTime = (pomo_type) => {
+        if (pomo_type === TIMER_SESSION_TYPE.POMODORO) {
+            return {
+                min: settings.pomodoroLength,
+                sec: 0
+            };
+        }
+        else if (pomo_type === TIMER_SESSION_TYPE.LONG_REST) {
+            return {
+                min: settings.longBreakLength,
+                sec:0
+            }
+        }
+        else if (pomo_type === TIMER_SESSION_TYPE.SHORT_REST) {
+            return {
+                min: settings.shortBreakLength,
+                sec: 0
+            }
+        }
+    }
     
     useEffect(() => {
         const newTimer = newTime(managerState.type)
@@ -133,27 +154,6 @@ function PomodoroManager ({onNewTimerSession}) {
         setManagerState(forward(managerState));
 
         return newTime(type)
-    }
-
-    const newTime = (pomo_type) => {
-        if (pomo_type === TIMER_SESSION_TYPE.POMODORO) {
-            return {
-                min: settings.pomodoroLength,
-                sec: 0
-            };
-        }
-        else if (pomo_type === TIMER_SESSION_TYPE.LONG_REST) {
-            return {
-                min: settings.longBreakLength,
-                sec:0
-            }
-        } 
-        else if (pomo_type === TIMER_SESSION_TYPE.SHORT_REST) {
-            return {
-                min: settings.shortBreakLength,
-                sec: 0
-            }
-        }
     }
 
     return (
