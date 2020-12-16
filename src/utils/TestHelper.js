@@ -2,8 +2,7 @@ import React, { useReducer } from 'react';
 import { 
 	GlobalStateContext,
 	initGlobalState, 
-	globalStateReducer, 
-	GlobalStateProvider 
+	globalStateReducer
 } from '../GlobalState/GlobalState';
 import { render } from '@testing-library/react'
 

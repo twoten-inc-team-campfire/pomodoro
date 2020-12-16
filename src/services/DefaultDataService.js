@@ -9,7 +9,7 @@ import {
 import { TIMER_SESSION_TYPE } from '../classes/TimerSession';
 
 let timerSessionStore = new Store('IndexedDB', 'TimerSessionStore');
-let userSettingsStore = new Store('IndexedDB', 'UserSettingsStore');
+let userSettingsStore = new Store('IndexedDB2', 'UserSettingsStore');
 
 /**
  * saveTimerSession
@@ -44,7 +44,12 @@ function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TI
  * @public
  */
 function saveUserSettings(settings) {
-    return saveUserSettingsWithStore(settings, userSettingsStore);
+    return (saveUserSettingsWithStore(settings, userSettingsStore)
+        .catch((error) => {
+            console.log(error)
+            throw new Error("Failed to save user settings!");
+        })
+    )
 }
 
 /**
