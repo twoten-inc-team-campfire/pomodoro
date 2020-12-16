@@ -46,7 +46,6 @@ function loadTimerSessionListByDate(startDate, endDate, types = Object.values(TI
 function saveUserSettings(settings) {
     return (saveUserSettingsWithStore(settings, userSettingsStore)
         .catch((error) => {
-            console.log(error)
             throw new Error("Failed to save user settings!");
         })
     )
