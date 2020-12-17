@@ -1,3 +1,5 @@
+import {TimerSession} from "../classes/TimerSession";
+
 /**
  * setDateToMidnight
  * @desc Sets the date passed in to midnight local time.

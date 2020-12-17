@@ -1,5 +1,4 @@
 import {setDateToMidnight} from "./ExampleUtil";
-import {TimerSession} from "../classes/TimerSession";
 
 describe("setDateToMidnight should set a date passed in to midnight", () => {
     test("It should set the date to the correct time, midnight", () => {
