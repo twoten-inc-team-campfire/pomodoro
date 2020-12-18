@@ -5,6 +5,6 @@
  * @returns {Date}
  */
 export function setDateToMidnight(date) {
-    date.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 8);
     return date;
 }
