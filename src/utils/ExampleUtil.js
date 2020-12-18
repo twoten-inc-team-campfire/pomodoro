@@ -1,7 +1,7 @@
 /**
  * setDateToMidnight
  * @desc Sets the date passed in to midnight local time.
- * @param {[Date]} date - The date to be set to midnight
+ * @param {Date} date - The date to be set to midnight
  * @returns {Date}
  */
 export function setDateToMidnight(date) {
