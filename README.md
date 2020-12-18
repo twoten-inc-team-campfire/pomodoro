@@ -1,6 +1,14 @@
-# Getting Started with Create React App
+# TwoTen Inc. Pomodoro Timer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+In a world that wrongly praises the skill of multitasking, some of us believe that dedicated focus on a single task is the only way to get things done. Our periods of productive work are poisoned by context switching between emails, text messages, small fires, and dozens of to-do’s that should have been to-done last week. When we try to juggle too many things at once, we end up dropping the ball on all of them. Our software solution is two pronged: first, an automated Pomodoro Timer to provide a convenient method for individuals to stick to single tasks, and second, a time tracking system that individuals can leverage to make informed decisions about their study and work habits
+
+# Running our Application
+
+1. Clone our repository
+2. Install the project dependencies within the project directory using a package manager like npm: `npm install`
+3. Run the test suite to verify that everything works. Start the test runner with: `npm test`. Press `a` to run all tests.
+4. Run the application locally using: `npm start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
 
 ## Available Scripts
 
@@ -29,37 +37,29 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### `npm run serve`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Runs the app in the production mode if you've successfully built it as shown above.\
+Open [http://localhost:5000](http://localhost:5000) to view it in the browser.
 
 ### `npm run generate-docs`
 
-Automatically generate the documantation under folder `docs` using JsDOc. 
+Automatically generate the documantation under folder `docs` using JsDoc. 
 
 **Note: for each of the class that you want to add to the documentation, at least a comment for the description of the class is needed right above the definition.**
 
 JsDoc will generate the documentation as a HTML webpage with entry `index.html` in the folder `docs`.
 
-## Learn More
+
+# Resources to Learn More About React
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+### Getting Started with Create React App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ### Making a Progressive Web App
 
@@ -69,10 +69,3 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/m
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
