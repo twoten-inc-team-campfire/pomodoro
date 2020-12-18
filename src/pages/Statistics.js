@@ -4,6 +4,7 @@ import {TimelineGraph} from "../components/Statistics/TimelineGraph";
 import {DailyLog} from "../components/Statistics/DailyLog";
 import {loadTimerSessionListByDate} from "../services/DefaultDataService";
 import {fitTimerSessionsIntoRange} from "../utils/StatisticsPageUtil";
+import {setDateToMidnight} from "../utils/ExampleUtil";
 
 export const statisticsLogMaxGap = 20;
 export const statisticsTimelineMaxGap = 10;
