@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^11.2.1",
-    "serve": "^11.3.2"
+    "serve": "^11.3.2",
+    "jsdoc": "^3.6.6"
   }
 }
